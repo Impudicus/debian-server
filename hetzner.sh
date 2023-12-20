@@ -127,7 +127,7 @@ service ntpsec restart || exit 1
 # OPEN-SSH
 
 # config
-cp "$PWD/config/ssh/sshd_config" "/etc/ssh/sshd_config/" || exit 1
+cp "$PWD/config/ssh/sshd_config" "/etc/ssh/sshd_config" || exit 1
 cp "$PWD/config/ssh/hetzner.conf" "/etc/ssh/sshd_config.d/" || exit 1
 
 # restart service
