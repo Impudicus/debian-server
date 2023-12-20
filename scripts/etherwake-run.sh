@@ -35,7 +35,7 @@ if [ $? -ne 0 ]; then
 fi
 
 # get slave status
-device_online $slave_name
+device_status $slave_name
 if [ $? -ne 0 ]; then
     /usr/local/bin/notification-push.sh "etherwake" "info" "job failed ('$slave_name' already online)!"
     exit 1
