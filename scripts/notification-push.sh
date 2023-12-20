@@ -5,6 +5,7 @@ user_token="uc8joh6vaszypwuvrprbyqfqgpwobb"
 
 case "$1" in
     etherwake)  app_token="asdpr25tei6i5969mcodw1ynsu7jp3" ;;
+    smartmon)   app_token="asdpr25tei6i5969mcodw1ynsu7jp3" ;;
 esac
 
 case "$2" in
