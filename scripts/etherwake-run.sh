@@ -13,6 +13,12 @@ device_slave()
     fi
     return 1
 }
+device_status()
+{
+    timeout=2
+    result=$(/usr/bin/ping -c 1 -W $timeout $zielhost >/dev/null;)
+    return $result
+}
 
 
 # ========================= ========================= =========================
@@ -24,6 +30,13 @@ job_runtime=$SECONDS
 slave_name="$(device_slave $HOSTNAME)"
 if [ $? -ne 0 ]; then
     /usr/local/bin/notification-push.sh "etherwake" "error" "job failed (unable to get device slave)!"
+    exit 1
+fi
+
+# get slave status
+device_online $slave_name
+if [ $? -eq 0 ]; then
+    /usr/local/bin/notification-push.sh "etherwake" "info" "job failed ('$slave_name' already online)!"
     exit 1
 fi
 
