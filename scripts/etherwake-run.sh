@@ -45,5 +45,5 @@ fi
 echo "offline"
 
 job_duration=$(($SECONDS - runtime))
-/usr/local/bin/notification-push.sh "etherwake" "success" "job finished successfully (runtime: $duration sec)!"
+/usr/local/bin/notification-push.sh "etherwake" "okay" "job finished successfully (runtime: $duration sec)!"
 exit 0
