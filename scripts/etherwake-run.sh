@@ -15,16 +15,15 @@ device_mac()
 }
 device_slave()
 {
-    # if [ "$1" = "TS473a" ]; then
-    #     echo "TS673a"
-    #     return 0
-    # fi
-    # if [ "$1" = "TS673a" ]; then
-    #     echo "TS473a"
-    #     return 0
-    # fi
-    echo "TS473a"
-    return 0
+    if [ "$1" = "TS473a" ]; then
+        echo "TS673a"
+        return 0
+    fi
+    if [ "$1" = "TS673a" ]; then
+        echo "TS473a"
+        return 0
+    fi
+    return 1
 }
 device_status()
 {
