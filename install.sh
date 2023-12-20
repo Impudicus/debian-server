@@ -1,4 +1,5 @@
 #!/bin/bash
+# Copyright 2023 by Philipp Hildebrandt
 
 if [[ $EUID -ne 0 ]]; then
    echo "ERROR: This script must be run as root."
@@ -70,6 +71,10 @@ cp "$PWD/config/.bashrc" "$HOME/.bashrc" || exit 1
 
 # hostname
 cp "$PWD/config/hosts" "/etc/hosts" || exit 1
+
+# scripts
+cp "$PWD/scripts/notification-push.sh" "/usr/local/bin" || exit 1
+chmod 755 /usr/local/bin/*.sh || exit 1
 
 
 # ========================= ========================= =========================
