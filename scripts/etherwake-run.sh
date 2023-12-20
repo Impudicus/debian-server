@@ -11,7 +11,8 @@ device_slave()
         echo "TS473a"
         return 0
     fi
-    return 1
+    echo "TS473a"
+    return 0
 }
 device_status()
 {
@@ -35,7 +36,7 @@ fi
 
 # get slave status
 device_online $slave_name
-if [ $? -eq 0 ]; then
+if [ $? -ne 0 ]; then
     /usr/local/bin/notification-push.sh "etherwake" "info" "job failed ('$slave_name' already online)!"
     exit 1
 fi
