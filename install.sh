@@ -119,6 +119,7 @@ apt update || exit 1
 apt install -y \
     docker-ce \
     docker-ce-cli \
+    docker-compose-plugin \
     || exit 1
 
 # config
