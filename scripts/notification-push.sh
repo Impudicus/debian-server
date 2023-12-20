@@ -28,7 +28,7 @@ fi
     --form-string "user=$user_token" \
     --form-string "html=1" \
     --form-string "title=$1 on $HOSTNAME" \
-    --form-string "message=$3" \
+    --form-string "message=$message" \
     https://api.pushover.net/1/messages.json &> /dev/null
 
 exit $?
