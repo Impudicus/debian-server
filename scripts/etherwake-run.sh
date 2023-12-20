@@ -1,18 +1,30 @@
 #!/bin/bash
 # Copyright 2023 by Philipp Hildebrandt
 
-device_slave()
+device_mac()
 {
     if [ "$1" = "TS473a" ]; then
-        echo "TS673a"
+        echo "24:5e:be:6c:2e:fe"
         return 0
     fi
     if [ "$1" = "TS673a" ]; then
-        echo "TS473a"
+        echo "24:5e:be:7e:6b:87"
         return 0
     fi
+    return 1
+}
+device_slave()
+{
+    # if [ "$1" = "TS473a" ]; then
+    #     echo "TS673a"
+    #     return 0
+    # fi
+    # if [ "$1" = "TS673a" ]; then
+    #     echo "TS473a"
+    #     return 0
+    # fi
     echo "TS473a"
-    return 0
+    return 1
 }
 device_status()
 {
@@ -20,7 +32,11 @@ device_status()
     result=$(/usr/bin/ping -c 1 -W $timeout $1 >/dev/null;)
     return $result
 }
-
+device_wakeup()
+{
+    /usr/sbin/etherwake -i "enp5s0" $1
+    return $?
+}
 
 # ========================= ========================= =========================
 # MAIN
@@ -34,16 +50,36 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
-# get slave status
+# get slave status I
 device_status $slave_name
 if [ $? -ne 0 ]; then
-    echo "online"
     /usr/local/bin/notification-push.sh "etherwake" "info" "job failed ('$slave_name' already online)!"
     exit 1
 fi
 
-echo "offline"
+# get slave mac-address
+slave_mac=$(device_mac $slave_name)
+if [ $? -ne 0 ]; then
+    /usr/local/bin/notification-push.sh "etherwake" "error" "job failed (unable to lookup slave mac-address)!"
+    exit 1
+fi
+
+# run etherwake
+device_wakeup $slave_mac
+if [ $? -ne 0 ]; then
+    /usr/local/bin/notification-push.sh "etherwake" "error" "job failed (error while running command)!"
+    exit 1
+fi
+
+sleep 30
+
+# get slave status II
+device_status $slave_name
+if [ $? -eq 0 ]; then
+    /usr/local/bin/notification-push.sh "etherwake" "error" "job failed (unable to wakeup slave)!"
+    exit 1
+fi
 
 job_duration=$(($SECONDS - runtime))
-/usr/local/bin/notification-push.sh "etherwake" "okay" "job finished successfully (runtime: $duration sec)!"
+/usr/local/bin/notification-push.sh "etherwake" "okay" "job finished successfully (runtime: $job_duration sec)!"
 exit 0
