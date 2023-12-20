@@ -222,7 +222,7 @@ apt install -y --no-install-recommends \
 
 # config
 mkdir -p "~/.config/restic" || exit 1
-cat "KJDPAmm3Xje6j2HRSNK4" > "~/.config/restic/password" || exit 1
+echo "KJDPAmm3Xje6j2HRSNK4" > "~/.config/restic/password" || exit 1
 
 
 # ========================= ========================= =========================
