@@ -62,7 +62,7 @@ if [ "$color_prompt" = yes ]; then
     elif [[ $HOSTNAME == "TS673a" ]]; then
         PS1='${debian_chroot:+($debian_chroot)}\[\033[01;31m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
     elif [[ $HOSTNAME == "srv" ]] || [[ $HOSTNAME == "srv.hilde.email" ]]; then
-        PS1='${debian_chroot:+($debian_chroot)}\[\033[01;35m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
+        PS1='${debian_chroot:+($debian_chroot)}\[\033[01;36m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
     else
         PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
     fi
