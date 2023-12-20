@@ -37,9 +37,12 @@ fi
 # get slave status
 device_status $slave_name
 if [ $? -ne 0 ]; then
+    echo "online"
     /usr/local/bin/notification-push.sh "etherwake" "info" "job failed ('$slave_name' already online)!"
     exit 1
 fi
+
+echo "offline"
 
 job_duration=$(($SECONDS - runtime))
 /usr/local/bin/notification-push.sh "etherwake" "success" "job finished successfully (runtime: $duration sec)!"
