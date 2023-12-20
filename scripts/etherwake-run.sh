@@ -24,7 +24,7 @@ device_slave()
     #     return 0
     # fi
     echo "TS473a"
-    return 1
+    return 0
 }
 device_status()
 {
