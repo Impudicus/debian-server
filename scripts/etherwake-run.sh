@@ -17,7 +17,7 @@ device_slave()
 device_status()
 {
     timeout=2
-    result=$(/usr/bin/ping -c 1 -W $timeout $zielhost >/dev/null;)
+    result=$(/usr/bin/ping -c 1 -W $timeout $1 >/dev/null;)
     return $result
 }
 
