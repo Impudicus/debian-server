@@ -37,6 +37,12 @@ device_wakeup()
     return $?
 }
 
+notification()
+{
+    /usr/local/bin/notification-push.sh "etherwake" "$1" "$2"
+    exit 1
+}
+
 # ========================= ========================= =========================
 # MAIN
 
@@ -45,28 +51,28 @@ job_runtime=$SECONDS
 # get device slave
 slave_name="$(device_slave $HOSTNAME)"
 if [ $? -ne 0 ]; then
-    /usr/local/bin/notification-push.sh "etherwake" "error" "job failed (unable to get device slave)!"
+    notification "error" "job failed (unable to get device slave)!"
     exit 1
 fi
 
 # get slave status I
 device_status $slave_name
 if [ $? -ne 0 ]; then
-    /usr/local/bin/notification-push.sh "etherwake" "info" "job failed ('$slave_name' already online)!"
+    notification "info" "job failed ('$slave_name' already online)!"
     exit 1
 fi
 
 # get slave mac-address
 slave_mac=$(device_mac $slave_name)
 if [ $? -ne 0 ]; then
-    /usr/local/bin/notification-push.sh "etherwake" "error" "job failed (unable to lookup slave mac-address)!"
+    notification "error" "job failed (unable to lookup slave mac-address)!"
     exit 1
 fi
 
 # run etherwake
 device_wakeup $slave_mac
 if [ $? -ne 0 ]; then
-    /usr/local/bin/notification-push.sh "etherwake" "error" "job failed (error while running command)!"
+    notification "error" "job failed (error while running command)!"
     exit 1
 fi
 
@@ -75,10 +81,10 @@ sleep 30
 # get slave status II
 device_status $slave_name
 if [ $? -eq 0 ]; then
-    /usr/local/bin/notification-push.sh "etherwake" "error" "job failed (unable to wakeup slave)!"
+    notification "error" "job failed (unable to wakeup slave)!"
     exit 1
 fi
 
 job_duration=$(($SECONDS - runtime))
-/usr/local/bin/notification-push.sh "etherwake" "okay" "job finished successfully (runtime: $job_duration sec)!"
+notification "okay" "job finished successfully (runtime: $job_duration sec)!"
 exit 0
