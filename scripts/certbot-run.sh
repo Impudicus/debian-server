@@ -55,7 +55,6 @@ while [ $SECONDS -lt $endtime ]; do
 
     container_status "certbot"
     if [ $? -eq 0 ]; then
-
         job_duration=$(($SECONDS - runtime))
         output_okay "job finished successfully (runtime: $job_duration sec)!"
     else
