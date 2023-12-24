@@ -19,19 +19,15 @@ container_status()
 # ========================= ========================= =========================
 # MAIN
 
-main() {
+job_runtime=$SECONDS
 
-    job_runtime=$SECONDS
+# get container status: certbot
+container_status "certbot"
+if [ $? -ne 0 ]; then
+    /usr/local/bin/notification-push.sh "certbot" "info" "job failed (certbot already running)!"
+    exit 1
+fi
 
-    # get container status: certbot
-    container_status "certbot"
-    if [ $? -ne 0 ]; then
-        /usr/local/bin/notification-push.sh "certbot" "info" "job failed (certbot already running)!"
-        exit 1
-    fi
-
-    job_duration=$(($SECONDS - runtime))
-    /usr/local/bin/notification-push.sh "certbot" "okay" "job finished successfully (runtime: $job_duration sec)!"
-    exit 0
-
-}
+job_duration=$(($SECONDS - runtime))
+/usr/local/bin/notification-push.sh "certbot" "okay" "job finished successfully (runtime: $job_duration sec)!"
+exit 0
