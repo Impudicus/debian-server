@@ -13,8 +13,7 @@ case "$2" in
     error)  message="<font color="#bf616a"><b>$3</b></font>" ;;
     warn)   message="<font color="#ebcb8b"><b>$3</b></font>" ;;
     info)   message="<font color="#5e81ac"><b>$3</b></font>" ;;
-    okay)   message="<font color="#a3be8c"><b>$3</b></font>" ;;
-    none)   message="<b>$3</b>" ;;
+    okay)   message="<font color="#ffffff"><b>$3</b></font>" ;;
 esac
 
 
