@@ -74,7 +74,7 @@ cp "$PWD/config/hosts" "/etc/hosts" || exit 1
 
 # scripts
 cp "$PWD/scripts/notification-push.sh" "/usr/local/bin" || exit 1
-chmod 755 /usr/local/bin/*.sh || exit 1
+chmod 755 /usr/local/bin/notification-*.sh || exit 1
 
 
 # ========================= ========================= =========================
@@ -143,7 +143,7 @@ cp "$PWD/cron.d/etherwake" "/etc/cron.d" || exit 1
 
 # scripts
 cp "$PWD/scripts/etherwake-run.sh" "/usr/local/bin" || exit 1
-chmod 755 "/usr/local/bin/etherwake-run.sh" || exit 1
+chmod 755 /usr/local/bin/etherwake-*.sh || exit 1
 
 
 # ========================= ========================= =========================

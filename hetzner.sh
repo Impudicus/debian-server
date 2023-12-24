@@ -62,7 +62,7 @@ cp "$PWD/config/.bashrc" "$HOME/.bashrc" || exit 1
 
 # scripts
 cp "$PWD/scripts/notification-push.sh" "/usr/local/bin" || exit 1
-chmod 755 /usr/local/bin/*.sh || exit 1
+chmod 755 /usr/local/bin/notification-*.sh || exit 1
 
 
 # ========================= ========================= =========================
