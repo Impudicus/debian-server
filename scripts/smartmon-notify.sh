@@ -1,9 +1,14 @@
 #!/bin/bash
 # Copyright 2023 by Philipp Hildebrandt
 
+notification()
+{
+    /usr/local/bin/notification-push.sh "smartmon" "$1" "$2"
+    exit 1
+}
 
 # ========================= ========================= =========================
 # MAIN
 
-/usr/local/bin/notification-push.sh "smartmon" "error" "$SMARTD_MESSAGE ($SMARTD_FAILTYPE)"
+notification "error" "$SMARTD_MESSAGE ($SMARTD_FAILTYPE)"
 exit $?
