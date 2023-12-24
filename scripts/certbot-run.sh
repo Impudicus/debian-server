@@ -16,20 +16,10 @@ container_status()
     fi
 }
 
-output_error()
+notification()
 {
-    /usr/local/bin/notification-push.sh "certbot" "error" "$1"
+    /usr/local/bin/notification-push.sh "certbot" "$1" "$2"
     exit 1
-}
-output_info()
-{
-    /usr/local/bin/notification-push.sh "certbot" "info" "$1"
-    exit 1
-}
-output_okay()
-{
-    /usr/local/bin/notification-push.sh "certbot" "none" "$1"
-    exit 0
 }
 
 # ========================= ========================= =========================
@@ -39,12 +29,12 @@ job_runtime=$SECONDS
 
 container_status "certbot"
 if [ $? -ne 0 ]; then
-    output_info "job failed (certbot already running)!"
+    notification "error" "job failed (certbot already running)!"
 fi
 
 container_start "certbot"
 if [ $? -ne 0 ]; then
-    output_error "job failed (unable to start container)!"
+    notification "error" "job failed (unable to start container)!"
 fi
 
 # check container runstate every 10sec for 5min: certbot
@@ -56,12 +46,12 @@ while [ $SECONDS -lt $endtime ]; do
     container_status "certbot"
     if [ $? -eq 0 ]; then
         job_duration=$(($SECONDS - runtime))
-        output_okay "job finished successfully (runtime: $job_duration sec)!"
+        notification "okay" "job finished successfully (runtime: $job_duration sec)!"
     else
         sleep 10
     fi
 done
 
 job_duration=$(($SECONDS - runtime))
-output_error "job failed (timeout: $job_duration sec)!"
+notification "error" "job failed (timeout: $job_duration sec)!"
 exit 0
