@@ -23,7 +23,7 @@ job_runtime=$SECONDS
 
 # get container status: certbot
 container_status "certbot"
-if [ $? -eq 0 ]; then
+if [ $? -ne 0 ]; then
     /usr/local/bin/notification-push.sh "certbot" "info" "job failed (certbot already running)!"
     exit 1
 fi
