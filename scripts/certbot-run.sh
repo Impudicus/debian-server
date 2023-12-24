@@ -28,7 +28,7 @@ output_info()
 }
 output_okay()
 {
-    /usr/local/bin/notification-push.sh "certbot" "okay" "$1"
+    /usr/local/bin/notification-push.sh "certbot" "none" "$1"
     exit 0
 }
 
