@@ -4,6 +4,7 @@
 user_token="uc8joh6vaszypwuvrprbyqfqgpwobb"
 
 case "$1" in
+    certbot)    app_token="acnh3tbb38s9xmjwt6p4id9zvv2bny" ;;
     etherwake)  app_token="asdpr25tei6i5969mcodw1ynsu7jp3" ;;
     smartmon)   app_token="asdpr25tei6i5969mcodw1ynsu7jp3" ;;
 esac
