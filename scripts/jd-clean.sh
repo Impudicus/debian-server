@@ -21,13 +21,13 @@ echo "done!"
 # print files are mkv/mp4 and more then 7,5 GB
 echo "--------------------------------------------------"
 echo "INFO: Printing files +7500 MB ..."
-find "$work_dir" -type f -size +7500M -name "*.mkv" -name "*.mp4" -printf "%f\n" || exit 1
+find "$work_dir" -type f -size +7500M -printf "%f\n" -exec mv {} /pool1/download/makemkv \;
 echo "done!"
 
 # print files are mkv/mp4 and x264
 echo "--------------------------------------------------"
 echo "INFO: Printing files with codec x264 ..."
-find "$work_dir" -type f -name "*x264*" -name "*AVC*" -printf "%f\n" || exit 1
+find "$work_dir" -type f -name "*x264*" -name "*AVC*" -printf "%f\n" -exec mv {} /pool1/download/makemkv \;
 echo "done!"
 
 echo "--------------------------------------------------"
