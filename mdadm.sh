@@ -100,7 +100,7 @@ echo "--------------------------------------------------"
 echo "INFO: Searching for RAID-Configurations ..."
 used_array=$(cat /etc/mdadm/mdadm.conf | grep ARRAY | awk '{print $2}')
 
-if [[ $used_array == "/dev/md/0" ]]; then
+if [[ $used_array == "/dev/md/$HOSTNAME/0" ]]; then
     echo "INFO: RAID-Configuration found!"
     echo "INFO: $used_array."
     echo "--------------------------------------------------"
@@ -110,7 +110,7 @@ if [[ $used_array == "/dev/md/0" ]]; then
     if [ "$remove_configuration" = "YES" ]; then
 
         # write raid-array to mdadm.conf
-        cp "$PWD/config/mdadm/mdadm.conf" "/etc/mdadm/mdadm.conf" || exit 1
+        cat "$PWD/config/mdadm/mdadm.conf" > "/etc/mdadm/mdadm.conf" || exit 1
 
         # update initramfs
         update-initramfs -u || exit 1
@@ -146,7 +146,7 @@ if [ -n "$unused_array" ]; then
     if [ "$keep_array" = "YES" ]; then
 
         # write raid-array to mdadm.conf
-        cp "$PWD/config/mdadm/mdadm.conf" "/etc/mdadm/mdadm.conf" || exit 1
+        cat "$PWD/config/mdadm/mdadm.conf" > "/etc/mdadm/mdadm.conf" || exit 1
         mdadm --detail --scan >> "/etc/mdadm/mdadm.conf" || exit 1
 
         # update initramfs
@@ -180,7 +180,7 @@ if [ -n "$unused_array" ]; then
         mdadm --zero-superblock /dev/sd[a-f] || exit 1
 
         # write raid-array to mdadm.conf
-        cp "$PWD/config/mdadm/mdadm.conf" "/etc/mdadm/mdadm.conf" || exit 1
+        cat "$PWD/config/mdadm/mdadm.conf" > "/etc/mdadm/mdadm.conf" || exit 1
 
         # update initramfs
         update-initramfs -u || exit 1
@@ -202,5 +202,6 @@ fi
 # ========================= ========================= =========================
 echo "--------------------------------------------------"
 echo "INFO: Script executed successfully."
+echo "INFO: System restart pending."
 echo "--------------------------------------------------"
 exit 0
