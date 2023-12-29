@@ -61,7 +61,7 @@ apt install -y --no-install-recommends \
 cp "$PWD/config/.bashrc" "$HOME/.bashrc" || exit 1
 
 # scripts
-cp "$PWD/scripts/notification-push.sh" "/usr/local/bin" || exit 1
+cp $PWD/scripts/notification-*.sh "/usr/local/bin" && \
 chmod 755 /usr/local/bin/notification-*.sh || exit 1
 
 
@@ -89,10 +89,14 @@ apt update || exit 1
 apt install -y \
     docker-ce \
     docker-ce-cli \
+    docker-compose-plugin \
     || exit 1
 
 # config
 cp "$PWD/config/docker/daemon.json" "/etc/docker/daemon.json" || exit 1
+
+# syslink
+ln -s "/etc/docker" "/docker" || exit 1
 
 # restart service
 service docker restart || exit 1
@@ -102,8 +106,10 @@ service docker restart || exit 1
 # NETWORK
 
 # disable ipv6
-cp "$PWD/config/rules/disable-all-ipv6.conf" "/etc/sysctl.d/disable-all-ipv6.conf" || exit 1
+cp "$PWD/config/rules/disable-all-ipv6.conf" "/etc/sysctl.d/disable-all-ipv6.conf" && \
 chmod 644 "/etc/sysctl.d/disable-all-ipv6.conf" || exit 1
+
+# restart service
 sysctl -p "/etc/sysctl.d/disable-all-ipv6.conf" || exit 1
 
 
@@ -117,7 +123,7 @@ apt install -y --no-install-recommends \
     || exit 1
 
 # config
-cp "$PWD/config/ntp/ntp.conf" "/etc/ntp.conf" || exit 1
+cat "$PWD/config/ntp/ntp.conf" > "/etc/ntp.conf" || exit 1
 
 # restart service
 service ntpsec restart || exit 1
@@ -127,8 +133,8 @@ service ntpsec restart || exit 1
 # OPEN-SSH
 
 # config
-cp "$PWD/config/ssh/sshd_config" "/etc/ssh/sshd_config" || exit 1
-cp "$PWD/config/ssh/hetzner.conf" "/etc/ssh/sshd_config.d/" || exit 1
+cat "$PWD/config/ssh/sshd_config" > "/etc/ssh/sshd_config" || exit 1
+cp "$PWD/config/ssh/qnap.conf" "/etc/ssh/sshd_config.d" || exit 1
 
 # restart service
 service sshd restart || exit 1
@@ -145,7 +151,7 @@ apt install -y --no-install-recommends \
 
 # config
 mkdir -p "~/.config/restic" || exit 1
-echo "KJDPAmm3Xje6j2HRSNK4" > "~/.config/restic/password" || exit 1
+cp "$PWD/config/restic/password" "~/.config/restic" || exit 1
 
 
 # ========================= ========================= =========================
