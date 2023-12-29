@@ -244,6 +244,9 @@ apt install -y --no-install-recommends \
 # config
 cat "$PWD/config/samba/$HOSTNAME.conf" > "/etc/samba/smb.conf" || exit 1
 
+# create samba user
+smbpasswd -a debian
+
 # restart service
 service samba restart || exit 1
 
