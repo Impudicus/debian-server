@@ -89,6 +89,36 @@ fi
 
 
 # ========================= ========================= =========================
+# DOCKER CE RUNTIME
+
+# add repositories
+cp "$PWD/config/apt/nvidia.list" "/etc/apt/sources.list.d" || exit 1
+
+# add gpg-key
+curl -fsSL "https://nvidia.github.io/nvidia-docker/gpgkey" | gpg --dearmor -o "/etc/apt/keyrings/nvidia-docker.gpg" || exit 1
+
+# install
+apt update || exit 1
+apt install -y \
+    nvidia-container-toolkit \
+    || exit 1
+
+# config
+cat "$PWD/config/nvidia/daemon.json" > "/etc/docker/daemon.json" || exit 1
+
+# restart service
+service docker restart || exit 1
+
+
+# ========================= ========================= =========================
+# CLEANUP
+
+# cleanup apt
+apt autoremove -y || exit 1
+apt clean || exit 1
+
+
+# ========================= ========================= =========================
 echo "--------------------------------------------------"
 echo "INFO: Script executed successfully."
 echo "INFO: System restart pending."

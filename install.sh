@@ -123,7 +123,7 @@ apt install -y \
     || exit 1
 
 # config
-cp "$PWD/config/docker/daemon.json" "/etc/docker/daemon.json" || exit 1
+cat "$PWD/config/docker/daemon.json" > "/etc/docker/daemon.json" || exit 1
 
 # syslink
 ln -s "/etc/docker" "/docker" || exit 1
@@ -231,8 +231,8 @@ apt install -y --no-install-recommends \
     || exit 1
 
 # config
-mkdir -p "~/.config/restic" || exit 1
-cp "$PWD/config/restic/password" "~/.config/restic" || exit 1
+mkdir -p "$HOME/.config/restic" || exit 1
+cp "$PWD/config/restic/password" "$HOME/.config/restic" || exit 1
 
 
 # ========================= ========================= =========================
