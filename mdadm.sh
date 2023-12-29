@@ -47,6 +47,8 @@ if [ -n "$old_volume" ]; then
         # add raid-volume to fstab
         volume_uuid=$(echo $old_volume | cut -d '"' -f2)
         echo "UUID=$volume_uuid /mnt/pool1 ext4 defaults,nofail,discard 0 0" >> "/etc/fstab" || exit 1
+
+        # restart daemon
         systemctl daemon-reload || exit 1
 
         echo "--------------------------------------------------"
