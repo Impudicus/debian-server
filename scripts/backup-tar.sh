@@ -18,7 +18,7 @@ for subdir in "$source_dir"/*; do
     container_name=$(basename "$subdir")
 
     echo "INFO: Running Backup of '$container_name' to '$backup_dir/$container_name.tar' ..."
-    tar cvf "$backup_dir/$container_name.tar" $subdir || exit 1
+    # tar cvf "$backup_dir/$container_name.tar" $subdir || exit 1
     echo "INFO: -> Backup finished."
 
 done
