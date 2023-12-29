@@ -233,6 +233,21 @@ cp "$PWD/config/restic/password" "$HOME/.config/restic" || exit 1
 
 
 # ========================= ========================= =========================
+# SAMBA
+
+# install
+apt update || exit 1
+apt install -y --no-install-recommends \
+    samba \
+    || exit 1
+
+# config
+cat "$PWD/config/samba/$HOSTNAME.conf" > "/etc/samba/smb.conf" || exit 1
+
+# restart service
+service samba restart || exit 1
+
+# ========================= ========================= =========================
 # SMARTMON
 
 # install
