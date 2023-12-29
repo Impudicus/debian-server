@@ -100,9 +100,7 @@ echo "--------------------------------------------------"
 echo "INFO: Searching for RAID-Configurations ..."
 used_array=$(cat /etc/mdadm/mdadm.conf | grep ARRAY | awk '{print $2}')
 
-shopt -s nocasematch
-
-if [ $used_array == "/dev/md/${HOSTNAME}:0" ]; then
+if [ $used_array == "/dev/md/TS673a:0" ] || [ $used_array == "/dev/md/TS673A:0" ] || [ $used_array == "/dev/md/TS473a:0" ] || [ $used_array == "/dev/md/TS473A:0" ]; then
     echo "INFO: RAID-Configuration found!"
     echo "INFO: $used_array."
     echo "--------------------------------------------------"
