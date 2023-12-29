@@ -96,6 +96,7 @@ fi
 # ========================= ========================= =========================
 # CONFIG
 
+echo "--------------------------------------------------"
 echo "INFO: Searching for RAID-Configurations ..."
 used_array=$(cat /etc/mdadm/mdadm.conf | grep ARRAY | awk '{print $2}')
 
