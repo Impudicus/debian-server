@@ -2,11 +2,11 @@
 # Copyright 2023 by Philipp Hildebrandt
 
 work_dir="/pool1/download/complete/"
+trcd_dir="/pool1/download/makemkv"
 
 # ========================= ========================= =========================
 # MAIN
 
-# validate work_dir
 if ! [ -d "$work_dir" ]; then
     echo "ERROR: job failed (work_dir not found)!"
     exit 1
@@ -21,13 +21,13 @@ echo "done!"
 # print files are mkv/mp4 and more then 7,5 GB
 echo "--------------------------------------------------"
 echo "INFO: Printing files +7500 MB ..."
-find "$work_dir" -type f -size +7500M -printf "%f\n" -exec mv {} /pool1/download/makemkv \;
+find "$work_dir" -type f -size +7500M -printf "%f\n" -exec mv {} $trcd_dir \;
 echo "done!"
 
 # print files are mkv/mp4 and x264
 echo "--------------------------------------------------"
 echo "INFO: Printing files with codec x264 ..."
-find "$work_dir" -type f -name "*x264*" -name "*AVC*" -printf "%f\n" -exec mv {} /pool1/download/makemkv \;
+find "$work_dir" -type f -name "*x264*" -name "*AVC*" -printf "%f\n" -exec mv {} $trcd_dir \;
 echo "done!"
 
 echo "--------------------------------------------------"
