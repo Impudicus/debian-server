@@ -100,7 +100,7 @@ udevadm control --reload-rules || exit 1
 
 # onboard soundcard
 cp "$PWD/config/rules/blacklist-snd-hda-intel.conf" "/etc/modprobe.d/" || exit 1
-chmod 755 "/etc/modprobe.d/blacklist-snd_hda_intel.conf" || exit 1
+chmod 755 "/etc/modprobe.d/blacklist-snd-hda-intel.conf" || exit 1
 update-initramfs -u || exit 1
 
 
