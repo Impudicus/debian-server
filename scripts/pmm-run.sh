@@ -18,7 +18,7 @@ container_status()
 
 notification()
 {
-    /usr/local/bin/notification-push.sh "certbot" "$1" "$2"
+    /usr/local/bin/notification-push.sh "plex-meta-manager" "$1" "$2"
     exit 1
 }
 
@@ -27,23 +27,35 @@ notification()
 
 job_runtime=$SECONDS
 
-container_status "certbot"
-if [ $? -ne 0 ]; then
-    notification "error" "job failed (certbot already running)!"
+# check container runstates
+container_status "plex"
+if [ $? -eq 0 ]; then
+    notification "error" "job failed (plex not running)!"
 fi
 
-container_start "certbot"
+container_status "plex-meta-manager"
 if [ $? -ne 0 ]; then
-    notification "error" "job failed (unable to start container)!"
+    notification "error" "job failed (plex-meta-manager already running)!"
 fi
 
-# check container runstate every 15sec for 5min: certbot
+container_status "plex-image-cleanup"
+if [ $? -ne 0 ]; then
+    notification "error" "job failed (plex-image-cleanup already running)!"
+fi
+
+# run container: plex-meta-manager
+container_start "plex-meta-manager"
+if [ $? -ne 0 ]; then
+    notification "error" "job failed (unable to start plex-meta-manager)!"
+fi
+
+# check container runstate every 15sec for 60min: plex-meta-manager
 starttime=$SECONDS
-endtime=$(( SECONDS + 300 ))
+endtime=$(( SECONDS + 3600 ))
 
 while [ $SECONDS -lt $endtime ]; do
 
-    container_status "certbot"
+    container_status "plex-meta-manager"
     if [ $? -eq 0 ]; then
         job_duration=$(($SECONDS - runtime))
         notification "okay" "job finished successfully (runtime: $job_duration sec)!"
