@@ -100,6 +100,7 @@ echo "--------------------------------------------------"
 echo "INFO: Searching for RAID-Configurations ..."
 used_array=$(cat /etc/mdadm/mdadm.conf | grep ARRAY | awk '{print $2}')
 echo $used_array
+echo "/dev/md/${HOSTNAME}:0"
 
 if [ $used_array == "/dev/md/${HOSTNAME}:0" ]; then
     echo "INFO: RAID-Configuration found!"
