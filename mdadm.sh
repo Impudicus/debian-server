@@ -88,6 +88,8 @@ if [ -n "$old_volume" ]; then
     echo "--------------------------------------------------"
     echo "INFO: RAID-Volume not formated."
     echo "INFO: No configuration changes made."
+else
+    echo "INFO: No RAID-Volume found!"
 fi
 
 
