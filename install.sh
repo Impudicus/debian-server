@@ -172,9 +172,6 @@ apt install -y --no-install-recommends \
     mdadm \
     || exit 1
 
-# config
-cp "$PWD/config/mdadm/mdadm.conf" "/etc/mdadm/mdadm.conf" || exit 1
-
 
 # ========================= ========================= =========================
 # NETWORK
