@@ -180,11 +180,15 @@ cp "$PWD/config/mdadm/mdadm.conf" "/etc/mdadm/mdadm.conf" || exit 1
 # NETWORK
 
 # config
-cp "$PWD/config/network/interfaces" "/etc/network/interfaces" || exit 1
+cat "$PWD/config/network/interfaces" > "/etc/network/interfaces" || exit 1
+cp "$PWD/config/network/$HOSTNAME" "/etc/network/interfaces.d" || exit 1
 
 # disable ipv6
 cp "$PWD/config/rules/disable-all-ipv6.conf" "/etc/sysctl.d/disable-all-ipv6.conf" && \
 chmod 644 "/etc/sysctl.d/disable-all-ipv6.conf" || exit 1
+
+# resolvconf
+cat "$PWD/config/network/resolv.conf" > "/etc/resolv.conf" || exit 1
 
 # restart service
 sysctl -p "/etc/sysctl.d/disable-all-ipv6.conf" || exit 1
