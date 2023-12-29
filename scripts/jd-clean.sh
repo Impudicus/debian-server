@@ -1,8 +1,8 @@
 #!/bin/bash
 # Copyright 2023 by Philipp Hildebrandt
 
-work_dir="/pool1/download/complete/"
-trcd_dir="/pool1/download/makemkv"
+work_dir="/pool1/downloads/complete/"
+trcd_dir="/pool1/downloads/makemkv"
 
 # ========================= ========================= =========================
 # MAIN
