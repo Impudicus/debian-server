@@ -2,7 +2,7 @@
 # Copyright 2023 by Philipp Hildebrandt
 
 source_dir="/etc/docker"
-backup_dir="/pool/backup/onetime_$(date +'%Y-%m-%d')"
+backup_dir="/pool1/backup/onetime_$(date +'%Y-%m-%d')"
 
 # ========================= ========================= =========================
 # MAIN
