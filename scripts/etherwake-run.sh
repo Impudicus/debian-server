@@ -48,28 +48,24 @@ notification()
 
 job_runtime=$SECONDS
 
-# get device slave
 slave_name="$(device_slave $HOSTNAME)"
 if [ $? -ne 0 ]; then
     notification "error" "job failed (unable to get device slave)!"
     exit 1
 fi
 
-# get slave status I
 device_status $slave_name
 if [ $? -ne 0 ]; then
     notification "info" "job failed ('$slave_name' already online)!"
     exit 1
 fi
 
-# get slave mac-address
 slave_mac=$(device_mac $slave_name)
 if [ $? -ne 0 ]; then
     notification "error" "job failed (unable to lookup slave mac-address)!"
     exit 1
 fi
 
-# run etherwake
 device_wakeup $slave_mac
 if [ $? -ne 0 ]; then
     notification "error" "job failed (error while running command)!"
@@ -78,7 +74,6 @@ fi
 
 sleep 30
 
-# get slave status II
 device_status $slave_name
 if [ $? -eq 0 ]; then
     notification "error" "job failed (unable to wakeup slave)!"

@@ -8,5 +8,5 @@
 # |   |   |   |   .---- day of week (0 - 6) (Sunday=0 or 7) OR sun,mon,tue,wed,thu,fri,sat
 # |   |   |   |   |
 # *   *   *   *   *         user-name   command to be executed
-  0   18  *   *   1,2,3,4   root        /usr/local/bin/system-wakeup.sh
-  0   12  *   *   5,6,7     root        /usr/local/bin/system-wakeup.sh
+  0   18  *   *   1,2,3,4   root        /usr/local/bin/etherwake-run.sh
+  0   12  *   *   5,6,7     root        /usr/local/bin/etherwake-run.sh
