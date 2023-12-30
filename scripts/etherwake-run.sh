@@ -76,7 +76,7 @@ sleep 30
 
 device_status $slave_name
 if [ $? -eq 0 ]; then
-    notification "error" "job failed (unable to wakeup slave)!"
+    notification "error" "job failed (slave still offline)!"
     exit 1
 fi
 
