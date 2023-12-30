@@ -23,11 +23,9 @@ notification()
 job_runtime=$SECONDS
 
 container_status "nextcloud"
-if [ $? -ne 0 ]; then
-    notification "error" "job failed (certbot already running)!"
+if [ $? -eq 0 ]; then
+    # notification "error" "job failed (nextcloud not running)!"
     exit 1
 fi
 
-job_duration=$(($SECONDS - runtime))
-notification "error" "job failed (timeout: $job_duration sec)!"
-exit 1
+exit 0
