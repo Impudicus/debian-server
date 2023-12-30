@@ -19,7 +19,7 @@ container_status()
 notification()
 {
     /usr/local/bin/notification-push.sh "certbot" "$1" "$2"
-    exit 1
+    return $?
 }
 
 # ========================= ========================= =========================
@@ -30,11 +30,13 @@ job_runtime=$SECONDS
 container_status "certbot"
 if [ $? -ne 0 ]; then
     notification "error" "job failed (certbot already running)!"
+    exit 1
 fi
 
 container_start "certbot"
 if [ $? -ne 0 ]; then
     notification "error" "job failed (unable to start container)!"
+    exit 1
 fi
 
 # check container runstate every 15sec for 5min: certbot
@@ -47,6 +49,7 @@ while [ $SECONDS -lt $endtime ]; do
     if [ $? -eq 0 ]; then
         job_duration=$(($SECONDS - runtime))
         notification "okay" "job finished successfully (runtime: $job_duration sec)!"
+        exit 0
     else
         sleep 15
     fi
@@ -54,4 +57,4 @@ done
 
 job_duration=$(($SECONDS - runtime))
 notification "error" "job failed (timeout: $job_duration sec)!"
-exit 0
+exit 1

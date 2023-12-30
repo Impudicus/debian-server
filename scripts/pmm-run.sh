@@ -19,7 +19,7 @@ container_status()
 notification()
 {
     /usr/local/bin/notification-push.sh "plex-meta-manager" "$1" "$2"
-    exit 1
+    return $?
 }
 
 # ========================= ========================= =========================
@@ -31,22 +31,26 @@ job_runtime=$SECONDS
 container_status "plex"
 if [ $? -eq 0 ]; then
     notification "error" "job failed (plex not running)!"
+    exit 1
 fi
 
 container_status "plex-meta-manager"
 if [ $? -ne 0 ]; then
     notification "error" "job failed (plex-meta-manager already running)!"
+    exit 1
 fi
 
 container_status "plex-image-cleanup"
 if [ $? -ne 0 ]; then
     notification "error" "job failed (plex-image-cleanup already running)!"
+    exit 1
 fi
 
 # run container: plex-meta-manager
 container_start "plex-meta-manager"
 if [ $? -ne 0 ]; then
     notification "error" "job failed (unable to start plex-meta-manager)!"
+    exit 1
 fi
 
 # check container runstate every 15sec for 60min: plex-meta-manager
@@ -59,6 +63,7 @@ while [ $SECONDS -lt $endtime ]; do
     if [ $? -eq 0 ]; then
         job_duration=$(($SECONDS - runtime))
         notification "okay" "job finished successfully (runtime: $job_duration sec)!"
+        exit 0
     else
         sleep 15
     fi
@@ -66,4 +71,4 @@ done
 
 job_duration=$(($SECONDS - runtime))
 notification "error" "job failed (timeout: $job_duration sec)!"
-exit 0
+exit 1

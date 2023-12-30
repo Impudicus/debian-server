@@ -4,7 +4,7 @@
 notification()
 {
     /usr/local/bin/notification-push.sh "smartmon" "$1" "$2"
-    exit 1
+    return $?
 }
 
 # ========================= ========================= =========================

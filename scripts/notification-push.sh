@@ -35,5 +35,4 @@ fi
     --form-string "title=$1 on $HOSTNAME" \
     --form-string "message=$message" \
     https://api.pushover.net/1/messages.json &> /dev/null
-
 exit $?
