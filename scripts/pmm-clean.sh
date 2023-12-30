@@ -18,7 +18,7 @@ container_status()
 
 notification()
 {
-    /usr/local/bin/notification-push.sh "nextcloud" "$1" "$2"
+    /usr/local/bin/notification-push.sh "plex-image-cleanup" "$1" "$2"
     return $?
 }
 
