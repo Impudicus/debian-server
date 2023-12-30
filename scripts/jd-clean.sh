@@ -14,8 +14,8 @@ fi
 
 # remove files not mkv/mp4 and less then 1 GB
 echo "--------------------------------------------------"
-echo "INFO: Deleting files -1000 MB ..."
-find "$work_dir" -type f -size -1000M ! -name "*.mkv" ! -name "*.mp4" -delete || exit 1
+echo "INFO: Deleting files -500 MB ..."
+find "$work_dir" -type f -size -500M -printf "%f\n" -delete || exit 1
 echo "done!"
 
 # print files are mkv/mp4 and more then 7,5 GB
