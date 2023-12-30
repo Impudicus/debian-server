@@ -9,6 +9,8 @@ case "$1" in
     plex-image-cleanup) app_token="a45ergc1dorqzwcwr2bphps5rqpha6" ;;
     plex-meta-manager)  app_token="a45ergc1dorqzwcwr2bphps5rqpha6" ;;
     smartmon)   app_token="asdpr25tei6i5969mcodw1ynsu7jp3" ;;
+    TS473a) app_token="asdpr25tei6i5969mcodw1ynsu7jp3" ;;
+    TS673a)  app_token="asdpr25tei6i5969mcodw1ynsu7jp3" ;;
 esac
 
 case "$2" in
