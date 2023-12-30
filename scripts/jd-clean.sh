@@ -15,19 +15,25 @@ fi
 # remove files not mkv/mp4 and less then 1 GB
 echo "--------------------------------------------------"
 echo "INFO: Deleting files -1000 MB ..."
-find "$work_dir" -type f -size -1000M ! -name "*.mkv" ! -name "*.mp4" -printf "%f\n" || exit 1
+find "$work_dir" -type f -size -1000M ! -name "*.mkv" ! -name "*.mp4" -delete || exit 1
 echo "done!"
 
 # print files are mkv/mp4 and more then 7,5 GB
 echo "--------------------------------------------------"
-echo "INFO: Printing files +7500 MB ..."
+echo "INFO: Moving files +7500 MB ..."
 find "$work_dir" -type f -size +7500M -printf "%f\n" -exec mv {} $trcd_dir \;
 echo "done!"
 
 # print files are mkv/mp4 and x264
 echo "--------------------------------------------------"
-echo "INFO: Printing files with codec x264 ..."
+echo "INFO: Moving files with codec x264 ..."
 find "$work_dir" -type f -name "*x264*" -name "*AVC*" -printf "%f\n" -exec mv {} $trcd_dir \;
+echo "done!"
+
+# remove empty folders
+echo "--------------------------------------------------"
+echo "INFO: Deleting files -1000 MB ..."
+find "$work_dir" -type d -empty -delete || exit 1
 echo "done!"
 
 echo "--------------------------------------------------"
