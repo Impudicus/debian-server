@@ -6,6 +6,7 @@ user_token="uc8joh6vaszypwuvrprbyqfqgpwobb"
 case "$1" in
     certbot)    app_token="acnh3tbb38s9xmjwt6p4id9zvv2bny" ;;
     etherwake)  app_token="asdpr25tei6i5969mcodw1ynsu7jp3" ;;
+    nextcloud)  app_token="asdpr25tei6i5969mcodw1ynsu7jp3" ;;
     plex-image-cleanup) app_token="a45ergc1dorqzwcwr2bphps5rqpha6" ;;
     plex-meta-manager)  app_token="a45ergc1dorqzwcwr2bphps5rqpha6" ;;
     poweroff) app_token="asdpr25tei6i5969mcodw1ynsu7jp3" ;;
