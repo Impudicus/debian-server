@@ -39,7 +39,7 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
-# check container runstate every 15sec for 5min: certbot
+# check container runstate every 5sec for 5min: certbot
 starttime=$SECONDS
 endtime=$(( SECONDS + 300 ))
 
@@ -51,7 +51,7 @@ while [ $SECONDS -lt $endtime ]; do
         notification "okay" "job finished successfully (runtime: $job_duration sec)!"
         exit 0
     else
-        sleep 15
+        sleep 5
     fi
 done
 
