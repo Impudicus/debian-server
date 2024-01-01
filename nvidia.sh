@@ -21,10 +21,10 @@ fi
 # ========================= ========================= =========================
 # DISABLE DEFAULT DRIVERS
 
-if ! [ -f "/etc/modprobe.d/nouveau-blacklist.conf" ]; then
+if ! [ -f "/etc/modprobe.d/blacklist-nouveau.conf" ]; then
 
     # create blacklist
-    cp "$PWD/config/nvidia/nouveau-blacklist.conf" "/etc/modprobe.d" || exit 1
+    cp "$PWD/config/nvidia/blacklist-nouveau.conf" "/etc/modprobe.d" || exit 1
 
     # update initramfs
     update-initramfs -u || exit 1
