@@ -38,7 +38,7 @@ apt upgrade -y || exit 1
 apt update || exit 1
 
 # install requirements
-apt install -y --no-install-recommends \
+apt install -y \
     curl \
     gnupg \
     wget \
@@ -46,7 +46,7 @@ apt install -y --no-install-recommends \
     || exit 1
 
 # install firmware
-apt install -y --no-install-recommends \
+apt install -y \
     firmware-atheros \
     firmware-linux \
     firmware-linux-nonfree \
@@ -55,7 +55,7 @@ apt install -y --no-install-recommends \
     || exit 1
 
 # install sys-tools
-apt install -y --no-install-recommends \
+apt install -y \
     bash-completion \
     openssh-client \
     openssh-server \
@@ -137,7 +137,7 @@ service docker restart || exit 1
 
 # install
 apt update || exit 1
-apt install -y --no-install-recommends \
+apt install -y \
     etherwake \
     || exit 1
 
@@ -168,7 +168,7 @@ update-grub || exit 1
 
 # install
 apt update || exit 1
-apt install -y --no-install-recommends \
+apt install -y \
     mdadm \
     || exit 1
 
@@ -196,7 +196,7 @@ sysctl -p "/etc/sysctl.d/disable-all-ipv6.conf" || exit 1
 
 # install
 apt update || exit 1
-apt install -y --no-install-recommends \
+apt install -y \
     ntp \
     || exit 1
 
@@ -223,7 +223,7 @@ service sshd restart || exit 1
 
 # install
 apt update || exit 1
-apt install -y --no-install-recommends \
+apt install -y \
     restic \
     || exit 1
 
@@ -237,7 +237,7 @@ cp "$PWD/config/restic/password" "$HOME/.config/restic" || exit 1
 
 # install
 apt update || exit 1
-apt install -y --no-install-recommends \
+apt install -y \
     samba \
     || exit 1
 
@@ -256,7 +256,7 @@ service samba restart || exit 1
 
 # install
 apt update || exit 1
-apt install -y --no-install-recommends \
+apt install -y \
     smartmontools \
     || exit 1
 
