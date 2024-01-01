@@ -27,9 +27,6 @@ cat "$PWD/config/apt/sources.list" > "/etc/apt/sources.list" || exit 1
 # update repositories
 apt update || exit 1
 
-# update system
-apt upgrade -y || exit 1
-
 
 # ========================= ========================= =========================
 # FIRMWARE
@@ -119,6 +116,8 @@ apt update || exit 1
 apt install -y \
     docker-ce \
     docker-ce-cli \
+    containerd.io \
+    docker-buildx-plugin \
     docker-compose-plugin \
     || exit 1
 
@@ -172,6 +171,8 @@ apt install -y \
     mdadm \
     || exit 1
 
+# config
+cat "$PWD/config/mdadm/mdadm.conf" > "/etc/mdadm/mdadm.conf" || exit 1
 
 # ========================= ========================= =========================
 # NETWORK
@@ -185,7 +186,7 @@ cp "$PWD/config/rules/disable-all-ipv6.conf" "/etc/sysctl.d/disable-all-ipv6.con
 chmod 644 "/etc/sysctl.d/disable-all-ipv6.conf" || exit 1
 
 # resolvconf
-cat "$PWD/config/network/resolv.conf" > "/etc/resolv.conf" || exit 1
+# cat "$PWD/config/network/resolv.conf" > "/etc/resolv.conf" || exit 1
 
 # restart service
 sysctl -p "/etc/sysctl.d/disable-all-ipv6.conf" || exit 1
@@ -291,7 +292,7 @@ ufw default deny incoming || exit 1
 ufw default allow outgoing || exit 1
 
 # enable ufw
-ufw enable || exit 1
+# ufw enable || exit 1
 
 
 # ========================= ========================= =========================
