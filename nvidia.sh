@@ -55,7 +55,7 @@ apt update || exit 1
 
 # install requirements
 apt update || exit 1
-apt install -y --no-install-recommends \
+apt install -y \
     libc-dev \
     libc6-dev \
     gcc \
