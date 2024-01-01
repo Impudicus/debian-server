@@ -48,7 +48,7 @@ if [ -n "$used_array" ] && [ -n "$used_config" ]; then
 
         # add raid-volume to fstab
         volume_uuid=$(echo $used_array | cut -d '"' -f2)
-        echo "UUID=$volume_uuid /mnt/pool1 ext4 defaults,nofail,discard 0 0" >> "/etc/fstab" || exit 1
+        echo "UUID=$volume_uuid /mnt/pool1 ext4 defaults,nofail 0 0" >> "/etc/fstab" || exit 1
 
         # restart daemon
         systemctl daemon-reload || exit 1
