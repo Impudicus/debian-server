@@ -251,7 +251,7 @@ apt install -y \
 # cat "$PWD/config/samba/$HOSTNAME.conf" > "/etc/samba/smb.conf" || exit 1
 
 # create samba user
-smbpasswd -a debian || exit 1
+# smbpasswd -a debian || exit 1
 
 # restart service
 service samba restart || exit 1
@@ -297,7 +297,7 @@ ufw default deny incoming || exit 1
 ufw default allow outgoing || exit 1
 
 # enable ufw
-# ufw enable || exit 1
+ufw enable || exit 1
 
 
 # ========================= ========================= =========================
