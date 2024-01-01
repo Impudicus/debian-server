@@ -39,7 +39,7 @@ device_wakeup()
 
 notification()
 {
-    /usr/local/bin/notification-push.sh "nextcloud" "$1" "$2"
+    /usr/local/bin/notification-push.sh "etherwake" "$1" "$2"
     return $?
 }
 
