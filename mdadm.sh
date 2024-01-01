@@ -29,12 +29,12 @@ fi
 # VOLUME
 
 echo "INFO: Searching for RAID-VOLUMES ..."
-old_volume=$(blkid | grep "md0" | awk '{print $2}')
-old_config=$(cat "/etc/mdadm/mdadm.conf" | grep "/dev/md/0")
+used_array=$(blkid | grep "md0" | awk '{print $2}')
+used_config=$(cat "/etc/mdadm/mdadm.conf" | grep "ARRAY")
 
-if [ -n "$old_volume" ] && [ -n "$old_config" ]; then
+if [ -n "$used_array" ] && [ -n "$used_config" ]; then
     echo "INFO: RAID-Volume found!"
-    echo "INFO: $old_volume."
+    echo "INFO: $used_array."
     echo "--------------------------------------------------"
     echo "Would you like to write RAID-Volume to fstab?"
 
@@ -101,7 +101,7 @@ fi
 
 echo "--------------------------------------------------"
 echo "INFO: Searching for RAID-Configurations ..."
-used_array=$(cat "/etc/mdadm/mdadm.conf" | grep "/dev/md/0")
+used_array=$(cat "/etc/mdadm/mdadm.conf" | grep "ARRAY")
 
 if [ -n "$used_array" ]; then
     echo "INFO: RAID-Configuration found!"
