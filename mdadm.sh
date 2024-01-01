@@ -30,8 +30,9 @@ fi
 
 echo "INFO: Searching for RAID-VOLUMES ..."
 old_volume=$(blkid | grep "md0" | awk '{print $2}')
+old_config=$(cat "/etc/mdadm/mdadm.conf" | grep "/dev/md/0")
 
-if [ -n "$old_volume" ]; then
+if [ -n "$old_volume" ] && [ -n "$old_config" ]; then
     echo "INFO: RAID-Volume found!"
     echo "INFO: $old_volume."
     echo "--------------------------------------------------"
@@ -102,7 +103,7 @@ echo "--------------------------------------------------"
 echo "INFO: Searching for RAID-Configurations ..."
 used_array=$(cat /etc/mdadm/mdadm.conf | grep ARRAY | awk '{print $2}')
 
-if [ $used_array == "/dev/md/TS673a:0" ] || [ $used_array == "/dev/md/TS673A:0" ] || [ $used_array == "/dev/md/TS473a:0" ] || [ $used_array == "/dev/md/TS473A:0" ]; then
+if [ $used_array = "/dev/md/TS673a:0" ] || [ $used_array = "/dev/md/TS673A:0" ] || [ $used_array = "/dev/md/TS473a:0" ] || [ $used_array = "/dev/md/TS473A:0" ]; then
     echo "INFO: RAID-Configuration found!"
     echo "INFO: $used_array."
     echo "--------------------------------------------------"
