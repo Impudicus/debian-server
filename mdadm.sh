@@ -26,7 +26,7 @@ fi
 
 
 # ========================= ========================= =========================
-# VOLUME
+# USED ARRAY
 
 echo "INFO: Searching for RAID-VOLUMES ..."
 used_array=$(blkid | grep "md0" | awk '{print $2}')
@@ -36,8 +36,9 @@ if [ -n "$used_array" ] && [ -n "$used_config" ]; then
     echo "INFO: RAID-Volume found!"
     echo "INFO: $used_array."
     echo "--------------------------------------------------"
-    echo "Would you like to write RAID-Volume to fstab?"
 
+
+    echo "Would you like to write RAID-Volume to fstab?"
     read -p "Usage: <YES|no> " add_volume
     if [ "$add_volume" = "YES" ]; then
 
@@ -62,8 +63,9 @@ if [ -n "$used_array" ] && [ -n "$used_config" ]; then
     echo "--------------------------------------------------"
     echo "INFO: RAID-Volume not added."
     echo "--------------------------------------------------"
-    echo "Would you like to format the RAID-Volume?"
 
+
+    echo "Would you like to format the RAID-Volume?"
     read -p "Usage: <YES|no> " format_volume
     if [ "$format_volume" = "YES" ]; then
 
@@ -90,25 +92,10 @@ if [ -n "$used_array" ] && [ -n "$used_config" ]; then
     fi
     echo "--------------------------------------------------"
     echo "INFO: RAID-Volume not formated."
-    echo "INFO: No configuration changes made."
-else
-    echo "INFO: No RAID-Volume found!"
-fi
-
-
-# ========================= ========================= =========================
-# CONFIG
-
-echo "--------------------------------------------------"
-echo "INFO: Searching for RAID-Configurations ..."
-used_array=$(cat "/etc/mdadm/mdadm.conf" | grep "ARRAY")
-
-if [ -n "$used_array" ]; then
-    echo "INFO: RAID-Configuration found!"
-    echo "INFO: $used_array."
     echo "--------------------------------------------------"
-    echo "Would you like to remove the RAID-Configuration?"
 
+
+    echo "Would you like to remove the RAID-Configuration?"
     read -p "Usage: <YES|no> " remove_configuration
     if [ "$remove_configuration" = "YES" ]; then
 
@@ -128,12 +115,12 @@ if [ -n "$used_array" ]; then
     echo "INFO: No configuration changes made."
     exit 0
 else
-    echo "INFO: No RAID-Configurations found!"
+    echo "INFO: No RAID-Volume found!"
 fi
 
 
 # ========================= ========================= =========================
-# ARRAY
+# UNUSED ARRAY
 
 echo "--------------------------------------------------"
 echo "INFO: Searching for unused RAID-Arrays ..."
