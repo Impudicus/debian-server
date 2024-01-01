@@ -103,7 +103,7 @@ echo "--------------------------------------------------"
 echo "INFO: Searching for RAID-Configurations ..."
 used_array=$(cat /etc/mdadm/mdadm.conf | grep ARRAY | awk '{print $2}')
 
-if [ $used_array = "/dev/md/TS673a:0" ] || [ $used_array = "/dev/md/TS673A:0" ] || [ $used_array = "/dev/md/TS473a:0" ] || [ $used_array = "/dev/md/TS473A:0" ]; then
+if [ -ne $used_array ]; then
     echo "INFO: RAID-Configuration found!"
     echo "INFO: $used_array."
     echo "--------------------------------------------------"
