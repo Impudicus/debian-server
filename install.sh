@@ -54,8 +54,6 @@ apt install -y \
 # install sys-tools
 apt install -y \
     bash-completion \
-    openssh-client \
-    openssh-server \
     rsync \
     || exit 1
 
@@ -210,6 +208,13 @@ service ntpsec restart || exit 1
 
 # ========================= ========================= =========================
 # OPEN-SSH
+
+# install
+apt update || exit 1
+apt install -y \
+    openssh-client \
+    openssh-server \
+    || exit 1
 
 # config
 cat "$PWD/config/ssh/sshd_config" > "/etc/ssh/sshd_config" || exit 1
