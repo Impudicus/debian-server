@@ -286,7 +286,7 @@ apt install -y \
 
 # create rules
 ufw allow samba || exit 1
-ufw limit ssh/tcp || exit 1
+ufw limit ssh || exit 1
 ufw default deny incoming || exit 1
 ufw default allow outgoing || exit 1
 
