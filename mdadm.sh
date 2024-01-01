@@ -44,7 +44,7 @@ if [ -n "$used_array" ] && [ -n "$used_config" ]; then
 
         # create mountpoint/syslinks
         mkdir -p "/mnt/pool1" || exit 1
-        ln -s "/mnt/pool1" "/pool1" || exit 1
+        ln -sf "/mnt/pool1" "/pool1" || exit 1
 
         # add raid-volume to fstab
         volume_uuid=$(echo $old_volume | cut -d '"' -f2)
