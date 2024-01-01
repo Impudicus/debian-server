@@ -101,7 +101,7 @@ fi
 
 echo "--------------------------------------------------"
 echo "INFO: Searching for RAID-Configurations ..."
-used_array=$(cat /etc/mdadm/mdadm.conf | grep -q "ARRAY")
+used_array=$(cat "/etc/mdadm/mdadm.conf" | grep "/dev/md/0")
 
 if [ -n $used_array ]; then
     echo "INFO: RAID-Configuration found!"
