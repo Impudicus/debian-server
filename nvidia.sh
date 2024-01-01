@@ -67,7 +67,7 @@ apt install -y --no-install-recommends \
 # ========================= ========================= =========================
 # INSTALL CUSTOM DRIVERS
 
-latest_driver_version="535.146.02"
+latest_driver_version="470.199.02"
 latest_driver_url="https://de.download.nvidia.com/XFree86/Linux-x86_64/${latest_driver_version}/NVIDIA-Linux-x86_64-${latest_driver_version}.run"
 
 if ! [ -d "/usr/lib/firmware/nvidia/${latest_driver_version}" ]; then
