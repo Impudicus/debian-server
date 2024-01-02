@@ -29,7 +29,7 @@ fi
 # USED ARRAY
 
 echo "INFO: Searching for RAID-VOLUMES ..."
-used_array=$(blkid | grep "md0" | awk '{print $2}')
+used_array=$(blkid | grep "md" | awk '{print $2}')
 used_config=$(cat "/etc/mdadm/mdadm.conf" | grep "ARRAY")
 
 if [ -n "$used_array" ] && [ -n "$used_config" ]; then
