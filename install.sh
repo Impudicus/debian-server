@@ -27,15 +27,16 @@ cat "$PWD/config/apt/sources.list" > "/etc/apt/sources.list" || exit 1
 # update repositories
 apt update || exit 1
 
+# update system
+apt upgrade || exit 1
+
 
 # ========================= ========================= =========================
 # FIRMWARE
 
-# update repositories
-apt update || exit 1
-
 # install requirements
-apt install -y \
+apt update || exit 1
+apt install -y --no-install-recommends \
     curl \
     gnupg \
     wget \
@@ -43,7 +44,8 @@ apt install -y \
     || exit 1
 
 # install firmware
-apt install -y \
+apt update || exit 1
+apt install -y --no-install-recommends \
     firmware-atheros \
     firmware-linux \
     firmware-linux-nonfree \
@@ -52,7 +54,8 @@ apt install -y \
     || exit 1
 
 # install sys-tools
-apt install -y \
+apt update || exit 1
+apt install -y --no-install-recommends \
     bash-completion \
     rsync \
     || exit 1
@@ -62,10 +65,10 @@ apt install -y \
 # BASIC CONFIG
 
 # bashrc
-cp "$PWD/config/.bashrc" "$HOME/.bashrc" || exit 1
+cat "$PWD/config/.bashrc" > "$HOME/.bashrc" || exit 1
 
 # hostname
-cp "$PWD/config/hosts" "/etc/hosts" || exit 1
+cat "$PWD/config/hosts" > "/etc/hosts" || exit 1
 
 # scripts
 cp $PWD/scripts/notification-*.sh "/usr/local/bin" && \
@@ -76,7 +79,7 @@ chmod 755 /usr/local/bin/notification-*.sh || exit 1
 # CRON
 
 # config
-cp "$PWD/config/crontab" "/etc/crontab" || exit 1
+cat "$PWD/config/crontab" > "/etc/crontab" || exit 1
 
 # cron.d
 cp "$PWD/cron.d/poweroff" "/etc/cron.d" || exit 1
@@ -90,12 +93,12 @@ service cron restart || exit 1
 
 # onboard usb-stick
 cp "$PWD/config/rules/disable-on-board-stick.rules" "/etc/udev/rules.d/" || exit 1
-chmod 755 "/etc/udev/rules.d/disable-on-board-stick.rules" || exit 1
+chmod 644 "/etc/udev/rules.d/disable-on-board-stick.rules" || exit 1
 udevadm control --reload-rules || exit 1
 
 # onboard soundcard
 cp "$PWD/config/rules/blacklist-snd-hda-intel.conf" "/etc/modprobe.d/" || exit 1
-chmod 755 "/etc/modprobe.d/blacklist-snd-hda-intel.conf" || exit 1
+chmod 644 "/etc/modprobe.d/blacklist-snd-hda-intel.conf" || exit 1
 update-initramfs -u || exit 1
 
 
@@ -111,7 +114,7 @@ curl -fsSL "https://download.docker.com/linux/debian/gpg" | gpg --dearmor -o "/e
 
 # install
 apt update || exit 1
-apt install -y \
+apt install -y --no-install-recommends \
     docker-ce \
     docker-ce-cli \
     containerd.io \
@@ -134,7 +137,7 @@ service docker restart || exit 1
 
 # install
 apt update || exit 1
-apt install -y \
+apt install -y --no-install-recommends \
     etherwake \
     || exit 1
 
@@ -153,11 +156,11 @@ chmod 755 /usr/local/bin/etherwake-*.sh || exit 1
 # mkdir -p "/boot/grub/themes/debian" || exit 1
 # tar -xf "$PWD/config/grub/debian.tar" -C "/boot/grub/themes/debian" || exit 1
 
-# # config
-# cat "$PWD/config/grub/grub" > "/etc/default/grub" || exit 1
+# config
+cat "$PWD/config/grub/grub" > "/etc/default/grub" || exit 1
 
-# # update grub
-# update-grub || exit 1
+# update grub
+update-grub || exit 1
 
 
 # ========================= ========================= =========================
@@ -165,12 +168,13 @@ chmod 755 /usr/local/bin/etherwake-*.sh || exit 1
 
 # install
 apt update || exit 1
-apt install -y \
+apt install -y --no-install-recommends \
     mdadm \
     || exit 1
 
 # config
 cat "$PWD/config/mdadm/mdadm.conf" > "/etc/mdadm/mdadm.conf" || exit 1
+
 
 # ========================= ========================= =========================
 # NETWORK
@@ -180,14 +184,12 @@ cat "$PWD/config/network/interfaces" > "/etc/network/interfaces" || exit 1
 cp "$PWD/config/network/$HOSTNAME" "/etc/network/interfaces.d" || exit 1
 
 # disable ipv6
-cp "$PWD/config/rules/disable-all-ipv6.conf" "/etc/sysctl.d/disable-all-ipv6.conf" && \
+cp "$PWD/config/rules/disable-all-ipv6.conf" "/etc/sysctl.d" && \
 chmod 644 "/etc/sysctl.d/disable-all-ipv6.conf" || exit 1
-
-# resolvconf
-# cat "$PWD/config/network/resolv.conf" > "/etc/resolv.conf" || exit 1
-
-# restart service
 sysctl -p "/etc/sysctl.d/disable-all-ipv6.conf" || exit 1
+
+# resolv.conf
+cat "$PWD/config/network/resolv.conf" > "/etc/resolv.conf" || exit 1
 
 
 # ========================= ========================= =========================
@@ -195,7 +197,7 @@ sysctl -p "/etc/sysctl.d/disable-all-ipv6.conf" || exit 1
 
 # install
 apt update || exit 1
-apt install -y \
+apt install -y --no-install-recommends \
     ntp \
     || exit 1
 
@@ -211,7 +213,7 @@ service ntpsec restart || exit 1
 
 # install
 apt update || exit 1
-apt install -y \
+apt install -y --no-install-recommends \
     openssh-client \
     openssh-server \
     || exit 1
@@ -229,7 +231,7 @@ service sshd restart || exit 1
 
 # install
 apt update || exit 1
-apt install -y \
+apt install -y --no-install-recommends \
     restic \
     || exit 1
 
@@ -243,7 +245,7 @@ cp "$PWD/config/restic/password" "$HOME/.config/restic" || exit 1
 
 # install
 apt update || exit 1
-apt install -y \
+apt install -y --no-install-recommends \
     samba \
     || exit 1
 
@@ -262,7 +264,7 @@ service samba restart || exit 1
 
 # install
 apt update || exit 1
-apt install -y \
+apt install -y --no-install-recommends \
     smartmontools \
     || exit 1
 
@@ -284,20 +286,20 @@ chmod 755 /usr/local/bin/smartmon-*.sh || exit 1
 # ========================= ========================= =========================
 # UFW
 
-# # install
-# apt update || exit 1
-# apt install -y \
-#     ufw \
-#     || exit 1
+# install
+apt update || exit 1
+apt install -y --no-install-recommends \
+    ufw \
+    || exit 1
 
-# # create rules
-# ufw allow samba || exit 1
-# ufw limit ssh || exit 1
-# ufw default deny incoming || exit 1
-# ufw default allow outgoing || exit 1
+# create rules
+ufw allow samba || exit 1
+ufw limit ssh || exit 1
+ufw default deny incoming || exit 1
+ufw default allow outgoing || exit 1
 
-# # enable ufw
-# ufw enable || exit 1
+# enable ufw
+ufw enable || exit 1
 
 
 # ========================= ========================= =========================
