@@ -30,10 +30,10 @@ fi
 
 echo "--------------------------------------------------"
 echo "INFO: Searching for RAID-Configuration ..."
-blkid_result=$(blkid | grep "md" | awk '{print $2}')
-mdadm_result=$(cat "/etc/mdadm/mdadm.conf" | grep "ARRAY")
+used_volume=$(blkid | grep "md" | awk '{print $2}')
+used_array=$(cat "/etc/mdadm/mdadm.conf" | grep "ARRAY")
 
-if [ -n "$lookup_array" ] && [ -n "$used_config" ]; then
+if [ -n "$used_volume" ] && [ -n "$used_array" ]; then
     echo "INFO: RAID-Volume found!"
     echo "INFO: $used_array"
     echo "--------------------------------------------------"
@@ -49,11 +49,11 @@ fi
 
 echo "--------------------------------------------------"
 echo "INFO: Searching for RAID-Arrays ..."
-mdadm_result=$(mdadm --examine --scan | grep 'ARRAY')
+unused_array=$(mdadm --examine --scan | grep 'ARRAY')
 
-if [ -n "$mdadm_result" ]; then
+if [ -n "$unused_array" ]; then
     echo "INFO: Unconfigured RAID-Array found!"
-    echo "INFO: $mdadm_result."
+    echo "INFO: $unused_array."
     echo "--------------------------------------------------"
     echo "Would you like to use the array?"
 
