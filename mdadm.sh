@@ -64,6 +64,55 @@ if [ -n "$used_volume" ] && [ -n "$used_array" ]; then
     echo "INFO: RAID-Volume not added to fstab."
     echo "--------------------------------------------------"
 
+
+    echo "Would you like to format the RAID-Volume?"
+    read -p "Usage: <YES|no> " format_volume
+    if [ "$format_volume" = "YES" ]; then
+
+        # print warning
+        echo "WARNING: RAID-Volume will be formated!! All files will be lost!!"
+        for ((i=10; i>0; i--)); do
+            echo "WARNING: Changes will be applied in $i seconds!!"
+            echo "         Press CTRL + C to cancel the operation!!"
+            sleep 1
+        done
+
+        # format raid-volume
+        mkfs.ext4 "/dev/md0" || exit 1
+
+        # set reserved space to 0%
+        tune2fs -m 0 "/dev/md0" || exit 1
+
+        echo "--------------------------------------------------"
+        echo "INFO: RAID-Volume formated as ext4."
+        echo "INFO: System restart pending."
+        echo "--------------------------------------------------"
+        exit 0
+
+    fi
+    echo "--------------------------------------------------"
+    echo "INFO: RAID-Volume not formated."
+    echo "--------------------------------------------------"
+
+
+    echo "Would you like to remove the RAID-Configuration?"
+    read -p "Usage: <YES|no> " remove_config
+    if [ "$remove_config" = "YES" ]; then
+
+        # write raid-array to mdadm.conf
+        cat "$PWD/config/mdadm/mdadm.conf" > "/etc/mdadm/mdadm.conf" || exit 1
+
+        # update initramfs
+        update-initramfs -u || exit 1
+
+        echo "--------------------------------------------------"
+        echo "INFO: RAID-Configuration removed."
+        echo "--------------------------------------------------"
+        exit 0
+    fi
+    echo "--------------------------------------------------"
+    echo "INFO: RAID-Configuration not removed."
+    echo "INFO: No configuration changes made."
     exit 0
 else
     echo "INFO: No RAID-Configuration found!"
