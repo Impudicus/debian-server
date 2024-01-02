@@ -19,25 +19,6 @@ fi
 
 
 # ========================= ========================= =========================
-# DISABLE DEFAULT DRIVERS
-
-if ! [ -f "/etc/modprobe.d/blacklist-nouveau.conf" ]; then
-
-    # create blacklist
-    cp "$PWD/config/nvidia/blacklist-nouveau.conf" "/etc/modprobe.d" || exit 1
-
-    # update initramfs
-    update-initramfs -u || exit 1
-
-    echo "--------------------------------------------------"
-    echo "INFO: Nouveau drivers disabled."
-    echo "INFO: System restart pending."
-    echo "--------------------------------------------------"
-    exit 0
-fi
-
-
-# ========================= ========================= =========================
 # UPDATE SYSTEM
 
 # update repositories
@@ -50,18 +31,34 @@ apt upgrade -y || exit 1
 # ========================= ========================= =========================
 # INSTALL FIRMWARE
 
-# update repositories
-apt update || exit 1
-
 # install requirements
 apt update || exit 1
-apt install -y \
-    libc-dev \
-    libc6-dev \
-    gcc \
-    make \
-    linux-headers-amd64 \
+apt install -y --no-install-recommends \
+    linux-headers-$(uname -r) \
+    build-essential \
+    libglvnd-dev \
+    pkg-config
     || exit 1
+
+
+# ========================= ========================= =========================
+# DISABLE DEFAULT DRIVERS
+
+if ! [ -f "/etc/modprobe.d/blacklist-nouveau.conf" ]; then
+
+    # create blacklist
+    cp "$PWD/config/nvidia/blacklist-nouveau.conf" "/etc/modprobe.d" || exit 1
+    chmod 644 "/etc/modprobe.d/blacklist-nouveau.conf" || exit 1
+
+    # update initramfs
+    update-initramfs -u || exit 1
+
+    echo "--------------------------------------------------"
+    echo "INFO: Nouveau drivers disabled."
+    echo "INFO: System restart pending."
+    echo "--------------------------------------------------"
+    exit 0
+fi
 
 
 # ========================= ========================= =========================
@@ -77,14 +74,19 @@ if ! [ -d "/usr/lib/firmware/nvidia/${latest_driver_version}" ]; then
     chmod 755 "$PWD/NVIDIA-Linux-x86_64-${latest_driver_version}.run" || exit 1
 
     # install driver
-    bash "$PWD/NVIDIA-Linux-x86_64-${latest_driver_version}.run" --target "$PWD/NVIDIA-Linux-x86_64-${latest_driver_version}" || exit 1
+    bash "$PWD/NVIDIA-Linux-x86_64-${latest_driver_version}.run" --target "/tmp/NVIDIA-Linux-x86_64-${latest_driver_version}" || exit 1
 
     # remove driver & temp-folder
     rm -rf \
         "$PWD/NVIDIA-Linux-x86_64-${latest_driver_version}.run" \
-        "$PWD/NVIDIA-Linux-x86_64-${latest_driver_version}" \
+        "/tmp/NVIDIA-Linux-x86_64-${latest_driver_version}" \
         || exit 1
 
+    echo "--------------------------------------------------"
+    echo "INFO: Custom drivers installed."
+    echo "INFO: System restart pending."
+    echo "--------------------------------------------------"
+    exit 0
 fi
 
 
@@ -99,7 +101,7 @@ curl -fsSL "https://nvidia.github.io/nvidia-docker/gpgkey" | gpg --dearmor -o "/
 
 # install
 apt update || exit 1
-apt install -y \
+apt install -y --no-install-recommends \
     nvidia-container-toolkit \
     || exit 1
 
