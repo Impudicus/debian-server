@@ -123,7 +123,7 @@ apt install -y \
 cat "$PWD/config/docker/daemon.json" > "/etc/docker/daemon.json" || exit 1
 
 # syslink
-ln -s "/etc/docker" "/docker" || exit 1
+ln -sf "/etc/docker" "/docker" || exit 1
 
 # restart service
 service docker restart || exit 1
@@ -149,15 +149,15 @@ chmod 755 /usr/local/bin/etherwake-*.sh || exit 1
 # ========================= ========================= =========================
 # GRUB
 
-# unzip
-mkdir -p "/boot/grub/themes/debian" || exit 1
-tar -xf "$PWD/config/grub/debian.tar" -C "/boot/grub/themes/debian" || exit 1
+# # unzip
+# mkdir -p "/boot/grub/themes/debian" || exit 1
+# tar -xf "$PWD/config/grub/debian.tar" -C "/boot/grub/themes/debian" || exit 1
 
-# config
-cat "$PWD/config/grub/grub" > "/etc/default/grub" || exit 1
+# # config
+# cat "$PWD/config/grub/grub" > "/etc/default/grub" || exit 1
 
-# update grub
-update-grub || exit 1
+# # update grub
+# update-grub || exit 1
 
 
 # ========================= ========================= =========================
@@ -284,20 +284,20 @@ chmod 755 /usr/local/bin/smartmon-*.sh || exit 1
 # ========================= ========================= =========================
 # UFW
 
-# install
-apt update || exit 1
-apt install -y \
-    ufw \
-    || exit 1
+# # install
+# apt update || exit 1
+# apt install -y \
+#     ufw \
+#     || exit 1
 
-# create rules
-ufw allow samba || exit 1
-ufw limit ssh || exit 1
-ufw default deny incoming || exit 1
-ufw default allow outgoing || exit 1
+# # create rules
+# ufw allow samba || exit 1
+# ufw limit ssh || exit 1
+# ufw default deny incoming || exit 1
+# ufw default allow outgoing || exit 1
 
-# enable ufw
-ufw enable || exit 1
+# # enable ufw
+# ufw enable || exit 1
 
 
 # ========================= ========================= =========================
