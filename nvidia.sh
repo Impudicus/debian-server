@@ -37,7 +37,7 @@ apt install -y --no-install-recommends \
     linux-headers-$(uname -r) \
     build-essential \
     libglvnd-dev \
-    pkg-config
+    pkg-config \
     || exit 1
 
 
