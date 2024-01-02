@@ -44,7 +44,7 @@ if [ -n "$used_volume" ] && [ -n "$used_array" ]; then
     if [ "$add_volume" = "YES" ]; then
 
         # add raid-volume to fstab
-        volume_uuid=$(echo $used_array | cut -d '"' -f2)
+        volume_uuid=$(echo $used_volume | cut -d '"' -f2)
         echo "UUID=$volume_uuid /mnt/pool1 ext4 defaults,nofail 0 0" >> "/etc/fstab" || exit 1
 
         # restart daemon
