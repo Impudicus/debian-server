@@ -153,8 +153,8 @@ chmod 755 /usr/local/bin/etherwake-*.sh || exit 1
 # GRUB
 
 # # unzip
-# mkdir -p "/boot/grub/themes/debian" || exit 1
-# tar -xf "$PWD/config/grub/debian.tar" -C "/boot/grub/themes/debian" || exit 1
+mkdir -p "/boot/grub/themes/debian" || exit 1
+tar -xf "$PWD/config/grub/debian.tar" -C "/boot/grub/themes/debian" || exit 1
 
 # config
 cat "$PWD/config/grub/grub" > "/etc/default/grub" || exit 1
