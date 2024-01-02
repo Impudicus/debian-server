@@ -54,8 +54,62 @@ if [ -n "$unused_array" ]; then
     echo "INFO: Unconfigured RAID-Array found!"
     echo "INFO: $unused_array."
     echo "--------------------------------------------------"
-    echo "Would you like to use the array?"
 
+
+    echo "Would you like to use the array?"
+    read -p "Usage: <YES|no> " use_array
+    if [ "$use_array" = "YES" ]; then
+
+        # write config to mdadm.conf
+        cat "$PWD/config/mdadm/mdadm.conf" > "/etc/mdadm/mdadm.conf" || exit 1
+        mdadm --detail --scan >> "/etc/mdadm/mdadm.conf" || exit 1
+
+        # update initramfs
+        update-initramfs -u || exit 1
+
+        echo "--------------------------------------------------"
+        echo "INFO: RAID-Array written to config."
+        echo "INFO: System restart pending."
+        echo "--------------------------------------------------"
+        exit 0
+    fi
+    echo "--------------------------------------------------"
+    echo "INFO: RAID-Array not written to config."
+    echo "--------------------------------------------------"
+
+
+    echo "Would you like to delete the array?"
+    read -p "Usage: <YES|no> " del_array
+    if [ "$del_array" = "YES" ]; then
+
+        echo "WARNING: RAID configuration will be deleted!! All files will be lost!!"
+        for ((i=10; i>0; i--)); do
+            echo "WARNING: Changes will be applied in $i seconds!!"
+            echo "         Press CTRL + C to cancel the operation!!"
+            sleep 1
+        done
+
+        # delete old raid-configuration
+        mdadm --stop /dev/md* || exit 1
+
+        # clear disks
+        mdadm --zero-superblock /dev/sd[a-f] || exit 1
+
+        # write raid-array to mdadm.conf
+        cat "$PWD/config/mdadm/mdadm.conf" > "/etc/mdadm/mdadm.conf" || exit 1
+
+        # update initramfs
+        update-initramfs -u || exit 1
+
+        echo "--------------------------------------------------"
+        echo "INFO: RAID-Array purged. Disks cleared."
+        echo "INFO: System restart pending."
+        echo "--------------------------------------------------"
+        exit 0
+    fi
+    echo "--------------------------------------------------"
+    echo "INFO: RAID-Array not purged. Disks not cleared."
+    echo "INFO: No configuration changes made."
 else
     echo "INFO: No RAID-Arrays found!"
 fi
