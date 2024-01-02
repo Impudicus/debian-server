@@ -187,11 +187,3 @@ if [ -n "$unused_array" ]; then
 else
     echo "INFO: No RAID-Arrays found!"
 fi
-
-
-# ========================= ========================= =========================
-echo "--------------------------------------------------"
-echo "INFO: Script executed successfully."
-echo "INFO: System restart pending."
-echo "--------------------------------------------------"
-exit 0
