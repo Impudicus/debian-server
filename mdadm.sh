@@ -28,7 +28,7 @@ fi
 # ========================= ========================= =========================
 # USED ARRAY
 
-echo "INFO: Searching for RAID-VOLUMES ..."
+echo "INFO: Searching for used RAID-Volumes ..."
 used_array=$(blkid | grep "md" | awk '{print $2}')
 used_config=$(cat "/etc/mdadm/mdadm.conf" | grep "ARRAY")
 
