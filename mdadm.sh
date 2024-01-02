@@ -40,7 +40,6 @@ if [ -n "$used_volume" ] && [ -n "$used_array" ]; then
 
 else
     echo "INFO: No RAID-Configuration found!"
-    exit 0
 fi
 
 
@@ -59,5 +58,4 @@ if [ -n "$unused_array" ]; then
 
 else
     echo "INFO: No RAID-Arrays found!"
-    exit 0
 fi
