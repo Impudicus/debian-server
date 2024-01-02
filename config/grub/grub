@@ -28,7 +28,7 @@ GRUB_CMDLINE_LINUX=""
 # note that you can use only modes which your graphic card supports via VBE
 # you can see them in real GRUB with the command `vbeinfo'
 # GRUB_THEME="/boot/grub/themes/debian/theme.txt"
-GRUB_GFXMODE=1920x1080x32
+GRUB_GFXMODE=1280x1024x32
 GRUB_GFXPAYLOAD_LINUX=keep
 
 # Uncomment if you don't want GRUB to pass "root=UUID=xxx" parameter to Linux
