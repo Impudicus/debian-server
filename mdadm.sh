@@ -43,16 +43,16 @@ if [ -n "$used_volume" ] && [ -n "$used_array" ]; then
     read -p "Usage: <YES|no> " add_volume
     if [ "$add_volume" = "YES" ]; then
 
-        # create mountpoint/syslinks
-        mkdir -p "/mnt/pool1" || exit 1
-        ln -sf "/mnt/pool1" "/pool1" || exit 1
-
         # add raid-volume to fstab
         volume_uuid=$(echo $used_array | cut -d '"' -f2)
         echo "UUID=$volume_uuid /mnt/pool1 ext4 defaults,nofail 0 0" >> "/etc/fstab" || exit 1
 
         # restart daemon
         systemctl daemon-reload || exit 1
+
+        # create mountpoint/syslinks
+        mkdir -p "/mnt/pool1" || exit 1
+        ln -sf "/mnt/pool1" "/pool1" || exit 1
 
         echo "--------------------------------------------------"
         echo "INFO: RAID-Volume added to fstab."
