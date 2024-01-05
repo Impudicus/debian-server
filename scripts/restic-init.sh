@@ -78,7 +78,7 @@ fi
 
 repository="/pool1/backup/$HOSTNAME"
 
-backup_check $slave_name $repository
+repo_check $slave_name $repository
 if [ $? -eq 0 ]; then
     notification "error" "init failed (repository already exists)!"
     exit 1
