@@ -239,6 +239,13 @@ apt install -y --no-install-recommends \
 mkdir -p "$HOME/.config/restic" || exit 1
 cp "$PWD/config/restic/password" "$HOME/.config/restic" || exit 1
 
+# cron.d
+cp "$PWD/cron.d/restic" "/etc/cron.d" || exit 1
+
+# scripts
+cp $PWD/scripts/restic-*.sh "/usr/local/bin" && \
+chmod 755 /usr/local/bin/restic-*.sh || exit 1
+
 
 # ========================= ========================= =========================
 # SAMBA
