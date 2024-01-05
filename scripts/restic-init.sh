@@ -86,13 +86,13 @@ fi
 current_year=$(date +"%Y")
 repository="/pool1/backup/$HOSTNAME-$current_year"
 
-repo_check $slave_name $repository
+repository_check $slave_name $repository
 if [ $? -eq 0 ]; then
     notification "error" "init failed (repository already exists)!"
     exit 1
 fi
 
-repo_create $slave_name $repository
+repository_create $slave_name $repository
 if [ $? -ne 0 ]; then
     notification "error" "init failed (error while init backup)!"
     exit 1
