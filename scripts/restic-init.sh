@@ -1,6 +1,7 @@
 #!/bin/bash
 # Copyright 2023 by Philipp Hildebrandt
 
+
 connect_check()
 {
     /usr/bin/ssh -q \
@@ -59,6 +60,7 @@ repository_create()
         1> /dev/null 2> /dev/null
     return $?
 }
+
 
 # ========================= ========================= =========================
 # MAIN

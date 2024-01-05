@@ -1,12 +1,13 @@
 #!/bin/bash
 # Copyright 2023 by Philipp Hildebrandt
 
+
 backup_create()
 {
     /usr/bin/restic \
         -r "sftp:$1:$2" \
         backup \
-        /etc/docker \
+        /etc/docker/portainer \
         --password-file "/root/.config/restic/password" \
         1> /dev/null 2> /dev/null
     return $?
@@ -51,7 +52,7 @@ notification()
 }
 
 
-repo_check()
+repository_check()
 {
     /usr/bin/restic \
         -r "sftp:$1:$2" \
@@ -60,6 +61,7 @@ repo_check()
         1> /dev/null 2> /dev/null
     return $?
 }
+
 
 # ========================= ========================= =========================
 # MAIN
@@ -87,17 +89,17 @@ fi
 current_year=$(date +"%Y")
 repository="/pool1/backup/$HOSTNAME-$current_year"
 
-repo_check $slave_name $repository
+repository_check $slave_name $repository
 if [ $? -ne 0 ]; then
     notification "error" "backup failed (unable to locate repository on slave)!"
     exit 1
 fi
 
-# backup_create $slave_name $repository
-# if [ $? -ne 0 ]; then
-#     notification "error" "backup failed (error while creating backup)!"
-#     exit 1
-# fi
+backup_create $slave_name $repository
+if [ $? -ne 0 ]; then
+    notification "error" "backup failed (error while creating backup)!"
+    exit 1
+fi
 
 job_duration=$(($SECONDS - runtime))
 notification "okay" "backup finished successfully (runtime: $job_duration sec)!"
