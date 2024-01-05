@@ -3,9 +3,8 @@
 
 backup_check()
 {
-    backup_dir="/pool1/backup/$HOSTNAME"
     /usr/bin/restic \
-        -r "sftp:$1:$backup_dir" \
+        -r "sftp:$1:$2" \
         check \
         --password-file "/root/.config/restic/password" \
         1> /dev/null 2> /dev/null
@@ -13,9 +12,8 @@ backup_check()
 }
 backup_create()
 {
-    backup_dir="/pool1/backup/$HOSTNAME"
     /usr/bin/restic \
-        -r "sftp:$1:$backup_dir" \
+        -r "sftp:$1:$2" \
         backup \
         /etc/docker \
         --password-file "/root/.config/restic/password" \
@@ -67,34 +65,36 @@ job_runtime=$SECONDS
 
 slave_name="$(device_slave $HOSTNAME)"
 if [ $? -ne 0 ]; then
-    notification "error" "job failed (unable to get device slave)!"
+    notification "error" "backup failed (unable to get device slave)!"
     exit 1
 fi
 
 device_status $slave_name
 if [ $? -ne 0 ]; then
-    notification "error" "job failed (slave not online)!"
+    notification "error" "backup failed (slave not online)!"
     exit 1
 fi
 
 connect_check $slave_name
 if [ $? -ne 0 ]; then
-    notification "error" "job failed (unable to connect to slave)!"
+    notification "error" "backup failed (unable to connect to slave)!"
     exit 1
 fi
 
-backup_check $slave_name
+repository="/pool1/backup/$HOSTNAME"
+
+backup_check $slave_name $repository
 if [ $? -ne 0 ]; then
-    notification "error" "job failed (unable to locate repository on slave)!"
+    notification "error" "backup failed (unable to locate repository on slave)!"
     exit 1
 fi
 
-backup_create $slave_name
-if [ $? -ne 0 ]; then
-    notification "error" "job failed (error while creating backup)!"
-    exit 1
-fi
+# backup_create $slave_name $repository
+# if [ $? -ne 0 ]; then
+#     notification "error" "backup failed (error while creating backup)!"
+#     exit 1
+# fi
 
 job_duration=$(($SECONDS - runtime))
-notification "okay" "job finished successfully (runtime: $job_duration sec)!"
+notification "okay" "backup finished successfully (runtime: $job_duration sec)!"
 exit 0
