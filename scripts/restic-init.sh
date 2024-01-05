@@ -1,12 +1,12 @@
 #!/bin/bash
 # Copyright 2023 by Philipp Hildebrandt
 
-backup_show()
+backup_check()
 {
     backup_dir="/pool1/backup/$HOSTNAME"
     /usr/bin/restic \
         -r "sftp:$1:$backup_dir" \
-        snapshots \
+        check \
         --password-file "/root/.config/restic/password"
     return $?
 }
@@ -67,7 +67,7 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
-backup_show $slave_name
+backup_check $slave_name
 if [ $? -ne 0 ]; then
     notification "error" "job failed (unable to locate repository on slave)!"
     exit 1
