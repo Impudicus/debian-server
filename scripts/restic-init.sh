@@ -20,6 +20,12 @@ device_status()
     return $result
 }
 
+connect_check()
+{
+    result=$(ssh -q -o "BatchMode=yes" root@$1 "echo Fine")
+    return $result
+}
+
 notification()
 {
     /usr/local/bin/notification-push.sh "restic" "$1" "$2"
@@ -43,7 +49,7 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
-ssh_result=$(ssh -q -o "BatchMode=yes" root@$slave_name "echo Fine")
+connect_check $slave_name
 if [ $? -ne 0 ]; then
     notification "error" "job failed (unable to connect to slave)!"
     exit 1
