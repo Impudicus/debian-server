@@ -6,6 +6,7 @@ repo_check()
     /usr/bin/restic \
         -r "sftp:$1:$2" \
         check \
+        --password-file "/root/.config/restic/password" \
         1> /dev/null 2> /dev/null
     return $?
 }
