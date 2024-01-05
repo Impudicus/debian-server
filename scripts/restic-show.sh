@@ -16,7 +16,8 @@ connect_check()
 {
     /usr/bin/ssh \
         root@$1 \
-        "echo Fine"
+        "echo Fine" \
+        1> /dev/null 2> /dev/null
     return $?
 }
 
