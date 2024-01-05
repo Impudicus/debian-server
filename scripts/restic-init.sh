@@ -7,13 +7,13 @@ backup_check()
     /usr/bin/restic \
         -r "sftp:$1:$backup_dir" \
         check \
-        --password-file "/root/.config/restic/password" 2> /dev/null
+        --password-file "/root/.config/restic/password" 2>&1 /dev/null
     return $?
 }
 
 connect_check()
 {
-    /usr/bin/ssh -q -o "BatchMode=yes" root@$1 "echo Fine" 1> /dev/null
+    /usr/bin/ssh -q -o "BatchMode=yes" root@$1 "echo Fine" 2>&1 /dev/null
     return $?
 }
 
