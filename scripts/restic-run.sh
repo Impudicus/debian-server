@@ -1,15 +1,6 @@
 #!/bin/bash
 # Copyright 2023 by Philipp Hildebrandt
 
-backup_check()
-{
-    /usr/bin/restic \
-        -r "sftp:$1:$2" \
-        check \
-        --password-file "/root/.config/restic/password" \
-        1> /dev/null 2> /dev/null
-    return $?
-}
 backup_create()
 {
     /usr/bin/restic \
@@ -21,6 +12,7 @@ backup_create()
     return $?
 }
 
+
 connect_check()
 {
     /usr/bin/ssh -q \
@@ -30,6 +22,7 @@ connect_check()
         1> /dev/null 2> /dev/null
     return $?
 }
+
 
 device_slave()
 {
@@ -51,10 +44,20 @@ device_status()
 }
 
 
-
 notification()
 {
     /usr/local/bin/notification-push.sh "restic" "$1" "$2"
+    return $?
+}
+
+
+repo_check()
+{
+    /usr/bin/restic \
+        -r "sftp:$1:$2" \
+        check \
+        --password-file "/root/.config/restic/password" \
+        1> /dev/null 2> /dev/null
     return $?
 }
 
@@ -83,7 +86,7 @@ fi
 
 repository="/pool1/backup/$HOSTNAME"
 
-backup_check $slave_name $repository
+repo_check $slave_name $repository
 if [ $? -ne 0 ]; then
     notification "error" "backup failed (unable to locate repository on slave)!"
     exit 1

@@ -1,21 +1,6 @@
 #!/bin/bash
 # Copyright 2023 by Philipp Hildebrandt
 
-repo_check()
-{
-    /usr/bin/restic \
-        -r "sftp:$1:$2" \
-        check \
-        --password-file "/root/.config/restic/password" \
-        1> /dev/null 2> /dev/null
-    return $?
-}
-repo_create()
-{
-
-    return $?
-}
-
 connect_check()
 {
     /usr/bin/ssh -q \
@@ -25,6 +10,7 @@ connect_check()
         1> /dev/null 2> /dev/null
     return $?
 }
+
 
 device_slave()
 {
@@ -46,10 +32,31 @@ device_status()
 }
 
 
-
 notification()
 {
     /usr/local/bin/notification-push.sh "restic" "$1" "$2"
+    return $?
+}
+
+
+repository_check()
+{
+    /usr/bin/restic \
+        -r "sftp:$1:$2" \
+        check \
+        --password-file "/root/.config/restic/password" \
+        1> /dev/null 2> /dev/null
+    return $?
+}
+repository_create()
+{
+    ssh root@$1 mkdir -p "$2" || return 1
+
+    /usr/bin/restic \
+        -r "sftp:$1:$2" \
+        init \
+        --password-file "/root/.config/restic/password" \
+        1> /dev/null 2> /dev/null
     return $?
 }
 
@@ -76,7 +83,8 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
-repository="/pool1/backup/$HOSTNAME"
+current_year=$(date +"%Y")
+repository="/pool1/backup/$HOSTNAME-$current_year"
 
 repo_check $slave_name $repository
 if [ $? -eq 0 ]; then
@@ -84,12 +92,12 @@ if [ $? -eq 0 ]; then
     exit 1
 fi
 
-# backup_create $slave_name $repository
-# if [ $? -ne 0 ]; then
-#     notification "error" "backup failed (error while creating backup)!"
-#     exit 1
-# fi
+repo_create $slave_name $repository
+if [ $? -ne 0 ]; then
+    notification "error" "init failed (error while init backup)!"
+    exit 1
+fi
 
 job_duration=$(($SECONDS - runtime))
-notification "okay" "backup finished successfully (runtime: $job_duration sec)!"
+notification "okay" "init finished successfully (runtime: $job_duration sec)!"
 exit 0
