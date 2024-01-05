@@ -7,7 +7,7 @@ backup_check()
     /usr/bin/restic \
         -r "sftp:$1:$backup_dir" \
         check \
-        --password-file "/root/.config/restic/password" 2>&1 /dev/null
+        --password-file "/root/.config/restic/password" 1> /dev/null
     return $?
 }
 
