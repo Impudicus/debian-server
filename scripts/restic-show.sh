@@ -14,7 +14,7 @@ backup_show()
 
 connect_check()
 {
-    /usr/bin/ssh -q \
+    /usr/bin/ssh \
         root@$1 \
         "echo Fine"
     return $?
