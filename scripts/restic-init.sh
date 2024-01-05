@@ -39,13 +39,13 @@ fi
 
 device_status $slave_name
 if [ $? -ne 0 ]; then
-    notification "error" "job failed ('$slave_name' not online)!"
+    notification "error" "job failed (slave not online)!"
     exit 1
 fi
 
 ssh_result=$(ssh -q -o "BatchMode=yes" root@$slave_name "echo Fine")
 if [ $? -ne 0 ]; then
-    notification "error" "job failed (unable to connect to '$slave_name')!"
+    notification "error" "job failed (unable to connect to slave)!"
     exit 1
 fi
 
