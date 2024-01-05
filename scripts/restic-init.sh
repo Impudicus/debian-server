@@ -13,8 +13,8 @@ backup_show()
 
 connect_check()
 {
-    result=$(ssh -q -o "BatchMode=yes" root@$1 "echo Fine")
-    return $result
+    /usr/bin/ssh -q -o "BatchMode=yes" root@$1 "echo Fine"
+    return $?
 }
 
 device_slave()
