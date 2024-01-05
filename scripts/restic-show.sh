@@ -6,7 +6,7 @@ backup_show()
 {
     /usr/bin/restic \
         -r "sftp:$1:$2" \
-        snapshots
+        snapshots \
         --password-file "/root/.config/restic/password"
     return $?
 }
