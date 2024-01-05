@@ -9,7 +9,7 @@ backup_create()
         backup \
         /etc/docker/portainer \
         --password-file "/root/.config/restic/password" \
-        1> /dev/null 2> /dev/null
+        $1 >/dev/null
     return $?
 }
 
@@ -19,7 +19,7 @@ connect_check()
     /usr/bin/ssh \
         root@$1 \
         "echo Fine" \
-        1> /dev/null 2> /dev/null
+        $1 >/dev/null
     return $?
 }
 
