@@ -99,5 +99,5 @@ if [ $? -ne 0 ]; then
 fi
 
 job_duration=$(($SECONDS - runtime))
-notification "okay" "init finished successfully (runtime: $job_duration sec)!"
+notification "fine" "init finished successfully (runtime: $job_duration sec)!"
 exit 0
