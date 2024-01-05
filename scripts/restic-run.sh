@@ -84,7 +84,8 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
-repository="/pool1/backup/$HOSTNAME"
+current_year=$(date +"%Y")
+repository="/pool1/backup/$HOSTNAME-$current_year"
 
 repo_check $slave_name $repository
 if [ $? -ne 0 ]; then
