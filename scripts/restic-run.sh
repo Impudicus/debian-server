@@ -7,7 +7,7 @@ backup_create()
     /usr/bin/restic \
         -r "sftp:$1:$2" \
         backup \
-        /etc/docker/portainer \
+        /etc/docker \
         --password-file "/root/.config/restic/password" \
         1> /dev/null
     return $?
