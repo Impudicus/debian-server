@@ -38,8 +38,8 @@ if [ $? -ne 0 ]; then
 fi
 
 device_status $slave_name
-if [ $? -eq 0 ]; then
-    notification "info" "job failed ('$slave_name' already online)!"
+if [ $? -ne 0 ]; then
+    notification "error" "job failed ('$slave_name' not online)!"
     exit 1
 fi
 
