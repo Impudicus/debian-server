@@ -7,13 +7,29 @@ backup_check()
     /usr/bin/restic \
         -r "sftp:$1:$backup_dir" \
         check \
-        --password-file "/root/.config/restic/password" 1> /dev/null 2> /dev/null
+        --password-file "/root/.config/restic/password" \
+        1> /dev/null 2> /dev/null
+    return $?
+}
+backup_create()
+{
+    backup_dir="/pool1/backup/$HOSTNAME"
+    /usr/bin/restic \
+        -r "sftp:$1:$backup_dir" \
+        backup \
+        /etc/docker \
+        --password-file "/root/.config/restic/password" \
+        1> /dev/null 2> /dev/null
     return $?
 }
 
 connect_check()
 {
-    /usr/bin/ssh -q -o "BatchMode=yes" root@$1 "echo Fine" 1> /dev/null 2> /dev/null
+    /usr/bin/ssh -q \
+        -o "BatchMode=yes" \
+        root@$1 \
+        "echo Fine" \
+        1> /dev/null 2> /dev/null
     return $?
 }
 
@@ -73,6 +89,11 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
+backup_create $slave_name
+if [ $? -ne 0 ]; then
+    notification "error" "job failed (error while creating backup)!"
+    exit 1
+fi
 
 job_duration=$(($SECONDS - runtime))
 notification "okay" "job finished successfully (runtime: $job_duration sec)!"
