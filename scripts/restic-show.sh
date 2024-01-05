@@ -15,10 +15,8 @@ backup_show()
 connect_check()
 {
     /usr/bin/ssh -q \
-        -o "BatchMode=yes" \
         root@$1 \
-        "echo Fine" \
-        1> /dev/null 2> /dev/null
+        "echo Fine"
     return $?
 }
 

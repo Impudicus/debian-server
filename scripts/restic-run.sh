@@ -17,7 +17,6 @@ backup_create()
 connect_check()
 {
     /usr/bin/ssh -q \
-        -o "BatchMode=yes" \
         root@$1 \
         "echo Fine"
     return $?
