@@ -294,7 +294,7 @@ apt install -y --no-install-recommends \
 
 # create rules
 ufw allow samba || exit 1
-ufw limit ssh || exit 1
+ufw allow ssh || exit 1
 ufw default deny incoming || exit 1
 ufw default allow outgoing || exit 1
 
