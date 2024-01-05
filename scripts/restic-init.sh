@@ -3,7 +3,7 @@
 
 backup_check()
 {
-    backup_dir="/pool1/backup/$HOSTNAME"
+    backup_dir="/pool1/backup/V4$HOSTNAME"
     /usr/bin/restic \
         -r "sftp:$1:$backup_dir" \
         check \
