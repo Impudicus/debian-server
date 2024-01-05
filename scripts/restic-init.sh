@@ -43,7 +43,7 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
-ssh_result=$(ssh -q root@$slave_name "echo Fine")
+ssh_result=$(ssh -q -o "BatchMode=yes" root@$slave_name "echo Fine")
 if [ $? -ne 0 ]; then
     notification "error" "job failed (unable to establish ssh to '$slave_name')!"
     exit 1
