@@ -270,7 +270,7 @@ service samba restart || exit 1
 
 
 # ========================= ========================= =========================
-# System Services
+# SYSTEM SERVICES
 
 # config
 cp "$PWD/config/systemd/system-poweron.service" "/etc/systemd/system" || exit 1
