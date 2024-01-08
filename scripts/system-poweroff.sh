@@ -11,6 +11,9 @@ notification()
 # MAIN
 
 notification "info" "system shutting down!"
+if [ $? -ne 0 ]; then
+    exit 1
+fi
 
 /usr/sbin/poweroff
 if [ $? -ne 0 ]; then
