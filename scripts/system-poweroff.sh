@@ -10,11 +10,10 @@ notification()
 # ========================= ========================= =========================
 # MAIN
 
+notification "info" "system shutting down!"
+
 /usr/sbin/poweroff
 if [ $? -ne 0 ]; then
     notification "error" "backup failed (error while shutting down)!"
     exit 1
-else
-    notification "info" "system shutting down!"
-    exit 0
 fi
