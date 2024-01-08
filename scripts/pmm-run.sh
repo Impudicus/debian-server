@@ -53,9 +53,9 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
-# check container runstate every 15sec for 60min: plex-meta-manager
+# check container runstate every 15sec for 120min: plex-meta-manager
 starttime=$SECONDS
-endtime=$(( SECONDS + 3600 ))
+endtime=$(( SECONDS + 7200 ))
 
 while [ $SECONDS -lt $endtime ]; do
 
