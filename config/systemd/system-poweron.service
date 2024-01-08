@@ -1,0 +1,11 @@
+[Unit]
+Description=Run system-poweron script on startup
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/system-poweron.sh
+
+[Install]
+WantedBy=default.target

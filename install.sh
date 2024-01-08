@@ -273,13 +273,13 @@ service samba restart || exit 1
 # System Services
 
 # config
-cp "$PWD/config/systemd/system-poweron.service" > "/etc/systemd/system" || exit 1
+cp "$PWD/config/systemd/system-poweron.service" "/etc/systemd/system" || exit 1
 
 # reload daemon
 systemctl daemon-reload || exit 1
 
 # enable service
-systemctl enable system-poweron.service
+systemctl enable system-poweron.service || exit 1
 
 
 # ========================= ========================= =========================
