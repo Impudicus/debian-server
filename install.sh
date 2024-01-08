@@ -74,6 +74,9 @@ cat "$PWD/config/hosts" > "/etc/hosts" || exit 1
 cp $PWD/scripts/notification-*.sh "/usr/local/bin" && \
 chmod 755 /usr/local/bin/notification-*.sh || exit 1
 
+cp $PWD/scripts/system-*.sh "/usr/local/bin" && \
+chmod 755 /usr/local/bin/system-*.sh || exit 1
+
 
 # ========================= ========================= =========================
 # CRON
@@ -264,6 +267,19 @@ apt install -y --no-install-recommends \
 
 # restart service
 service samba restart || exit 1
+
+
+# ========================= ========================= =========================
+# System Services
+
+# config
+cp "$PWD/config/systemd/system-poweron.service" > "/etc/systemd/system" || exit 1
+
+# reload daemon
+systemctl daemon-reload || exit 1
+
+# enable service
+systemctl enable system-poweron.service
 
 
 # ========================= ========================= =========================
