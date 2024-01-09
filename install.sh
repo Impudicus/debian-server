@@ -153,9 +153,33 @@ chmod 755 /usr/local/bin/etherwake-*.sh || exit 1
 
 
 # ========================= ========================= =========================
+# FANCONTROL
+
+# install
+apt update || exit 1
+apt install -y --no-install-recommends \
+    build-essential \
+    fancontrol \
+    lm-sensors \
+    || exit 1
+
+# clone repository
+git clone https://github.com/Stonyx/QNAP-EC || exit 1
+cd QNAP-EC || exit 1
+make install || exit 1
+
+# config
+cat "$PWD/config/fancontrol/$HOSTNAME" > "/etc/fancontrol" || exit 1
+cat "$PWD/config/fancontrol/modules.conf" > "/etc/modules-load.d/modules.conf" || exit 1
+
+# restart service
+service fancontrol restart || exit 1
+
+
+# ========================= ========================= =========================
 # GRUB
 
-# # unzip
+# unzip
 mkdir -p "/boot/grub/themes/debian" || exit 1
 tar -xf "$PWD/config/grub/debian.tar" -C "/boot/grub/themes/debian" || exit 1
 
