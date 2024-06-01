@@ -13,7 +13,7 @@ runConfig() {
     # configured
     printLog "info" "Looking for configured RAID-Volumes ..."
     local used_volume=$(blkid | grep "md0" | awk '{print $2}')
-    local used_config=$(cat "/etc/mdadm/mdadm.conf" | grep "ARRAY")
+    local used_config=$(cat "/proc/mdstat" | grep "md0")
     if [[ "${used_config}" && "${used_volume}"  ]]; then
         printLog "okay" "Configured RAID-Volume '${used_config}' found."
         read -p "${script_name}: Would you like to add volume to fstab? Usage: <YES|no> " add_volume
