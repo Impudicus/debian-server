@@ -60,7 +60,7 @@ runInstall() {
     git clone "https://github.com/Stonyx/QNAP-EC" "/tmp/QNAP-EC"
     (
         cd "/tmp/QNAP-EC"
-        make install > /dev/null
+        make install > /dev/null 2> /dev/null
     )
     rm --recursive --force "/tmp/QNAP-EC"
 
