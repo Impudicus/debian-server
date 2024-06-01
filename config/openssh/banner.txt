@@ -1,0 +1,16 @@
+#################################################################
+#                                                               #
+#                            WARNING                            #
+#                                                               #
+#             Authorized Access Only - Secure Area              #
+#                                                               #
+#   You are accessing a secure system. Your IP address, login   #
+#     time, and username have been recorded and sent to the     #
+#                     system administrator.                     #
+#                                                               #
+#     This service is restricted to authorized users only.      #
+#    All activities on this system are monitored and logged.    #
+#    Unauthorized access will be thoroughly investigated and    #
+#     reported to the appropriate law enforcement agencies.     #
+#                                                               #
+#################################################################
