@@ -28,7 +28,7 @@ runInstall() {
         cat "${config_dir}/nvidia/blacklist-nouveau.conf" > "${blacklist_file}"
         chmod 644 "${blacklist_file}"
 
-        update-initramfs -u > /dev/null
+        update-initramfs -u
 
         printLog "okay" "Nouveau drivers disabled."
         printLog "text" "System restart pending."
