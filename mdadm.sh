@@ -9,6 +9,45 @@ readonly script_start=${SECONDS}
 set -o errexit  # exit on error
 set -o pipefail # return exit status on pipefail
 
+runConfig() {
+    printLog "info" "Looking for configured RAID-Volumes ..."
+    local used_volume=$(blkid | grep "md0" | awk '{print $2}')
+    local used_config=$(cat "/etc/mdadm/mdadm.conf" | grep "ARRAY")
+    if [[ "${used_config}" && "${used_volume}"  ]]; then
+        printLog "okay" "Configured RAID-Volume '${used_config}' found."
+        read -p "${script_name}: Would you like to add volume to fstab? Usage: <YES|no> " add_volume
+        if [[ "${add_volume}" == 'YES' ]]; then
+            local volume_uuid=$(echo "${used_volume}" | cut --delimiter '"' --fields 2)
+            echo "UUID=${volume_uuid} /mnt/pool1 ext4 defaults 0 3" >> --append "/etc/fstab"
+
+            systemctl daemon-reload
+
+            mkdir --parents /mnt/pool1
+
+            printLog "okay" "RAID-Volume added to fstab."
+            printLog "text" "System restart pending."
+            exit 0
+        fi
+
+        read -p "${script_name}: Would you like to remove volume from mdadm-configuration? Usage: <YES|no> " remove_volume
+        if [[ "${add_volume}" == 'YES' ]]; then
+            cat "${config_dir}/mdadm/mdadm.conf" > "/etc/mdadm/mdadm.conf"
+            
+            update-initramfs -u
+
+            printLog "okay" "RAID-Volume removed from mdadm-configuration."
+            printLog "text" "System restart pending."
+            exit 0
+        fi
+
+        printLog "text" "No action selected, no changes have been made."
+        exit 0
+    else
+        printLog "text" "No RAID-Volume found."
+    fi
+
+}
+
 printLog() {
     local log_type="${1}"
     local log_text="${2}"
@@ -66,6 +105,7 @@ main() {
     done
 
     # run
+    runConfig
 
     printLog "okay" "Script executed successfully."
 }
