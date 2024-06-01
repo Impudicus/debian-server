@@ -10,6 +10,7 @@ set -o errexit  # exit on error
 set -o pipefail # return exit status on pipefail
 
 runInstall() {
+    # apt config
     cat "${config_dir}/apt/bookworm.list" > "/etc/apt/sources.list"
 
     # apt update
