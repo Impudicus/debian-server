@@ -10,6 +10,7 @@ set -o errexit  # exit on error
 set -o pipefail # return exit status on pipefail
 
 runConfig() {
+    # configured
     printLog "info" "Looking for configured RAID-Volumes ..."
     local used_volume=$(blkid | grep "md0" | awk '{print $2}')
     local used_config=$(cat "/etc/mdadm/mdadm.conf" | grep "ARRAY")
@@ -29,13 +30,13 @@ runConfig() {
             exit 0
         fi
 
-        read -p "${script_name}: Would you like to remove volume from mdadm-configuration? Usage: <YES|no> " remove_volume
-        if [[ "${add_volume}" == 'YES' ]]; then
+        read -p "${script_name}: Would you like to remove volume from config? Usage: <YES|no> " del_volume
+        if [[ "${del_volume}" == 'YES' ]]; then
             cat "${config_dir}/mdadm/mdadm.conf" > "/etc/mdadm/mdadm.conf"
             
             update-initramfs -u
 
-            printLog "okay" "RAID-Volume removed from mdadm-configuration."
+            printLog "okay" "RAID-Volume removed from config."
             printLog "text" "System restart pending."
             exit 0
         fi
@@ -43,9 +44,31 @@ runConfig() {
         printLog "text" "No action selected, no changes have been made."
         exit 0
     else
-        printLog "text" "No RAID-Volume found."
+        printLog "text" "No RAID-Volumes found."
     fi
 
+    # UNconfigured
+    printLog "info" "Looking for unconfigured RAID-Arrays ..."
+    local unused_array=$(mdadm --examine --scan | grep 'ARRAY')
+    if [[ "${unused_array}" ]]; then
+        printLog "okay" "Unconfigured RAID-Array '${unused_array}' found."
+        read -p "${script_name}: Would you like to add array to config? Usage: <YES|no> " add_array
+        if [[ "${add_array}" == 'YES' ]]; then
+            cat "${config_dir}/mdadm/mdadm.conf" > "/etc/mdadm/mdadm.conf"
+            mdadm --detail --scan >> "/etc/mdadm/mdadm.conf"
+
+            update-initramfs -u
+
+            printLog "okay" "RAID-Array added to config."
+            printLog "text" "System restart pending."
+            exit 0
+        fi
+
+        printLog "text" "No action selected, no changes have been made."
+        exit 0
+    else
+        printLog "text" "No RAID-Arrays found."
+    fi
 }
 
 printLog() {
