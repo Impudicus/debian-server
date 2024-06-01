@@ -48,7 +48,7 @@ runInstall() {
         chmod 755 "/tmp/${driver_name}.run"
 
         bash "/tmp/${driver_name}.run" --target "/tmp/${driver_name}"
-        rm --recusive --force "/tmp/${driver_name}.run" "/tmp/${driver_name}"
+        rm --recursive --force "/tmp/${driver_name}.run" "/tmp/${driver_name}"
 
         printLog "okay" "Custom drivers installed."
         printLog "text" "System restart pending."
@@ -62,14 +62,14 @@ runInstall() {
     # install docker toolkit
     local package_name="docker-ce"
     local package_installed=$(dpkg --list | grep --quiet --word-regexp "${package_name}" && echo "installed")
-    if [[ ! "${package_installed}" ]]; then
+    if [[ -z "${package_installed}" ]]; then
         printLog "error" "Unable to find dpkg-package '${package_name}'."
         printLog "text" "Check apt for missing packages and rerun the script."
         exit 1
     fi
     local package_name="nvidia-container-toolkit"
     local package_installed=$(dpkg --list | grep --quiet --word-regexp "${package_name}" && echo "installed")
-    if [[ ! "${package_installed}" ]]; then
+    if [[ -z "${package_installed}" ]]; then
         curl --silent --show-error "https://nvidia.github.io/libnvidia-container/gpgkey" | gpg --dearmor --yes --output "/etc/apt/trusted.gpg.d/nvidia-container-toolkit.gpg"
         cat "${config_dir}/apt/nvidia-container-toolkit.list" > "/etc/apt/sources.list.d/nvidia-container-toolkit.list"
         apt update
