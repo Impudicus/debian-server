@@ -60,9 +60,9 @@ runInstall() {
     git clone "https://github.com/Stonyx/QNAP-EC" "/tmp/QNAP-EC"
     (
         cd "/tmp/QNAP-EC"
-        make install
+        make install > /dev/null
     )
-    rm --recusive --force "/tmp/QNAP-EC"
+    rm --recursive --force "/tmp/QNAP-EC"
 
     cat "${config_dir}/fancontrol/fancontrol.conf" > "/etc/fancontrol.conf"
     cat "${config_dir}/fancontrol/modules.conf" > "/etc/modules-load.d/fancontrol.conf"
