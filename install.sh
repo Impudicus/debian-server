@@ -60,7 +60,7 @@ runInstall() {
     git clone "https://github.com/Stonyx/QNAP-EC" "/tmp/QNAP-EC"
     (
         cd "/tmp/QNAP-EC"
-        make install > /dev/null 2> /dev/null
+        make install 1> /dev/null 2> /dev/null
     )
     rm --recursive --force "/tmp/QNAP-EC"
 
@@ -130,7 +130,7 @@ runConfig() {
     cat "${config_dir}/rules/bluetooth-hci.rules" > "/etc/udev/rules.d/bluetooth-hci.rules"
     chmod 644 "/etc/udev/rules.d/bluetooth-hci.rules"
 
-    update-initramfs -u > /dev/null
+    update-initramfs -u
 
     # config cron
     cat "${config_dir}/cron/crontab" > "/etc/crontab"
@@ -171,8 +171,8 @@ runCleanup() {
         exim4-config \
         exim4-daemon-light
 
-    apt autoremove --yes > /dev/null
-    apt clean > /dev/null
+    apt autoremove --yes
+    apt clean
 }
 
 printLog() {
