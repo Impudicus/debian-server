@@ -19,7 +19,7 @@ runConfig() {
         read -p "${script_name}: Would you like to add volume to fstab? Usage: <YES|no> " add_volume
         if [[ "${add_volume}" == 'YES' ]]; then
             local volume_uuid=$(echo "${used_volume}" | cut --delimiter '"' --fields 2)
-            echo "UUID=${volume_uuid} /mnt/pool1 ext4 defaults 0 3" >> --append "/etc/fstab"
+            echo "UUID=${volume_uuid} /mnt/pool1 ext4 defaults 0 3" >> "/etc/fstab"
 
             systemctl daemon-reload
 
