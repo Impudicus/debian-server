@@ -111,6 +111,14 @@ main() {
         exit 1
     fi
 
+    local package_name="mdadm"
+    local package_installed=$(dpkg-query --show --showformat='${db:Status-Status}' "${package_name}" 2>/dev/null)
+    if [[ ! "${package_installed}" ]]; then
+        printLog "error" "Unable to find dpkg-package '${package_name}'."
+        printLog "text" "Check apt for missing packages and rerun the script."
+        exit 1
+    fi
+
     # variables
 
     # parameters

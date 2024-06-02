@@ -117,15 +117,15 @@ printLog() {
 printHelp() {
     printf "Usage: ${script_name} [OPTIONS] Version\n"
     printf "Options:\n"
-    printf "  -h, --help       Show this help message.\n"
+    printf "  -h, --help        Show this help message.\n"
     printf "\n"
     printf "Versions:\n"
-    printf " beta               Install latest beta release.\n"
-    printf " latest             Install latest production branch.\n"
-    printf " 470                Install legacy 470.xx series.\n"
-    printf " 390                Install legacy 390.xx series.\n"
-    printf " 340                Install legacy 340.xx series.\n"
-    printf " 304                Install legacy 304.xx series.\n"
+    printf "  beta              Install latest beta release.\n"
+    printf "  latest            Install latest production branch.\n"
+    printf "  470               Install legacy 470.xx series.\n"
+    printf "  390               Install legacy 390.xx series.\n"
+    printf "  340               Install legacy 340.xx series.\n"
+    printf "  304               Install legacy 304.xx series.\n"
     printf "\n"
 }
 
