@@ -155,6 +155,11 @@ runConfig() {
     # config sudo
     echo "${default_user} ALL=(ALL:ALL) NOPASSWD: ALL" > "/etc/sudoers.d/default-user-no-password"
 
+    # create systemd
+    cat "${config_dir}/systemd/qnap-powerstate.service" > "/etc/systemd/system/qnap-powerstate.service"
+    systemctl daemon-reload
+    systemctl enable qnap-powerstate.service
+
     # config user   
     cat "${config_dir}/.bash_aliases" > "/home/${default_user}/.bash_aliases"
     cat "${config_dir}/.bashrc" > "/home/${default_user}/.bashrc"

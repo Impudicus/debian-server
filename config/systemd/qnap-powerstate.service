@@ -1,0 +1,14 @@
+[Unit]
+Description=qnap powerstate notification
+Requires=network-online.target
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/local/sbin/notification-push.sh "debian" "info" "system powered on!"
+ExecStop=/usr/local/sbin/notification-push.sh "debian" "warn" "system powered off!"
+
+[Install]
+WantedBy=default.target
