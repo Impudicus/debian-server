@@ -120,7 +120,7 @@ main() {
 
     getTargetRunstate "${target_ip_address}"
     if [[ $? -eq 0 ]]; then
-        printLog "info" "Job failed! Reason: Target '${target_hostname}' already online!"
+        printLog "info" "Job finished with warnings! Reason: Target '${target_hostname}' already online!"
         if [[ ! "${option_force}" ]]; then
             return 1
         fi
