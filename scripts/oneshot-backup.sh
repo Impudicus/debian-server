@@ -23,8 +23,8 @@ runBackup() {
             fi
 
             local subdir_name=$(basename "${subdir}")
-            local backup_name="${subdir_name}.tar.gz"
-            tar --create --gzip --file "${target_dir}/${backup_name}" "${subdir_name}"
+            local backup_name="${subdir_name}.tar"
+            tar --create --file "${target_dir}/${backup_name}" "${subdir_name}"
 
             printf "${script_name}: » '${backup_name}' created\n"
         done
