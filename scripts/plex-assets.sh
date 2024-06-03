@@ -198,7 +198,7 @@ main() {
     while [[ $# -gt 0 ]]; do
         case "${1}" in
             movies)
-                work_dir='/mnt/pool1/movies'
+                work_dir='/mnt/pool1/movies/The Fall Guy (2024)'
                 break
                 ;;
             series)
