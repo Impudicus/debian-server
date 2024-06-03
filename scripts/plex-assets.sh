@@ -94,8 +94,8 @@ validateAssetDimensions() {
 
             local new_file="${file%.*}.jpg"
             local new_file_name=$(basename "${new_file}")
-            # convert "${file}" -resize 1000x1500 -quality 95 "${new_file}"
-            # rm --force "${file%.*}.png" "${file%.*}.jpeg" > /dev/null
+            convert "${file}" -resize 1000x1500 -quality 95 "${new_file}"
+            rm --force "${file%.*}.png" "${file%.*}.jpeg" > /dev/null
 
             printf "${script_name}: » poster '${file_parent_dir}/${file_name}' renamed to '${new_file_name}'\n"
             continue
