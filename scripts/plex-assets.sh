@@ -86,7 +86,7 @@ validateAssetDimensions() {
         local image_aspect_ratio=$((image_width * 100 / image_height))
 
         # poster
-        if [[ "${aspect_ratio}" -lt 100 ]]; then
+        if [[ "${image_aspect_ratio}" -lt 100 ]]; then
             if [[ "${image_dimension}" == '1000x1500' ]]; then
                 # printf "${script_name}: » filename '${file_parent_dir}/${file_name}' already meet requirements\n"
                 break
