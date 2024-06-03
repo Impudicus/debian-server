@@ -121,7 +121,7 @@ main() {
     local start_container='imagemaid'
     setContainerRunstate "${start_container}" 'start'
     if [[ $? -ne 0 ]]; then
-        printLog "error" "Job failed! Reason: Unable to start container 'imagemaid'!"
+        printLog "error" "Job failed! Reason: Unable to start container '${start_container}'!"
         exit 1
     fi
 
