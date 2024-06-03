@@ -93,11 +93,25 @@ validateAssetDimensions() {
             fi
 
             local new_file="${file%.*}.jpg"
-            local new_file_name=$(basename "${new_file}")
             convert "${file}" -resize 1000x1500 -quality 95 "${new_file}"
             rm --force "${file%.*}.png" "${file%.*}.jpeg" > /dev/null
 
-            printf "${script_name}: » poster '${file_parent_dir}/${file_name}' renamed to '${new_file_name}'\n"
+            printf "${script_name}: » poster '${file_parent_dir}/${file_name}' resized\n"
+            continue
+        fi
+
+        # tilecard
+        if [[ "${image_aspect_ratio}" -gt 100 ]]; then
+            if [[ "${image_dimension}" == '1280x720' && "${file_ext}" == 'jpg' ]]; then
+                # printf "${script_name}: » filename '${file_parent_dir}/${file_name}' already meet requirements\n"
+                continue
+            fi
+
+            local new_file="${file%.*}.jpg"
+            convert "${file}" -resize 1280x720 -quality 95 "${new_file}"
+            rm --force "${file%.*}.png" "${file%.*}.jpeg" > /dev/null
+
+            printf "${script_name}: » tilecard '${file_parent_dir}/${file_name}' resized\n"
             continue
         fi
     done
