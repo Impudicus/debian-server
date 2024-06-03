@@ -153,12 +153,6 @@ main() {
         exit 1
     fi
 
-    config_dir="${script_path}/config"
-    if [[ ! -d "${config_dir}" ]]; then
-        printLog "error" "Unable to find config folder in the specified directory."
-        exit 1
-    fi
-
     # variables
     work_dir=''
     action_validatemissing=''
