@@ -88,7 +88,7 @@ validateAssetDimensions() {
         # poster
         if [[ "${image_aspect_ratio}" -lt 100 ]]; then
             if [[ "${image_dimension}" == '1000x1500' && "${file_ext}" == 'jpg' ]]; then
-                printf "${script_name}: » filename '${file_parent_dir}/${file_name}' already meet requirements\n"
+                # printf "${script_name}: » filename '${file_parent_dir}/${file_name}' already meet requirements\n"
                 continue
             fi
 
