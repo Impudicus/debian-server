@@ -133,7 +133,7 @@ main() {
         getContainerRunstate "${check_container}"
         if [[ $? -ne 0 ]]; then
             local job_duration=$(getJobDuration)
-            printLog "okay" "Job finished successfully! Runtime: ${job_duration}!"
+            printLog "okay" "Job finished successfully. Runtime: ${job_duration}."
             exit 0
         fi
     done
