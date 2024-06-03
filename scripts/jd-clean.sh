@@ -15,6 +15,24 @@ removeEmptyFolders() {
          -delete -printf "${script_name}: » '%f' removed\n"
 }
 
+removeJunk() {
+    local file_extensions=("idx" "ifo" "jpg" "jpeg" "m2ts" "nfo" "png" "sfv" "srt" "sub" "sup" "txt" "url")
+    for file_extension in "${file_extensions[@]}"; do
+        find "${work_dir}" \
+            -type f -iname "*.$file_extension" \
+             -delete -printf "${script_name}: » '%f' removed\n"
+    done
+}
+
+removeSamples() {
+    local file_extensions=("mkv" "mp4")
+    for file_extension in "${file_extensions[@]}"; do
+        find "${work_dir}" \
+            -type f -iname "*sample*.$file_extension" -size -100M \
+             -delete -printf "${script_name}: » '%f' removed\n"
+    done
+}
+
 printLog() {
     local log_type="${1}"
     local log_text="${2}"
