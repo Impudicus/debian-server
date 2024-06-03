@@ -78,7 +78,6 @@ printLog() {
 printHelp() {
     printf "Usage: ${script_name} [OPTIONS]\n"
     printf "Options:\n"
-    printf "  -f, --force       Ignore warnings.\n"
     printf "  -h, --help        Show this help message.\n"
     printf "\n"
 }
@@ -96,10 +95,6 @@ main() {
     # parameters
     while [[ $# -gt 0 ]]; do
         case "${1}" in
-            -f | --force)
-                option_force='true'
-                shift
-                ;;
             -h | --help)
                 printHelp
                 exit 0
@@ -121,9 +116,7 @@ main() {
     getTargetRunstate "${target_ip_address}"
     if [[ $? -eq 0 ]]; then
         printLog "info" "Job finished with warnings! Reason: Target '${target_hostname}' already online!"
-        if [[ ! "${option_force}" ]]; then
-            return 1
-        fi
+        return 1
     fi
 
     local attempt=1
