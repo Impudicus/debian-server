@@ -135,19 +135,22 @@ main() {
     if [[ "${action_removejunk}" ]]; then
         printLog "info" "Task running: remove junk files ..."
         removeJunk
-        printLog "okay" "Task completed: junk files removed."
+        printLog "okay" "Task completed: junk files removed.\n"
+        sleep 1
     fi
 
     if [[ "${action_removesamples}" ]]; then
         printLog "info" "Task running: remove sample files ..."
         removeSamples
-        printLog "okay" "Task completed: sample files removed."
+        printLog "okay" "Task completed: sample files removed.\n"
+        sleep 1
     fi
 
     if [[ "${action_removeemptyfolders}" ]]; then
         printLog "info" "Task running: remove empty folders ..."
         removeEmptyFolders
-        printLog "okay" "Task completed: empty folders removed."
+        printLog "okay" "Task completed: empty folders removed.\n"
+        sleep 1
     fi
 
     printLog "okay" "Script executed successfully."
