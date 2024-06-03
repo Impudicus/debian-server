@@ -12,8 +12,10 @@ readonly script_start=${SECONDS}
 getContainerRunstate() {
     local container_runstate=$(docker inspect --format "{{.State.Status}}" "${1}" > /dev/null)
     if [[ "${container_runstate}" == 'running' ]]; then
+        echo "${container_runstate} is running"
         return 0
     else
+        echo "${container_runstate} is not running"
         return 1
     fi
 }
