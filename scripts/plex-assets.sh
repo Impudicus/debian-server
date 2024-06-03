@@ -163,10 +163,10 @@ printHelp() {
     printf "Usage: ${script_name} [OPTIONS]\n"
     printf "Options:\n"
     printf "      -all              Run all of the following tasks..\n"
-    printf "  -d, --dimensions      Validate asset dimensions.\n"
     printf "  -h, --help            Print this help message.\n"
     printf "  -m, --missing         Validate missing assets.\n"
     printf "  -n, --name            Validate asset names.\n"
+    printf "  -s, --size            Validate asset dimensions.\n"
     printf "\n"
     printf "Paths:\n"
     printf "  movies                Run operations on '/mnt/pool1/movies'.\n"
@@ -213,7 +213,7 @@ main() {
                 shift
                 ;;
             -s | --size)
-                action_validatesize='true'
+                action_validatedimensions='true'
                 shift
                 ;;
             -h | --help)
