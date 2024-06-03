@@ -183,9 +183,8 @@ printLog() {
 printHelp() {
     printf "Usage: ${script_name} [OPTIONS]\n"
     printf "Options:\n"
-    printf "      -all              Run all of the following tasks..\n"
     printf "  -h, --help            Print this help message.\n"
-    printf "  -m, --missing         Validate missing assets.\n"
+    printf "  -m, --missing         Lookup missing assets.\n"
     printf "  -n, --name            Validate asset names.\n"
     printf "  -s, --size            Validate asset dimensions.\n"
     printf "\n"
@@ -218,12 +217,6 @@ main() {
             series)
                 work_dir='/mnt/pool1/series'
                 break
-                ;;
-            --all)
-                action_validatemissing='true'
-                action_validatename='true'
-                action_validatedimensions='true'
-                shift
                 ;;
             -m | --missing)
                 action_validatemissing='true'
@@ -271,7 +264,7 @@ main() {
         validateAssetDimensions
         printLog "okay" "Task completed: asset dimensions validated."
         sleep 1
-    fi    
+    fi
 
     if [[ "${action_validatemissing}" ]]; then
         printLog "info" "Task running: lookup missing assets ..."
