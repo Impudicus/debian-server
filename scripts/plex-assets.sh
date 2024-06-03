@@ -34,7 +34,7 @@ validateAssetNames() {
             mv "${file}" "${file_dir}/${asset_name}"
 
             printf "${script_name}: » season '${file_parent_dir}/${file_name}' renamed to '${asset_name}' \n"
-            break
+            continue
         fi
 
         local invalid_background_regex=".*Backdrop.*"
@@ -43,7 +43,7 @@ validateAssetNames() {
             mv "${file}" "${file_dir}/${asset_name}"
 
             printf "${script_name}: » background '${file_parent_dir}/${file_name}' renamed to '${asset_name}' \n"
-            break
+            continue
         fi
 
         local invalid_specials_regex=".*Specials.*"
@@ -52,7 +52,7 @@ validateAssetNames() {
             mv "${file}" "${file_dir}/${asset_name}"
 
             printf "${script_name}: » specials '${file_parent_dir}/${file_name}' renamed to '${asset_name}' \n"
-            break
+            continue
         fi
 
         local invalid_poster_regex=".*\([0-9]{4}\).*"
@@ -61,11 +61,11 @@ validateAssetNames() {
             mv "${file}" "${file_dir}/${asset_name}"
             
             printf "${script_name}: » poster '${file_parent_dir}/${file_name}' renamed to '${asset_name}' \n"
-            break
+            continue
         fi
 
         printLog "error" "Invalid filename '${file_parent_dir}/${file_name}'."
-        break
+        continue
     done
 }
 
