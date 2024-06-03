@@ -10,7 +10,7 @@ readonly script_start=${SECONDS}
 # set -o pipefail # return exit status on pipefail
 
 getContainerRunstate() {
-    local container_runstate=$(docker inspect --format "{{.State.Status}}" "${1}" > /dev/null)
+    local container_runstate=$(docker inspect --format "{{.State.Status}}" "${1}")
     if [[ "${container_runstate}" == 'running' ]]; then
         echo "${container_runstate} is running"
         return 0
