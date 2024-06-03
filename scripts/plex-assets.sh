@@ -204,14 +204,14 @@ main() {
     # run
     printLog "text" "Config loaded: using '${work_dir}' as working directory."
 
-    if [[ "${option_validatename}" ]]; then
+    if [[ "${action_validatename}" ]]; then
         printLog "info" "Task running: validate asset naming convention ..."
         validateAssetNames
         printLog "okay" "Task completed: asset naming convention validated."
         sleep 1
     fi
 
-    if [[ "${action_removesamples}" ]]; then
+    if [[ "${action_validatemissing}" ]]; then
         printLog "info" "Task running: lookup missing assets ..."
         findMissingAssets
         printLog "okay" "Task completed: missing assets looked up."
