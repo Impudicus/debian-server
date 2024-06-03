@@ -23,6 +23,7 @@ validateAssetNames() {
         local valid_poster_regex="^poster$"
         local valid_season_regex="^Season[0-9]{2}$"
         if [[ "${file_name%.*}" =~ ${valid_poster_regex} || "${file_name%.*}" =~ ${valid_season_regex} ]]; then
+            # printf "${script_name}: » filename '${file_parent_dir}/${file_name}' already meet requirements\n"
             continue
         fi
 
@@ -33,7 +34,7 @@ validateAssetNames() {
             local asset_name=$(printf "Season%02.f.%s" "${BASH_REMATCH[1]}" "${file_ext}")
             mv "${file}" "${file_dir}/${asset_name}"
 
-            printf "${script_name}: » season '${file_parent_dir}/${file_name}' renamed to '${asset_name}' \n"
+            printf "${script_name}: » season '${file_parent_dir}/${file_name}' renamed to '${asset_name}'\n"
             continue
         fi
 
@@ -42,7 +43,7 @@ validateAssetNames() {
             local asset_name=$(printf "background.%s" "${file_ext}")
             mv "${file}" "${file_dir}/${asset_name}"
 
-            printf "${script_name}: » background '${file_parent_dir}/${file_name}' renamed to '${asset_name}' \n"
+            printf "${script_name}: » background '${file_parent_dir}/${file_name}' renamed to '${asset_name}'\n"
             continue
         fi
 
@@ -51,7 +52,7 @@ validateAssetNames() {
             local asset_name=$(printf "Season00.%s" "${file_ext}")
             mv "${file}" "${file_dir}/${asset_name}"
 
-            printf "${script_name}: » specials '${file_parent_dir}/${file_name}' renamed to '${asset_name}' \n"
+            printf "${script_name}: » specials '${file_parent_dir}/${file_name}' renamed to '${asset_name}'\n"
             continue
         fi
 
@@ -60,12 +61,38 @@ validateAssetNames() {
             local asset_name=$(printf "poster.%s" "${file_ext}")
             mv "${file}" "${file_dir}/${asset_name}"
             
-            printf "${script_name}: » poster '${file_parent_dir}/${file_name}' renamed to '${asset_name}' \n"
+            printf "${script_name}: » poster '${file_parent_dir}/${file_name}' renamed to '${asset_name}'\n"
             continue
         fi
 
         printLog "error" "Invalid filename '${file_parent_dir}/${file_name}'."
         continue
+    done
+}
+
+validateAssetDimensions() {
+    find "${work_dir}" \
+        -type f \( -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.png" \) \
+        | while read -r file; do
+
+        local file_name=$(basename "${file}")
+        local file_dir=$(dirname "${file}")
+        local file_ext=${file##*.}
+        local file_parent_dir=$(basename "$(dirname "$file")")
+
+        local image_dimension=$(identify -format "%wx%h" "$file")
+        local image_width=$(identify -format "%w" "$file")
+        local image_height=$(identify -format "%h" "$file")
+        local image_aspect_ratio=$((image_width * 100 / image_height))
+
+        # poster
+        if [[ "${aspect_ratio}" -lt 100 ]]; then
+            if [[ "${image_dimension}" == '1000x1500' ]]; then
+                printf "${script_name}: » filename '${file_parent_dir}/${file_name}' already meet requirements\n"
+                break
+            fi
+            continue
+        fi
     done
 }
 
@@ -136,6 +163,7 @@ printHelp() {
     printf "Usage: ${script_name} [OPTIONS]\n"
     printf "Options:\n"
     printf "      -all              Run all of the following tasks..\n"
+    printf "  -d, --dimensions      Validate asset dimensions.\n"
     printf "  -h, --help            Print this help message.\n"
     printf "  -m, --missing         Validate missing assets.\n"
     printf "  -n, --name            Validate asset names.\n"
@@ -157,6 +185,7 @@ main() {
     work_dir=''
     action_validatemissing=''
     action_validatename=''
+    action_validatedimensions=''
 
     # parameters
     while [[ $# -gt 0 ]]; do
@@ -172,6 +201,7 @@ main() {
             --all)
                 action_validatemissing='true'
                 action_validatename='true'
+                action_validatedimensions='true'
                 shift
                 ;;
             -m | --missing)
@@ -180,6 +210,10 @@ main() {
                 ;;
             -n | --name)
                 action_validatename='true'
+                shift
+                ;;
+            -s | --size)
+                action_validatesize='true'
                 shift
                 ;;
             -h | --help)
@@ -196,7 +230,7 @@ main() {
     if [[ ! "${work_dir}" ]]; then
         printLog "error" "Missing working directory, use --help for further information."
         exit 1
-    elif [[ ! "${action_validatemissing}" && ! "${action_validatename}" && ! "${action_removesamples}" ]]; then
+    elif [[ ! "${action_validatemissing}" && ! "${action_validatename}" && ! "${action_removesamples}" && ! "${action_validatedimensions}" ]]; then
         printLog "error" "No action selected, use --help for further information."
         exit 1
     fi
@@ -210,6 +244,13 @@ main() {
         printLog "okay" "Task completed: asset naming convention validated."
         sleep 1
     fi
+
+    if [[ "${action_validatedimensions}" ]]; then
+        printLog "info" "Task running: validate asset dimensions ..."
+        validateAssetDimensions
+        printLog "okay" "Task completed: asset dimensions validated."
+        sleep 1
+    fi    
 
     if [[ "${action_validatemissing}" ]]; then
         printLog "info" "Task running: lookup missing assets ..."
