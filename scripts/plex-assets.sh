@@ -93,7 +93,7 @@ findMissingAssets() {
         # season
         for file in "${subdir}"/*; do
             if [[ ! -f "${file}" ]]; then
-                printLog "error" "Invalid file '${file}' skipped."
+                # printLog "error" "Invalid file '${file}' skipped."
                 continue
             fi
 
