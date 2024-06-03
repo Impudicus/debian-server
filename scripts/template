@@ -68,6 +68,7 @@ main() {
     # run
 
     printLog "okay" "Script executed successfully."
+    exit 0
 }
 
 main "$@"

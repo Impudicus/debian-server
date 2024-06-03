@@ -103,6 +103,7 @@ main() {
     printLog "okay" "Task completed: backups created."
 
     printLog "okay" "Script executed successfully."
+    exit 0
 }
 
 main "$@"

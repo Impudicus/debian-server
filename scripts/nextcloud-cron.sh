@@ -82,6 +82,9 @@ main() {
         printLog "error" "Job failed! Reason: Error while running command!"
         exit 1
     fi
+
+    printLog "okay" "Script executed successfully."
+    exit 0
 }
 
 main "$@"

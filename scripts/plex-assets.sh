@@ -274,6 +274,7 @@ main() {
     fi
 
     printLog "okay" "Script executed successfully."
+    exit 0
 }
 
 main "$@"
