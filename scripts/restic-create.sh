@@ -9,7 +9,7 @@ readonly script_start=${SECONDS}
 # set -o errexit  # exit on error
 # set -o pipefail # return exit status on pipefail
 
-getTargetVariables() {
+getTarget() {
     local device_name="${1}"
     case "${device_name}" in
             TS473a | ts473a)
@@ -31,24 +31,26 @@ getTargetVariables() {
 }
 
 checkTargetConnection() {
-    local target_name="${1}"
-    ssh -o BatchMode=true "root@${target_name}" "exit" &> /dev/null
+    local target_hostname="${1}"
+    ssh -o BatchMode=true "root@${target_hostname}" "exit" &> /dev/null
     return $?
 }
 
-checkTargetRepository() {
-    local repository_name="${1}"
+checkRepository() {
+    local connection_string="${1}"
     restic check \
-        "${repository_name}" \
+        "${connection_string}" \
         --password-file "/root/.config/restic/password" \
         &> /dev/null
     return $?
 }
-createTargetRepository() {
-    restic check \
-        --repository-file "/root/.config/restic/repository" \
-        --password-file "/root/.config/restic/password" \
-        &> /dev/null
+createRepository() {
+    local connection_string="${1}"
+    # restic backup \
+    #     /docker \
+    #     "${connection_string}" \
+    #     --password-file "/root/.config/restic/password" \
+    #     &> /dev/null
     return $?
 }
 
@@ -95,7 +97,7 @@ main() {
     fi
 
     # variables
-    repository_name=$(cat "/root/.config/restic/repository")
+    device_repository=$(cat "/root/.config/restic/repository")
 
     # parameters
     while [[ $# -gt 0 ]]; do
@@ -112,7 +114,7 @@ main() {
     done
 
     # run
-    getTargetVariables "${HOSTNAME}"
+    getTarget "${HOSTNAME}"
     if [[ $? -ne 0 ]]; then
         printLog "error" "Job failed! Reason: Unable to find target stats!"
         exit 1
@@ -120,19 +122,19 @@ main() {
 
     checkTargetConnection "${target_hostname}"
     if [[ $? -ne 0 ]]; then
-        printLog "error" "Job failed! Reason: Unable to etablish connection to '${target_hostname}'!"
+        printLog "error" "Job failed! Reason: Unable to etablish connection '${target_hostname}'!"
         exit 1
     fi
 
-    checkTargetRepository "${repository_name}"
+    checkRepository "${device_repository}"
     if [[ $? -eq 0 ]]; then
-        printLog "error" "Job failed! Reason: Repository '${repository_name}' already exists!"
+        printLog "error" "Job failed! Reason: Repository '${device_repository}' already exists!"
         exit 1
     fi
 
-    createTargetRepository "${repository_name}"
-    if [[ $? -eq 0 ]]; then
-        printLog "error" "Job failed! Reason: Repository '${repository_name}' already exists!"
+    createRepository "${device_repository}"
+    if [[ $? -ne 0 ]]; then
+        printLog "error" "Job failed! Reason: Unable to create repository '${device_repository}'!"
         exit 1
     fi
 

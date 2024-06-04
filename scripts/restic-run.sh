@@ -9,7 +9,7 @@ readonly script_start=${SECONDS}
 # set -o errexit  # exit on error
 # set -o pipefail # return exit status on pipefail
 
-getTargetVariables() {
+getTarget() {
     local device_name="${1}"
     case "${device_name}" in
             TS473a | ts473a)
@@ -31,14 +31,15 @@ getTargetVariables() {
 }
 
 checkTargetConnection() {
-    local target_name="${1}"
-    ssh -o BatchMode=true "root@${target_name}" "exit" &> /dev/null
+    local target_hostname="${1}"
+    ssh -o BatchMode=true "root@${target_hostname}" "exit" &> /dev/null
     return $?
 }
 
 checkRepository() {
+    local connection_string="${1}"
     restic check \
-        "${repository}" \
+        "${connection_string}" \
         --password-file "/root/.config/restic/password" \
         &> /dev/null
     return $?
@@ -87,7 +88,7 @@ main() {
     fi
 
     # variables
-    repository=$(cat "/root/.config/restic/repository")
+    device_repository=$(cat "/root/.config/restic/repository")
 
     # parameters
     while [[ $# -gt 0 ]]; do
@@ -104,7 +105,7 @@ main() {
     done
 
     # run
-    getTargetVariables "${HOSTNAME}"
+    getTarget "${HOSTNAME}"
     if [[ $? -ne 0 ]]; then
         printLog "error" "Job failed! Reason: Unable to find target stats!"
         exit 1
@@ -112,13 +113,13 @@ main() {
 
     checkTargetConnection "${target_hostname}"
     if [[ $? -ne 0 ]]; then
-        printLog "error" "Job failed! Reason: Unable to etablish connection to '${target_hostname}'!"
+        printLog "error" "Job failed! Reason: Unable to etablish connection '${target_hostname}'!"
         exit 1
     fi
 
-    checkRepository "${repository}"
+    checkRepository "${device_repository}"
     if [[ $? -ne 0 ]]; then
-        printLog "error" "Job failed! Reason: Unable to find repository '${repository}'!"
+        printLog "error" "Job failed! Reason: Unable to find repository '${device_repository}'!"
         exit 1
     fi
 
