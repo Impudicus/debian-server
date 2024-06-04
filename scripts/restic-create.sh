@@ -117,8 +117,8 @@ main() {
     fi
 
     checkTargetRepository "${target_hostname}"
-    if [[ $? -ne 0 ]]; then
-        printLog "error" "Job failed! Reason: Unable to find repository '${repository_name}'!"
+    if [[ $? -eq 0 ]]; then
+        printLog "error" "Job failed! Reason: Repository '${repository_name}' already exists!"
         exit 1
     fi
 
