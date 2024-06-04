@@ -32,7 +32,15 @@ getTargetVariables() {
 
 checkTargetConnection() {
     local target_name="${1}"
-    ssh -q -o BatchMode=true "root@${target_name}" "exit"
+    ssh -o BatchMode=true "root@${target_name}" "exit" &> /dev/null
+    return $?
+}
+
+checkTargetRepository() {
+    restic check \
+        --repository-file "/root/.config/restic/repository" \
+        --password-file "/root/.config/restic/password" \
+        &> /dev/null
     return $?
 }
 
@@ -89,13 +97,20 @@ main() {
     # run
     getTargetVariables "${HOSTNAME}"
     if [[ $? -ne 0 ]]; then
-        printLog "info" "Job failed! Reason: Unable to find target stats!"
+        printLog "error" "Job failed! Reason: Unable to find target stats!"
         exit 1
     fi
 
     checkTargetConnection "${target_hostname}"
     if [[ $? -ne 0 ]]; then
-        printLog "info" "Job failed! Reason: Unable to etablish connection to '${target_hostname}'!"
+        printLog "error" "Job failed! Reason: Unable to etablish connection to '${target_hostname}'!"
+        exit 1
+    fi
+
+    checkTargetRepository "${target_hostname}"
+    if [[ $? -ne 0 ]]; then
+        local repository_name=$(cat "/root/.config/restic/repository")
+        printLog "error" "Job failed! Reason: Unable to find repository '${repository_name}'!"
         exit 1
     fi
 
