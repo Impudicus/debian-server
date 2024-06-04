@@ -48,8 +48,7 @@ createRepository() {
     local connection_string="${1}"
     restic init \
         "${connection_string}" \
-        --password-file "/root/.config/restic/password" \
-        &> /dev/null
+        --password-file "/root/.config/restic/password"
     return $?
 }
 
