@@ -32,12 +32,8 @@ getTargetVariables() {
 
 checkTargetConnection() {
     local target_name="${1}"
-    ssh --option BatchMode=yes "root@${target_name}" "exit" 2>&1
-    if [[ $? -eq 0 ]]; then
-        return 0
-    else
-        return 1
-    fi
+    ssh "root@${target_name}" "exit" 2>&1
+    return $?
 }
 
 printLog() {
