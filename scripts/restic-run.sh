@@ -39,7 +39,7 @@ checkTargetConnection() {
 checkRepository() {
     local connection_string="${1}"
     restic check \
-        "${connection_string}" \
+        -r "${connection_string}" \
         --password-file "/root/.config/restic/password" \
         &> /dev/null
     return $?
