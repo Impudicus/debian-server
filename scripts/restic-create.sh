@@ -46,11 +46,10 @@ checkRepository() {
 }
 createRepository() {
     local connection_string="${1}"
-    # restic backup \
-    #     /docker \
-    #     "${connection_string}" \
-    #     --password-file "/root/.config/restic/password" \
-    #     &> /dev/null
+    restic init \
+        "${connection_string}" \
+        --password-file "/root/.config/restic/password" \
+        &> /dev/null
     return $?
 }
 
@@ -134,11 +133,11 @@ main() {
 
     createRepository "${device_repository}"
     if [[ $? -ne 0 ]]; then
-        printLog "error" "Job failed! Reason: Unable to create repository '${device_repository}'!"
+        printLog "error" "Job failed! Reason: Error while creating repository '${device_repository}'!"
         exit 1
     fi
 
-    printLog "okay" "Script executed successfully."
+    printLog "okay" "Task completed: Repository '${device_repository}' successfully created."
     exit 0
 }
 
