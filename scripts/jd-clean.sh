@@ -28,7 +28,7 @@ removeSamples() {
     local file_extensions=("mkv" "mp4")
     for file_extension in "${file_extensions[@]}"; do
         find "${work_dir}" \
-            -type f -iname "*sample*.$file_extension" -size -100M \
+            -type f -iname "*sample*.$file_extension" -size -500M \
              -delete -printf "${script_name}: » '%f' removed\n"
     done
 }
