@@ -44,11 +44,13 @@ checkRepository() {
         &> /dev/null
     return $?
 }
+
 createRepository() {
     local connection_string="${1}"
     restic init \
         -r "${connection_string}" \
-        --password-file "/root/.config/restic/password"
+        --password-file "/root/.config/restic/password" \
+        &> /dev/null
     return $?
 }
 

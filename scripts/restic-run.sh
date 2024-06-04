@@ -45,6 +45,16 @@ checkRepository() {
     return $?
 }
 
+createBackup() {
+    local connection_string="${1}"
+    restic backup \
+        /docker \
+        -r "${connection_string}" \
+        --password-file "/root/.config/restic/password" \
+        &> /dev/null
+    return $?
+}
+
 printLog() {
     local log_type="${1}"
     local log_text="${2}"
@@ -119,11 +129,17 @@ main() {
 
     checkRepository "${device_repository}"
     if [[ $? -ne 0 ]]; then
-        printLog "error" "Job failed! Reason: Unable to find repository '${device_repository}'!"
+        printLog "error" "Job failed! Reason: Repository '${device_repository}' not found!"
         exit 1
     fi
 
-    printLog "okay" "Script executed successfully."
+    createBackup "${device_repository}"
+    if [[ $? -ne 0 ]]; then
+        printLog "error" "Job failed! Reason: Error while backuping to repository '${device_repository}'!"
+        exit 1
+    fi
+
+    printLog "okay" "Task completed: Backup successfully written to repository '${device_repository}'."
     exit 0
 }
 
