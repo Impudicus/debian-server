@@ -32,7 +32,7 @@ getTargetVariables() {
 
 checkTargetConnection() {
     local target_name="${1}"
-    ssh --option BatchMode=yes --option ConnectTimeout=5 "root@${target_name}" "exit" 2>&1
+    ssh --option BatchMode=yes "root@${target_name}" "exit" 2>&1
     if [[ $? -eq 0 ]]; then
         return 0
     else
