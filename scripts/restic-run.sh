@@ -32,7 +32,7 @@ getTargetVariables() {
 
 checkTargetConnection() {
     local target_name="${1}"
-    ssh "root@${target_name}" "exit" 2>&1
+    ssh -q -o BatchMode=true "root@${target_name}" "exit"
     return $?
 }
 
