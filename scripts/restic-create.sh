@@ -37,6 +37,14 @@ checkTargetConnection() {
 }
 
 checkTargetRepository() {
+    local repository_name="${1}"
+    restic check \
+        "${repository_name}" \
+        --password-file "/root/.config/restic/password" \
+        &> /dev/null
+    return $?
+}
+createTargetRepository() {
     restic check \
         --repository-file "/root/.config/restic/repository" \
         --password-file "/root/.config/restic/password" \
@@ -116,7 +124,13 @@ main() {
         exit 1
     fi
 
-    checkTargetRepository "${target_hostname}"
+    checkTargetRepository "${repository_name}"
+    if [[ $? -eq 0 ]]; then
+        printLog "error" "Job failed! Reason: Repository '${repository_name}' already exists!"
+        exit 1
+    fi
+
+    createTargetRepository "${repository_name}"
     if [[ $? -eq 0 ]]; then
         printLog "error" "Job failed! Reason: Repository '${repository_name}' already exists!"
         exit 1

@@ -36,9 +36,9 @@ checkTargetConnection() {
     return $?
 }
 
-checkTargetRepository() {
+checkRepository() {
     restic check \
-        --repository-file "/root/.config/restic/repository" \
+        "${repository}" \
         --password-file "/root/.config/restic/password" \
         &> /dev/null
     return $?
@@ -87,7 +87,7 @@ main() {
     fi
 
     # variables
-    repository_name=$(cat "/root/.config/restic/repository")
+    repository=$(cat "/root/.config/restic/repository")
 
     # parameters
     while [[ $# -gt 0 ]]; do
@@ -116,9 +116,9 @@ main() {
         exit 1
     fi
 
-    checkTargetRepository "${target_hostname}"
+    checkRepository "${repository}"
     if [[ $? -ne 0 ]]; then
-        printLog "error" "Job failed! Reason: Unable to find repository '${repository_name}'!"
+        printLog "error" "Job failed! Reason: Unable to find repository '${repository}'!"
         exit 1
     fi
 
