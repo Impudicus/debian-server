@@ -18,7 +18,7 @@ validateMediaMissing() {
         local dir_name=$(basename "${subdir}")
         local parent_dir=$(basename "$(dirname "$subdir")")
 
-        local result=$(find "${subdir}" -type f -name "*.mkv")
+        local result=$(find "${subdir}" -type f \( -name "*.mkv" -o -name "*.mp4" \))
         if [[ ! "$result" ]]; then
             printf "${script_name}: » media file in '${dir_name}' missing\n"
         fi
