@@ -24,8 +24,8 @@ validateAssetNames() {
         fi
 
         # invalid filenames
-        local invalid_season_regex_space="*Season ?([0-9]{1,2})*"
-        local invalid_season_regex_nospace="*Season([0-9]{1,2})*"
+        local invalid_season_regex_space=".*Season ?([0-9]{1,2})*"
+        local invalid_season_regex_nospace=".*Season([0-9]{1,2})*"
         if [[ "${file_name%.*}" =~ ${invalid_season_regex_space} || "${file_name%.*}" =~ ${invalid_season_regex_nospace} ]]; then
             local asset_name=$(printf "Season%02.f.%s" "${BASH_REMATCH[1]}" "${file_ext}")
             mv "${file}" "${file_dir}/${asset_name}"
