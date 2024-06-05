@@ -21,7 +21,7 @@ printLog() {
 
     case "${log_type}" in
         error)
-            pushNotification.sh "wakeonlan" "${log_type}" "${log_text}"
+            pushNotification.sh "nextcloud" "${log_type}" "${log_text}"
             printf "${script_name}: \e[41m${log_text}\e[0m\n" >&2
             ;;
         okay)
