@@ -103,12 +103,6 @@ main() {
         exit 1
     fi
 
-    getTargetRunstate "${target_ip_address}"
-    if [[ $? -eq 0 ]]; then
-        printLog "info" "Job finished successfully. Reason: Target '${target_hostname}' already online!"
-        # return 1
-    fi
-
     local attempt=1
     local max_attempts=4
     while [ ${attempt} -le ${max_attempts} ]; do
