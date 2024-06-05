@@ -1,8 +1,10 @@
 #!/bin/bash
 
 main() {
-    local script_start="${1}"
-    local duration=$((SECONDS - script_start))
+    local start_time="${1}"
+    local end_time="${1}"
+
+    local duration=$((start_time - end_time))
     local hours=$((duration / 3600))
     local minutes=$(( (duration % 3600) / 60 ))
     local seconds=$((duration % 60))
