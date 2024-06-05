@@ -34,7 +34,7 @@ validateAssetNames() {
             continue
         fi
 
-        local invalid_background_regex="*Backdrop*"
+        local invalid_background_regex=".*Backdrop*"
         if [[ "${file_name%.*}" =~ ${invalid_background_regex} ]]; then
             local asset_name=$(printf "background.%s" "${file_ext}")
             mv "${file}" "${file_dir}/${asset_name}"
@@ -43,7 +43,7 @@ validateAssetNames() {
             continue
         fi
 
-        local invalid_specials_regex="*Specials*"
+        local invalid_specials_regex=".*Specials*"
         if [[ "${file_name%.*}" =~ ${invalid_specials_regex} ]]; then
             local asset_name=$(printf "Season00.%s" "${file_ext}")
             mv "${file}" "${file_dir}/${asset_name}"
