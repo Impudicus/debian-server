@@ -39,6 +39,27 @@ setTargetRunstate() {
     return $?
 }
 
+printLog() {
+    local log_type="${1}"
+    local log_text="${2}"
+
+    case "${log_type}" in
+        error)
+            printf "${script_name}: \e[41m${log_text}\e[0m\n" >&2
+            ;;
+        okay)
+            printf "${script_name}: \e[42m${log_text}\e[0m\n" >&1
+            ;;
+        info)
+            printf "${script_name}: \e[44m${log_text}\e[0m\n" >&1
+            ;;
+        *)
+            printf "${script_name}: ${log_text}\n" >&1
+            ;;
+    esac
+    return 0
+}
+
 printHelp() {
     printf "Usage: ${script_name} [OPTIONS]\n"
     printf "Options:\n"
@@ -49,15 +70,15 @@ printHelp() {
 main() {
     # pre-checks
     if [[ "${EUID}" -ne 0 ]]; then
-        /usr/local/sbin/printLog.sh "error" "Script has to be run with root user privileges."
+        printLog "error" "Script has to be run with root user privileges."
         exit 1
     fi
 
     local package_name="wakeonlan"
     local package_installed=$(dpkg-query --show --showformat='${db:Status-Status}' "${package_name}" 2>/dev/null)
     if [[ ! "${package_installed}" ]]; then
-        /usr/local/sbin/printLog.sh "error" "Unable to find dpkg-package '${package_name}'."
-        /usr/local/sbin/printLog.sh "text" "Check apt for missing packages and rerun the script."
+        printLog "error" "Unable to find dpkg-package '${package_name}'."
+        printLog "text" "Check apt for missing packages and rerun the script."
         exit 1
     fi
 
@@ -72,7 +93,7 @@ main() {
                 exit 0
                 ;;
             *)
-                /usr/local/sbin/printLog.sh "error" "Unknown option '${1}', use --help for further information."
+                printLog "error" "Unknown option '${1}', use --help for further information."
                 exit 1
                 ;;
         esac
@@ -81,14 +102,14 @@ main() {
     # run
     getTargetSlave "${HOSTNAME}"
     if [[ $? -ne 0 ]]; then
-        /usr/local/sbin/printLog.sh "error" "Job failed! Reason: Unable to identify target!"
+        printLog "error" "Job failed! Reason: Unable to identify target!"
         exit 1
     fi
 
     getTargetRunstate "${target_ip_address}"
     if [[ $? -eq 0 ]]; then
-        /usr/local/sbin/printLog.sh "info" "Job finished successfully. Reason: Target '${target_hostname}' already online!"
-        return 1
+        printLog "info" "Job finished successfully. Reason: Target '${target_hostname}' already online!"
+        # return 1
     fi
 
     local attempt=1
@@ -96,7 +117,7 @@ main() {
     while [ ${attempt} -le ${max_attempts} ]; do
         setTargetRunstate "${target_mac_address}"
         if [[ $? -ne 0 ]]; then
-            /usr/local/sbin/printLog.sh "error" "Job failed! Reason: Unable to wakeup slave!"
+            printLog "error" "Job failed! Reason: Unable to wakeup slave!"
             exit 1
         fi
 
@@ -104,16 +125,16 @@ main() {
 
         getTargetRunstate "${target_ip_address}"
         if [[ $? -eq 0 ]]; then
-            local job_duration=$(/usr/local/sbin/getJobDuration.sh $script_start $SECONDS)
-            /usr/local/sbin/printLog.sh "okay" "Job finished successfully. Runtime: ${job_duration}."
+            local job_duration=$(getJobDuration.sh $script_start $SECONDS)
+            printLog "okay" "Job finished successfully. Runtime: ${job_duration}."
             exit 0
         fi
 
         attempt=$((attempt + 1))
     done
 
-    local job_duration=$(/usr/local/sbin/getJobDuration.sh $script_start $SECONDS)
-    /usr/local/sbin/printLog.sh "error" "Job failed! Reason: Timeout after ${job_duration}!"
+    local job_duration=$(getJobDuration.sh $script_start $SECONDS)
+    printLog "error" "Job failed! Reason: Timeout after ${job_duration}!"
     exit 1
 }
 
