@@ -19,7 +19,7 @@ validateAssetNames() {
         local valid_poster_regex="^poster$"
         local valid_season_regex="^Season[0-9]{2}$"
         if [[ "${file_name%.*}" =~ ${valid_poster_regex} || "${file_name%.*}" =~ ${valid_season_regex} ]]; then
-            # asset already meet requirements
+            # filename meets requirements
             continue
         fi
 
@@ -83,7 +83,7 @@ validateAssetDimensions() {
         # poster
         if [[ "${image_aspect_ratio}" -lt 100 ]]; then
             if [[ "${image_dimension}" == '1000x1500' && "${file_ext}" == 'jpg' ]]; then
-                # printf "${script_name}: » filename '${file_parent_dir}/${file_name}' already meet requirements\n"
+                # poster meets requirements
                 continue
             fi
 
@@ -98,7 +98,7 @@ validateAssetDimensions() {
         # tilecard
         if [[ "${image_aspect_ratio}" -gt 100 ]]; then
             if [[ "${image_dimension}" == '1280x720' && "${file_ext}" == 'jpg' ]]; then
-                # printf "${script_name}: » filename '${file_parent_dir}/${file_name}' already meet requirements\n"
+                # tilecard meets requirements
                 continue
             fi
 
@@ -136,7 +136,7 @@ validateAssetMissing() {
         # season
         for file in "${subdir}"/*; do
             if [[ ! -f "${file}" ]]; then
-                # printLog "error" "Invalid file '${file}' skipped."
+                # invalid file
                 continue
             fi
 

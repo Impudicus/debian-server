@@ -5,6 +5,34 @@ readonly script_name=${BASH_SOURCE[0]}
 readonly script_path=$(dirname $(realpath ${BASH_SOURCE[0]}))
 readonly script_start=${SECONDS}
 
+validateMediaDuplicates() {
+    for subdir in "${work_dir}"/*; do
+        if [[ ! -d "${subdir}" ]]; then
+            printLog "error" "Invalid directory '${subdir}', skipped."
+            continue
+        elif [[ "${subdir}" == './lost+found' ]]; then
+            printLog "info" "System directory '${subdir}', skipped."
+            continue
+        fi
+
+        local dir_name=$(basename "${subdir}")
+        local parent_dir=$(basename "$(dirname "$subdir")")
+
+        for file in "${subdir}"/*; do
+            if [[ ! -f "${file}" ]]; then
+                # invalid file
+                continue
+            fi
+
+            local file_name=$(basename "${file}")
+            local file_ext=${file##*.}
+
+            echo "Im Ordner $dir_name liegt die Datei $file_name"
+            return 0
+        done
+    done
+}
+
 validateMediaMissing() {
     for subdir in "${work_dir}"/*; do
         if [[ ! -d "${subdir}" ]]; then
@@ -47,6 +75,7 @@ printLog() {
 printHelp() {
     printf "Usage: ${script_name} [OPTIONS]\n"
     printf "Options:\n"
+    printf "  -d, --duplicates      Lookup duplicate media files.\n"
     printf "  -h, --help            Print this help message.\n"
     printf "  -m, --missing         Lookup missing media files.\n"
     printf "\n"
@@ -65,6 +94,7 @@ main() {
 
     # variables
     work_dir=''
+    action_validateduplicates=''
     action_validatemissing=''
 
     # parameters
@@ -77,6 +107,10 @@ main() {
             series)
                 work_dir='/mnt/pool1/series'
                 break
+                ;;
+            -d | --duplicates)
+                action_validateduplicates='true'
+                shift
                 ;;
             -m | --missing)
                 action_validatemissing='true'
@@ -96,7 +130,7 @@ main() {
     if [[ ! "${work_dir}" ]]; then
         printLog "error" "Missing working directory, use --help for further information."
         exit 1
-    elif [[ ! "${action_validatemissing}" ]]; then
+    elif [[ ! "${action_validatemissing}" && ! "${action_validateduplicates}" ]]; then
         printLog "error" "No action selected, use --help for further information."
         exit 1
     fi
@@ -108,6 +142,13 @@ main() {
         printLog "info" "Task running: Validate missing media files ..."
         validateMediaMissing
         printLog "okay" "Task completed: Missing media files validated."
+        sleep 1
+    fi
+
+    if [[ "${action_validateduplicates}" ]]; then
+        printLog "info" "Task running: Validate duplicate media files ..."
+        validateMediaDuplicates
+        printLog "okay" "Task completed: Duplicate media files validated."
         sleep 1
     fi
 
