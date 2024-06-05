@@ -7,8 +7,8 @@ After=network-online.target
 [Service]
 Type=oneshot
 RemainAfterExit=yes
-ExecStart=/usr/local/sbin/notification-push.sh "debian" "info" "system powered on!"
-ExecStop=/usr/local/sbin/notification-push.sh "debian" "warn" "system powered off!"
+ExecStart=/usr/local/sbin/pushNotification.sh "debian" "info" "system powered on!"
+ExecStop=/usr/local/sbin/pushNotification.sh "debian" "info" "system powered off!"
 
 [Install]
 WantedBy=default.target
