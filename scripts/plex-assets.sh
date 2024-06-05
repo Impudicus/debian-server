@@ -24,8 +24,8 @@ validateAssetNames() {
         fi
 
         # invalid filenames
-        local invalid_season_regex_space=".*Season ?([0-9]{1,2})*"
-        local invalid_season_regex_nospace=".*Season([0-9]{1,2})*"
+        local invalid_season_regex_space="*Season ?([0-9]{1,2})*"
+        local invalid_season_regex_nospace="*Season([0-9]{1,2})*"
         if [[ "${file_name%.*}" =~ ${invalid_season_regex_space} || "${file_name%.*}" =~ ${invalid_season_regex_nospace} ]]; then
             local asset_name=$(printf "Season%02.f.%s" "${BASH_REMATCH[1]}" "${file_ext}")
             mv "${file}" "${file_dir}/${asset_name}"
@@ -34,7 +34,7 @@ validateAssetNames() {
             continue
         fi
 
-        local invalid_background_regex=".*Backdrop.*"
+        local invalid_background_regex="*Backdrop*"
         if [[ "${file_name%.*}" =~ ${invalid_background_regex} ]]; then
             local asset_name=$(printf "background.%s" "${file_ext}")
             mv "${file}" "${file_dir}/${asset_name}"
@@ -43,7 +43,7 @@ validateAssetNames() {
             continue
         fi
 
-        local invalid_specials_regex=".*Specials.*"
+        local invalid_specials_regex="*Specials*"
         if [[ "${file_name%.*}" =~ ${invalid_specials_regex} ]]; then
             local asset_name=$(printf "Season00.%s" "${file_ext}")
             mv "${file}" "${file_dir}/${asset_name}"
@@ -52,14 +52,14 @@ validateAssetNames() {
             continue
         fi
 
-        local invalid_poster_regex=".*\([0-9]{4}\).*"
-        if [[ "${file_name%.*}" =~ ${invalid_poster_regex} ]]; then
-            local asset_name=$(printf "poster.%s" "${file_ext}")
-            mv "${file}" "${file_dir}/${asset_name}"
+        # local invalid_poster_regex=".*\([0-9]{4}\).*"
+        # if [[ "${file_name%.*}" =~ ${invalid_poster_regex} ]]; then
+        #     local asset_name=$(printf "poster.%s" "${file_ext}")
+        #     mv "${file}" "${file_dir}/${asset_name}"
             
-            printf "${script_name}: » poster '${file_parent_dir}/${file_name}' renamed to '${asset_name}'\n"
-            continue
-        fi
+        #     printf "${script_name}: » poster '${file_parent_dir}/${file_name}' renamed to '${asset_name}'\n"
+        #     continue
+        # fi
 
         printLog "error" "Invalid filename '${file_parent_dir}/${file_name}'."
     done
