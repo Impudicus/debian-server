@@ -22,28 +22,14 @@ setContainerRunstate() {
     local container_name="${1}"
     local container_runstate="${2}"
     if [[ "${container_runstate}" == 'start'  ]]; then
-        docker start "${container_name}" > /dev/null
+        docker start "${container_name}" &> /dev/null
         return $?
     elif [[ "${container_runstate}" == 'stop'  ]]; then
-        docker stop "${container_name}" > /dev/null
+        docker stop "${container_name}" &> /dev/null
         return $?
     else
         return 1
     fi
-}
-
-getJobDuration() {
-    local duration=$((SECONDS - script_start))
-    local hours=$((duration / 3600))
-    local minutes=$(( (duration % 3600) / 60 ))
-    local seconds=$((duration % 60))
-    local result=""
-
-    (( hours > 0 )) && result+="${hours} hours"
-    (( minutes > 0 )) && result+="${result:+, }${minutes} minutes"
-    (( seconds > 0 )) && result+="${result:+, }${seconds} seconds"
-
-    echo "${result}"
 }
 
 printLog() {
@@ -65,7 +51,6 @@ printLog() {
             ;;
     esac
 }
-
 printHelp() {
     printf "Usage: ${script_name} [OPTIONS]\n"
     printf "Options:\n"
@@ -132,13 +117,13 @@ main() {
         local check_container='imagemaid'
         getContainerRunstate "${check_container}"
         if [[ $? -ne 0 ]]; then
-            local job_duration=$(getJobDuration)
+            local job_duration=$(getJobDuration.sh $script_start $SECONDS)
             printLog "okay" "Job finished successfully. Runtime: ${job_duration}."
             exit 0
         fi
     done
 
-    local job_duration=$(getJobDuration)
+    local job_duration=$(getJobDuration.sh $script_start $SECONDS)
     printLog "error" "Job failed! Reason: Timeout after ${job_duration}!"
     exit 1
 }

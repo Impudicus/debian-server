@@ -5,11 +5,7 @@ readonly script_name=${BASH_SOURCE[0]}
 readonly script_path=$(dirname $(realpath ${BASH_SOURCE[0]}))
 readonly script_start=${SECONDS}
 
-# configurations
-set -o errexit  # exit on error
-set -o pipefail # return exit status on pipefail
-
-runBackup() {
+runBackups() {
     (
         cd "${source_dir}"
 
@@ -31,20 +27,6 @@ runBackup() {
     )
 }
 
-getJobDuration() {
-    local duration=$((SECONDS - script_start))
-    local hours=$((duration / 3600))
-    local minutes=$(( (duration % 3600) / 60 ))
-    local seconds=$((duration % 60))
-    local result=""
-
-    (( hours > 0 )) && result+="${hours} hours"
-    (( minutes > 0 )) && result+="${result:+, }${minutes} minutes"
-    (( seconds > 0 )) && result+="${result:+, }${seconds} seconds"
-
-    echo "${result}"
-}
-
 printLog() {
     local log_type="${1}"
     local log_text="${2}"
@@ -64,7 +46,6 @@ printLog() {
             ;;
     esac
 }
-
 printHelp() {
     printf "Usage: ${script_name} [OPTIONS]\n"
     printf "Options:\n"
@@ -106,18 +87,18 @@ main() {
     fi
 
     # run
-    printLog "text" "Config loaded: using '${source_dir}' as source directory."
-    printLog "text" "Config loaded: using '${target_dir}' as target directory."
+    printLog "text" "Config loaded: Using '${source_dir}' as source directory."
+    printLog "text" "Config loaded: Using '${target_dir}' as target directory."
 
     mkdir --parents "${target_dir}"
-    printLog "okay" "Task completed: target directory created."
+    printLog "okay" "Task completed: Target directory created."
 
-    printLog "info" "Task completed: create backups ..."
-    runBackup
-    printLog "okay" "Task completed: backups created."
+    printLog "info" "Task running: Create backups ..."
+    runBackups
+    printLog "okay" "Task completed: Backups created."
 
-    local job_duration=$(getJobDuration)
-    printLog "okay" "Backup successfully created. Runtime: ${job_duration}."
+    local job_duration=$(getJobDuration.sh $script_start $SECONDS)
+    printLog "okay" "One-Time-Backup successfully created. Runtime: ${job_duration}."
     exit 0
 }
 

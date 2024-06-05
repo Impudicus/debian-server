@@ -5,10 +5,6 @@ readonly script_name=${BASH_SOURCE[0]}
 readonly script_path=$(dirname $(realpath ${BASH_SOURCE[0]}))
 readonly script_start=${SECONDS}
 
-# configurations
-# set -o errexit  # exit on error
-# set -o pipefail # return exit status on pipefail
-
 validateAssetNames() {
     find "${work_dir}" \
         -type f \( -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.png" \) \
@@ -23,7 +19,7 @@ validateAssetNames() {
         local valid_poster_regex="^poster$"
         local valid_season_regex="^Season[0-9]{2}$"
         if [[ "${file_name%.*}" =~ ${valid_poster_regex} || "${file_name%.*}" =~ ${valid_season_regex} ]]; then
-            # printf "${script_name}: » filename '${file_parent_dir}/${file_name}' already meet requirements\n"
+            # asset already meet requirements
             continue
         fi
 
@@ -66,7 +62,6 @@ validateAssetNames() {
         fi
 
         printLog "error" "Invalid filename '${file_parent_dir}/${file_name}'."
-        continue
     done
 }
 
@@ -160,20 +155,6 @@ findMissingAssets() {
     done
 }
 
-getJobDuration() {
-    local duration=$((SECONDS - script_start))
-    local hours=$((duration / 3600))
-    local minutes=$(( (duration % 3600) / 60 ))
-    local seconds=$((duration % 60))
-    local result=""
-
-    (( hours > 0 )) && result+="${hours} hours"
-    (( minutes > 0 )) && result+="${result:+, }${minutes} minutes"
-    (( seconds > 0 )) && result+="${result:+, }${seconds} seconds"
-
-    echo "${result}"
-}
-
 printLog() {
     local log_type="${1}"
     local log_text="${2}"
@@ -193,7 +174,6 @@ printLog() {
             ;;
     esac
 }
-
 printHelp() {
     printf "Usage: ${script_name} [OPTIONS]\n"
     printf "Options:\n"
@@ -264,30 +244,30 @@ main() {
     fi
 
     # run
-    printLog "text" "Config loaded: using '${work_dir}' as working directory."
+    printLog "text" "Config loaded: Using '${work_dir}' as working directory."
 
     if [[ "${action_validatename}" ]]; then
-        printLog "info" "Task running: validate asset naming convention ..."
+        printLog "info" "Task running: Validate asset naming convention ..."
         validateAssetNames
-        printLog "okay" "Task completed: asset naming convention validated."
+        printLog "okay" "Task completed: Asset naming convention validated."
         sleep 1
     fi
 
     if [[ "${action_validatedimensions}" ]]; then
-        printLog "info" "Task running: validate asset dimensions ..."
+        printLog "info" "Task running: Validate asset dimensions ..."
         validateAssetDimensions
-        printLog "okay" "Task completed: asset dimensions validated."
+        printLog "okay" "Task completed: Asset dimensions validated."
         sleep 1
     fi
 
     if [[ "${action_validatemissing}" ]]; then
-        printLog "info" "Task running: lookup missing assets ..."
+        printLog "info" "Task running: Validate missing assets ..."
         findMissingAssets
-        printLog "okay" "Task completed: missing assets looked up."
+        printLog "okay" "Task completed: Missing assets validated."
         sleep 1
     fi
 
-    local job_duration=$(getJobDuration)
+    local job_duration=$(getJobDuration.sh $script_start $SECONDS)
     printLog "okay" "Job finished successfully. Runtime: ${job_duration}."
     exit 0
 }

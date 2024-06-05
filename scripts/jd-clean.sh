@@ -5,10 +5,6 @@ readonly script_name=${BASH_SOURCE[0]}
 readonly script_path=$(dirname $(realpath ${BASH_SOURCE[0]}))
 readonly script_start=${SECONDS}
 
-# configurations
-set -o errexit  # exit on error
-set -o pipefail # return exit status on pipefail
-
 removeEmptyFolders() {
     find "${work_dir}" \
         -type d -empty \
@@ -19,7 +15,7 @@ removeJunk() {
     local file_extensions=("idx" "ifo" "jpg" "jpeg" "m2ts" "nfo" "png" "sfv" "srt" "sub" "sup" "txt" "url")
     for file_extension in "${file_extensions[@]}"; do
         find "${work_dir}" \
-            -type f -iname "*.$file_extension" \
+             -type f -iname "*.$file_extension" \
              -delete -printf "${script_name}: » '%f' removed\n"
     done
 }
@@ -28,7 +24,7 @@ removeSamples() {
     local file_extensions=("mkv" "mp4")
     for file_extension in "${file_extensions[@]}"; do
         find "${work_dir}" \
-            -type f -iname "*sample*.$file_extension" -size -500M \
+             -type f -iname "*sample*.$file_extension" -size -500M \
              -delete -printf "${script_name}: » '%f' removed\n"
     done
 }
@@ -52,7 +48,6 @@ printLog() {
             ;;
     esac
 }
-
 printHelp() {
     printf "Usage: ${script_name} [TASKS] Path\n"
     printf "Tasks:\n"
@@ -130,30 +125,31 @@ main() {
     fi
 
     # run
-    printLog "text" "Config loaded: using '${work_dir}' as working directory."
+    printLog "text" "Config loaded: Using '${work_dir}' as working directory."
 
     if [[ "${action_removejunk}" ]]; then
-        printLog "info" "Task running: remove junk files ..."
+        printLog "info" "Task running: Remove junk files ..."
         removeJunk
-        printLog "okay" "Task completed: junk files removed."
+        printLog "okay" "Task completed: Junk files removed."
         sleep 1
     fi
 
     if [[ "${action_removesamples}" ]]; then
-        printLog "info" "Task running: remove sample files ..."
+        printLog "info" "Task running: Remove sample files ..."
         removeSamples
-        printLog "okay" "Task completed: sample files removed."
+        printLog "okay" "Task completed: Sample files removed."
         sleep 1
     fi
 
     if [[ "${action_removeemptyfolders}" ]]; then
-        printLog "info" "Task running: remove empty folders ..."
+        printLog "info" "Task running: Remove empty folders ..."
         removeEmptyFolders
-        printLog "okay" "Task completed: empty folders removed."
+        printLog "okay" "Task completed: Empty folders removed."
         sleep 1
     fi
 
-    printLog "okay" "Script executed successfully."
+    local job_duration=$(getJobDuration.sh $script_start $SECONDS)
+    printLog "okay" "Job finished successfully. Runtime: ${job_duration}."
     exit 0
 }
 

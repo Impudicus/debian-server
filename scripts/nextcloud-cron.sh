@@ -5,10 +5,6 @@ readonly script_name=${BASH_SOURCE[0]}
 readonly script_path=$(dirname $(realpath ${BASH_SOURCE[0]}))
 readonly script_start=${SECONDS}
 
-# configurations
-# set -o errexit  # exit on error
-# set -o pipefail # return exit status on pipefail
-
 getContainerRunstate() {
     local container_name="${1}"
     local container_runstate=$(docker inspect --format "{{.State.Status}}" "${container_name}")
@@ -38,7 +34,6 @@ printLog() {
             ;;
     esac
 }
-
 printHelp() {
     printf "Usage: ${script_name} [OPTIONS]\n"
     printf "Options:\n"
@@ -73,17 +68,19 @@ main() {
     local check_container='nextcloud'
     getContainerRunstate "${check_container}"
     if [[ $? -ne 0 ]]; then
+        # printLog "error" "Job failed! Reason: Container '${check_container}' not running!"
         exit 1
     fi
 
     local container_name='nextcloud'
     docker exec -u www-data -t "${container_name}" php -f /var/www/html/cron.php
     if [[ $? -ne 0 ]]; then
-        printLog "error" "Job failed! Reason: Error while running command!"
+        printLog "error" "Job failed! Reason: Unable to run cronjob!"
         exit 1
     fi
 
-    printLog "okay" "Script executed successfully."
+    local job_duration=$(getJobDuration.sh $script_start $SECONDS)
+    printLog "okay" "Cronjob successfully run. Runtime: ${job_duration}."
     exit 0
 }
 

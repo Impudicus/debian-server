@@ -44,7 +44,8 @@ createBackup() {
     restic backup \
         /docker \
         -r "${connection_string}" \
-        --password-file "/root/.config/restic/password"
+        --password-file "/root/.config/restic/password" \
+        &> /dev/null
     return $?
 }
 
