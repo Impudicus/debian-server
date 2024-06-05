@@ -20,7 +20,7 @@ validateMediaDuplicates() {
 
         local file_count=$(find "${subdir}" -type f -iname "${dir_name}*.mkv" | wc -l)
         if [[ ${file_count} -gt 1 ]]; then
-            printf "${script_name}: » '${dir_name}' has $file_count media elements\n"
+            printf "${script_name}: » '${dir_name}' has multiple media files\n"
         fi
     done
 }
