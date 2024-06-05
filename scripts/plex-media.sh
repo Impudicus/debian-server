@@ -18,18 +18,14 @@ validateMediaDuplicates() {
         local dir_name=$(basename "${subdir}")
         local parent_dir=$(basename "$(dirname "$subdir")")
 
-        for file in "${subdir}"/*; do
-            if [[ ! -f "${file}" ]]; then
-                # invalid file
-                continue
-            fi
-
-            local file_name=$(basename "${file}")
-            local file_ext=${file##*.}
-
-            echo "Im Ordner $dir_name liegt die Datei $file_name"
-            return 0
+        local file_count=0
+        find "${subdir}" \
+            -type f -iname "${dir_name}*.mkv" \
+            | while read -r file; do
+            file_count=$((file_count + 1))
         done
+
+        printf "${script_name}: » '${dir_name}' has $file_count media elements.\n"
     done
 }
 
