@@ -55,6 +55,20 @@ createBackup() {
     return $?
 }
 
+getJobDuration() {
+    local duration=$((SECONDS - script_start))
+    local hours=$((duration / 3600))
+    local minutes=$(( (duration % 3600) / 60 ))
+    local seconds=$((duration % 60))
+    local result=""
+
+    (( hours > 0 )) && result+="${hours} hours"
+    (( minutes > 0 )) && result+="${result:+, }${minutes} minutes"
+    (( seconds > 0 )) && result+="${result:+, }${seconds} seconds"
+
+    echo "${result}"
+}
+
 printLog() {
     local log_type="${1}"
     local log_text="${2}"
@@ -117,29 +131,30 @@ main() {
     # run
     getTarget "${HOSTNAME}"
     if [[ $? -ne 0 ]]; then
-        printLog "error" "Job failed! Reason: Unable to find target stats!"
+        printLog "error" "Job failed! Reason: Unable to identify target!"
         exit 1
     fi
 
     checkTargetConnection "${target_hostname}"
     if [[ $? -ne 0 ]]; then
-        printLog "error" "Job failed! Reason: Unable to etablish connection '${target_hostname}'!"
+        printLog "error" "Job failed! Reason: Unable to etablish connection!"
         exit 1
     fi
 
     checkRepository "${device_repository}"
     if [[ $? -ne 0 ]]; then
-        printLog "error" "Job failed! Reason: Repository '${device_repository}' not found!"
+        printLog "error" "Job failed! Reason: Repository does not exist!"
         exit 1
     fi
 
     createBackup "${device_repository}"
     if [[ $? -ne 0 ]]; then
-        printLog "error" "Job failed! Reason: Error while backuping to repository '${device_repository}'!"
+        printLog "error" "Job failed! Reason: Unable to create backup!"
         exit 1
     fi
 
-    printLog "okay" "Task completed: Backup successfully written to repository '${device_repository}'."
+    local job_duration=$(getJobDuration)
+    printLog "okay" "Backup successfully created. Runtime: ${job_duration}."
     exit 0
 }
 

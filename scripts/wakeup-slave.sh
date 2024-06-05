@@ -117,13 +117,13 @@ main() {
     # run
     getTargetSlave "${HOSTNAME}"
     if [[ $? -ne 0 ]]; then
-        printLog "info" "Job failed! Reason: Unable to find target stats!"
+        printLog "error" "Job failed! Reason: Unable to identify target!"
         exit 1
     fi
 
     getTargetRunstate "${target_ip_address}"
     if [[ $? -eq 0 ]]; then
-        printLog "info" "Job finished with warnings! Reason: Target '${target_hostname}' already online!"
+        printLog "info" "Job finished successfully. Reason: Target '${target_hostname}' already online!"
         return 1
     fi
 
@@ -132,7 +132,7 @@ main() {
     while [ ${attempt} -le ${max_attempts} ]; do
         setTargetRunstate "${target_mac_address}"
         if [[ $? -ne 0 ]]; then
-            printLog "error" "Job failed! Reason: Error while running command!"
+            printLog "error" "Job failed! Reason: Unable to wakeup slave!"
             exit 1
         fi
 
@@ -148,7 +148,7 @@ main() {
         attempt=$((attempt + 1))
     done
 
-    plocal job_duration=$(getJobDuration)
+    local job_duration=$(getJobDuration)
     printLog "error" "Job failed! Reason: Timeout after ${job_duration}!"
     exit 1
 }

@@ -31,6 +31,20 @@ runBackup() {
     )
 }
 
+getJobDuration() {
+    local duration=$((SECONDS - script_start))
+    local hours=$((duration / 3600))
+    local minutes=$(( (duration % 3600) / 60 ))
+    local seconds=$((duration % 60))
+    local result=""
+
+    (( hours > 0 )) && result+="${hours} hours"
+    (( minutes > 0 )) && result+="${result:+, }${minutes} minutes"
+    (( seconds > 0 )) && result+="${result:+, }${seconds} seconds"
+
+    echo "${result}"
+}
+
 printLog() {
     local log_type="${1}"
     local log_text="${2}"
@@ -102,7 +116,8 @@ main() {
     runBackup
     printLog "okay" "Task completed: backups created."
 
-    printLog "okay" "Script executed successfully."
+    local job_duration=$(getJobDuration)
+    printLog "okay" "Backup successfully created. Runtime: ${job_duration}."
     exit 0
 }
 
