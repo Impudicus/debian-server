@@ -9,7 +9,7 @@ readonly script_start=${SECONDS}
 # set -o errexit  # exit on error
 # set -o pipefail # return exit status on pipefail
 
-getTargetSlave() {
+getTarget() {
     local device_name="${1}"
     case "${device_name}" in
         TS473a | ts473a)
@@ -57,9 +57,7 @@ printLog() {
             printf "${script_name}: ${log_text}\n" >&1
             ;;
     esac
-    return 0
 }
-
 printHelp() {
     printf "Usage: ${script_name} [OPTIONS]\n"
     printf "Options:\n"
@@ -100,7 +98,7 @@ main() {
     done
 
     # run
-    getTargetSlave "${HOSTNAME}"
+    getTarget "${HOSTNAME}"
     if [[ $? -ne 0 ]]; then
         printLog "error" "Job failed! Reason: Unable to identify target!"
         exit 1
@@ -117,7 +115,7 @@ main() {
     while [ ${attempt} -le ${max_attempts} ]; do
         setTargetRunstate "${target_mac_address}"
         if [[ $? -ne 0 ]]; then
-            printLog "error" "Job failed! Reason: Unable to wakeup slave!"
+            printLog "error" "Job failed! Reason: Unable to wakeup target!"
             exit 1
         fi
 
