@@ -12,5 +12,5 @@ getJobDuration() {
     (( minutes > 0 )) && result+="${result:+, }${minutes} minutes"
     (( seconds > 0 )) && result+="${result:+, }${seconds} seconds"
 
-    echo "${result}"
+    return "${result}"
 }
