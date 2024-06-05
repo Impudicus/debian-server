@@ -117,7 +117,7 @@ main() {
         getTargetRunstate "${target_ip_address}"
         if [[ $? -eq 0 ]]; then
             local job_duration=$(getJobDuration.sh $script_start $SECONDS)
-            printLog "okay" "Job finished successfully. Runtime: ${job_duration}."
+            printLog "okay" "Target '${target_hostname}' woken up. Runtime: ${job_duration}."
             exit 0
         fi
 
