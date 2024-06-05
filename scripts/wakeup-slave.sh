@@ -41,20 +41,6 @@ setTargetRunstate() {
     return $?
 }
 
-getJobDuration() {
-    local duration=$((SECONDS - script_start))
-    local hours=$((duration / 3600))
-    local minutes=$(( (duration % 3600) / 60 ))
-    local seconds=$((duration % 60))
-    local result=""
-
-    (( hours > 0 )) && result+="${hours} hours"
-    (( minutes > 0 )) && result+="${result:+, }${minutes} minutes"
-    (( seconds > 0 )) && result+="${result:+, }${seconds} seconds"
-
-    echo "${result}"
-}
-
 printLog() {
     local log_type="${1}"
     local log_text="${2}"
@@ -140,7 +126,7 @@ main() {
 
         getTargetRunstate "${target_ip_address}"
         if [[ $? -eq 0 ]]; then
-            local job_duration=$(getJobDuration)
+            local job_duration=$(/usr/local/sbin/getJobDuration.sh $script_start $SECONDS)
             printLog "okay" "Job finished successfully. Runtime: ${job_duration}."
             exit 0
         fi
@@ -148,7 +134,7 @@ main() {
         attempt=$((attempt + 1))
     done
 
-    local job_duration=$(getJobDuration)
+    local job_duration=$(/usr/local/sbin/getJobDuration.sh $script_start $SECONDS)
     printLog "error" "Job failed! Reason: Timeout after ${job_duration}!"
     exit 1
 }
