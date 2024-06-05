@@ -13,6 +13,7 @@ main() {
     (( seconds > 0 )) && result+="${result:+, }${seconds} seconds"
 
     echo "${result}"
+    return 0
 }
 
 main "$@"
