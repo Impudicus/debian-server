@@ -1,6 +1,6 @@
 #!/bin/bash
 
-getJobDuration() {
+main() {
     local script_start="${1}"
     local duration=$((SECONDS - script_start))
     local hours=$((duration / 3600))
@@ -12,5 +12,7 @@ getJobDuration() {
     (( minutes > 0 )) && result+="${result:+, }${minutes} minutes"
     (( seconds > 0 )) && result+="${result:+, }${seconds} seconds"
 
-    return "${result}"
+    echo "${result}"
 }
+
+main "$@"
