@@ -50,17 +50,11 @@ main() {
         error)
             message_body="<font color="#bf616a"><b>${message_body}</b></font>"
             ;;
-        warn)
-            message_body="<font color="#ebcb8b"><b>${message_body}</b></font>"
-            ;;
         info)
             message_body="<font color="#5e81ac"><b>${message_body}</b></font>"
             ;;
-        fine)
-            message_body="<font color="#a3be8c"><b>${message_body}</b></font>"
-            ;;
         okay)
-            message_body="${message_body}"
+            message_body="<font color="#a3be8c"><b>${message_body}</b></font>"
             ;;
         *)
             return 1
