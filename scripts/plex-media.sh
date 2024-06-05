@@ -19,7 +19,7 @@ validateMediaDuplicates() {
         local parent_dir=$(basename "$(dirname "$subdir")")
 
         local file_count=$(find "${subdir}" -type f -iname "${dir_name}*.mkv" | wc -l)
-        if [[ ${file_count} -ne 1 ]]; then
+        if [[ ${file_count} -gt 1 ]]; then
             printf "${script_name}: » '${dir_name}' has $file_count media elements\n"
         fi
     done
@@ -38,9 +38,9 @@ validateMediaMissing() {
         local dir_name=$(basename "${subdir}")
         local parent_dir=$(basename "$(dirname "$subdir")")
 
-        local result=$(find "${subdir}" -type f \( -name "*.mkv" -o -name "*.mp4" \))
-        if [[ ! "$result" ]]; then
-            printf "${script_name}: » media file in '${dir_name}' missing\n"
+        local file_count=$(find "${subdir}" -type f -iname "${dir_name}*.mkv" | wc -l)
+        if [[ ${file_count} -eq 0 ]]; then
+            printf "${script_name}: » '${dir_name}' has no media files\n"
         fi
     done
 }
