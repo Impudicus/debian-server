@@ -112,7 +112,7 @@ validateAssetDimensions() {
     done
 }
 
-findMissingAssets() {
+validateAssetMissing() {
     for subdir in "${work_dir}"/*; do
         if [[ ! -d "${subdir}" ]]; then
             printLog "error" "Invalid directory '${subdir}', skipped."
@@ -262,7 +262,7 @@ main() {
 
     if [[ "${action_validatemissing}" ]]; then
         printLog "info" "Task running: Validate missing assets ..."
-        findMissingAssets
+        validateAssetMissing
         printLog "okay" "Task completed: Missing assets validated."
         sleep 1
     fi
