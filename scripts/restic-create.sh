@@ -5,29 +5,23 @@ readonly script_name=${BASH_SOURCE[0]}
 readonly script_path=$(dirname $(realpath ${BASH_SOURCE[0]}))
 readonly script_start=${SECONDS}
 
-# configurations
-# set -o errexit  # exit on error
-# set -o pipefail # return exit status on pipefail
-
 getTarget() {
     local device_name="${1}"
     case "${device_name}" in
-            TS473a | ts473a)
-                target_hostname='TS673a'
-                target_ip_address='192.168.0.222'
-                target_mac_address='24:5e:be:7e:6b:87'
-                return 0
-                ;;
-            TS673a | ts673a)
-                target_hostname='TS473a'
-                target_ip_address='192.168.0.221'
-                target_mac_address='24:5e:be:6c:2e:fe'
-                return 0
-                ;;
-            *)
-                return 1
-                ;;
-        esac
+        TS473a | ts473a)
+            target_hostname='TS673a'
+            target_ip_address='192.168.0.222'
+            target_mac_address='24:5e:be:7e:6b:87'
+            return 0
+            ;;
+        TS673a | ts673a)
+            target_hostname='TS473a'
+            target_ip_address='192.168.0.221'
+            target_mac_address='24:5e:be:6c:2e:fe'
+            return 0
+            ;;
+    esac
+    return 1
 }
 
 checkTargetConnection() {
@@ -54,20 +48,6 @@ createRepository() {
     return $?
 }
 
-getJobDuration() {
-    local duration=$((SECONDS - script_start))
-    local hours=$((duration / 3600))
-    local minutes=$(( (duration % 3600) / 60 ))
-    local seconds=$((duration % 60))
-    local result=""
-
-    (( hours > 0 )) && result+="${hours} hours"
-    (( minutes > 0 )) && result+="${result:+, }${minutes} minutes"
-    (( seconds > 0 )) && result+="${result:+, }${seconds} seconds"
-
-    echo "${result}"
-}
-
 printLog() {
     local log_type="${1}"
     local log_text="${2}"
@@ -87,7 +67,6 @@ printLog() {
             ;;
     esac
 }
-
 printHelp() {
     printf "Usage: ${script_name} [OPTIONS]\n"
     printf "Options:\n"
@@ -152,7 +131,7 @@ main() {
         exit 1
     fi
 
-    local job_duration=$(getJobDuration)
+    local job_duration=$(getJobDuration.sh $script_start $SECONDS)
     printLog "okay" "Repository successfully created. Runtime: ${job_duration}."
     exit 0
 }

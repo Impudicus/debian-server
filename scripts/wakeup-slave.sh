@@ -5,10 +5,6 @@ readonly script_name=${BASH_SOURCE[0]}
 readonly script_path=$(dirname $(realpath ${BASH_SOURCE[0]}))
 readonly script_start=${SECONDS}
 
-# configurations
-# set -o errexit  # exit on error
-# set -o pipefail # return exit status on pipefail
-
 getTarget() {
     local device_name="${1}"
     case "${device_name}" in
