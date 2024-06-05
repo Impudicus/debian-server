@@ -41,15 +41,15 @@ printLog() {
 
     case "${log_type}" in
         error)
-            pushNotification.sh "wakeonlan" "${log_type}" "${log_text}"
+            /usr/local/sbin/pushNotification.sh "wakeonlan" "${log_type}" "${log_text}"
             printf "${script_name}: \e[41m${log_text}\e[0m\n" >&2
             ;;
         okay)
-            pushNotification.sh "wakeonlan" "${log_type}" "${log_text}"
+            /usr/local/sbin/pushNotification.sh "wakeonlan" "${log_type}" "${log_text}"
             printf "${script_name}: \e[42m${log_text}\e[0m\n" >&1
             ;;
         info)
-            pushNotification.sh "wakeonlan" "${log_type}" "${log_text}"
+            /usr/local/sbin/pushNotification.sh "wakeonlan" "${log_type}" "${log_text}"
             printf "${script_name}: \e[44m${log_text}\e[0m\n" >&1
             ;;
         *)
@@ -116,7 +116,7 @@ main() {
 
         getTargetRunstate "${target_ip_address}"
         if [[ $? -eq 0 ]]; then
-            local job_duration=$(getJobDuration.sh $script_start $SECONDS)
+            local job_duration=$(/usr/local/sbin/getJobDuration.sh $script_start $SECONDS)
             printLog "okay" "Target '${target_hostname}' woken up. Runtime: ${job_duration}."
             exit 0
         fi
@@ -124,7 +124,7 @@ main() {
         attempt=$((attempt + 1))
     done
 
-    local job_duration=$(getJobDuration.sh $script_start $SECONDS)
+    local job_duration=$(/usr/local/sbin/getJobDuration.sh $script_start $SECONDS)
     printLog "error" "Job failed! Reason: Timeout after ${job_duration}!"
     exit 1
 }

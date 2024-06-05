@@ -21,7 +21,7 @@ printLog() {
 
     case "${log_type}" in
         error)
-            pushNotification.sh "nextcloud" "${log_type}" "${log_text}"
+            /usr/local/sbin/pushNotification.sh "nextcloud" "${log_type}" "${log_text}"
             printf "${script_name}: \e[41m${log_text}\e[0m\n" >&2
             ;;
         okay)
@@ -80,7 +80,7 @@ main() {
         exit 1
     fi
 
-    local job_duration=$(getJobDuration.sh $script_start $SECONDS)
+    local job_duration=$(/usr/local/sbin/getJobDuration.sh $script_start $SECONDS)
     printLog "okay" "Cronjob successfully run. Runtime: ${job_duration}."
     exit 0
 }

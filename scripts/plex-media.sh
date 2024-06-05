@@ -144,7 +144,7 @@ main() {
         sleep 1
     fi
 
-    local job_duration=$(getJobDuration.sh $script_start $SECONDS)
+    local job_duration=$(/usr/local/sbin/getJobDuration.sh $script_start $SECONDS)
     printLog "okay" "Job finished successfully. Runtime: ${job_duration}."
     exit 0
 }

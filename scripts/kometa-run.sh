@@ -34,15 +34,15 @@ printLog() {
 
     case "${log_type}" in
         error)
-            pushNotification.sh "kometa" "${log_type}" "${log_text}"
+            /usr/local/sbin/pushNotification.sh "kometa" "${log_type}" "${log_text}"
             printf "${script_name}: \e[41m${log_text}\e[0m\n" >&2
             ;;
         okay)
-            pushNotification.sh "kometa" "${log_type}" "${log_text}"
+            /usr/local/sbin/pushNotification.sh "kometa" "${log_type}" "${log_text}"
             printf "${script_name}: \e[42m${log_text}\e[0m\n" >&1
             ;;
         info)
-            pushNotification.sh "kometa" "${log_type}" "${log_text}"
+            /usr/local/sbin/pushNotification.sh "kometa" "${log_type}" "${log_text}"
             printf "${script_name}: \e[44m${log_text}\e[0m\n" >&1
             ;;
         *)
@@ -116,13 +116,13 @@ main() {
         local check_container='kometa'
         getContainerRunstate "${check_container}"
         if [[ $? -ne 0 ]]; then
-            local job_duration=$(getJobDuration.sh $script_start $SECONDS)
+            local job_duration=$(/usr/local/sbin/getJobDuration.sh $script_start $SECONDS)
             printLog "okay" "Job finished successfully. Runtime: ${job_duration}."
             exit 0
         fi
     done
 
-    local job_duration=$(getJobDuration.sh $script_start $SECONDS)
+    local job_duration=$(/usr/local/sbin/getJobDuration.sh $script_start $SECONDS)
     printLog "error" "Job failed! Reason: Timeout after ${job_duration}!"
     exit 1
 }
