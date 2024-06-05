@@ -18,12 +18,7 @@ validateMediaDuplicates() {
         local dir_name=$(basename "${subdir}")
         local parent_dir=$(basename "$(dirname "$subdir")")
 
-        local file_count=0
-        find "${subdir}" \
-            -type f -iname "${dir_name}*.mkv" \
-            | while read -r file; do
-            file_count=$((file_count + 1))
-        done
+        local file_count=$(find "${subdir}" -type f -iname "${dir_name}*.mkv" | wc -l)
 
         printf "${script_name}: » '${dir_name}' has $file_count media elements.\n"
     done
