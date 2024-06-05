@@ -2,7 +2,7 @@
 
 main() {
     local start_time="${1}"
-    local end_time="${1}"
+    local end_time="${2}"
 
     local duration=$((end_time - start_time))
     local hours=$((duration / 3600))
