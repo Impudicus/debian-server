@@ -13,7 +13,7 @@ main() {
         certbot)
             app_token="acnh3tbb38s9xmjwt6p4id9zvv2bny"
             ;;
-        debian)
+        debian|wakeonlan)
             app_token="asdpr25tei6i5969mcodw1ynsu7jp3"
             ;;
         grafana)
