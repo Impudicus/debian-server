@@ -142,7 +142,7 @@ validateAssetMissing() {
 
             local file_name=$(basename "${file}")
             local file_ext=${file##*.}
-            if [[ "${file_ext}" != '.mkv' ]];
+            if [[ "${file_ext}" != '.mkv' ]]; then
                 # no media file
                 continue
             fi
