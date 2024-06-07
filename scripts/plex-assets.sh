@@ -149,8 +149,6 @@ validateAssetMissing() {
                     break
                 fi
             fi
-
-            printLog "error" "Invalid file '${file}', skipped."
         done
     done
 }
