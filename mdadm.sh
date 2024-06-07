@@ -41,13 +41,32 @@ runConfig() {
             exit 0
         fi
 
+        read -p "${script_name}: Would you like to format the volume? Usage: <YES|no> " format_volume
+        if [[ "${format_volume}" == 'YES' ]]; then
+            printLog "error" "RAID VOLUME WILL BE DELETED!!"
+            printLog "error" "ALL DATA WILL BE LOST!!"
+            printLog "text" "Press CTRL + C to cancel the operation"
+            for ((i=10; i>0; i--)); do
+                printLog "text" "Changes will applied in ${i} seconds"
+                sleep 1
+            done
+
+            local volume_name=$(fdisk -l | grep md | awk '{print $2}' | cut -d ':' -f1)
+            mkfs.ext4 "${volume_name}"
+
+            tune2fs -m 0 "${volume_name}"
+
+            printLog "okay" "RAID-Volume formated as ext4."
+            exit 0
+        fi
+
         printLog "text" "No action selected, no changes have been made."
         exit 0
     else
         printLog "text" "No RAID-Volumes found."
     fi
 
-    # UNconfigured
+    # Unconfigured
     printLog "info" "Looking for unconfigured RAID-Arrays ..."
     local unused_array=$(mdadm --examine --scan | grep 'ARRAY')
     if [[ "${unused_array}" ]]; then
@@ -60,6 +79,31 @@ runConfig() {
             update-initramfs -u
 
             printLog "okay" "RAID-Array added to config."
+            printLog "text" "System restart pending."
+            exit 0
+        fi
+
+        read -p "${script_name}: Would you like to delete the array? Usage: <YES|no> " del_array
+        if [[ "${del_array}" == 'YES' ]]; then
+            printLog "error" "RAID ARRAY WILL BE REMOVED!!"
+            printLog "error" "ALL DATA WILL BE LOST!!"
+            printLog "text" "Press CTRL + C to cancel the operation"
+            for ((i=10; i>0; i--)); do
+                printLog "text" "Changes will applied in ${i} seconds"
+                sleep 1
+            done
+
+            local volume_name=$(fdisk -l | grep md | awk '{print $2}' | cut -d ':' -f1)
+            umount "${volume_name}"
+
+            mdadm --stop "${volume_name}"
+            mdadm --zero-superblock /dev/sd[a-f]
+
+            cat "${config_dir}/mdadm/mdadm.conf" > "/etc/mdadm/mdadm.conf"
+
+            update-initramfs -u
+
+            printLog "okay" "RAID-Array removed."
             printLog "text" "System restart pending."
             exit 0
         fi

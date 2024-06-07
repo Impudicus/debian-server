@@ -39,12 +39,12 @@ checkRepository() {
     return $?
 }
 
-createRepository() {
+showSnapshots() {
     local connection_string="${1}"
-    restic init \
+    restic backup \
+        snapshots \
         -r "${connection_string}" \
-        --password-file "/root/.config/restic/password" \
-        &> /dev/null
+        --password-file "/root/.config/restic/password"
     return $?
 }
 
@@ -112,30 +112,30 @@ main() {
     # run
     getTarget "${HOSTNAME}"
     if [[ $? -ne 0 ]]; then
-        printLog "error" "Init failed! Reason: Unable to identify target!"
+        printLog "error" "Lookup failed! Reason: Unable to identify target!"
         exit 1
     fi
 
     checkTargetConnection "${target_hostname}"
     if [[ $? -ne 0 ]]; then
-        printLog "error" "Init failed! Reason: Unable to etablish connection!"
+        printLog "error" "Lookup failed! Reason: Unable to etablish connection!"
         exit 1
     fi
 
     checkRepository "${device_repository}"
-    if [[ $? -eq 0 ]]; then
-        printLog "error" "Init failed! Reason: Repository already exists!"
+    if [[ $? -ne 0 ]]; then
+        printLog "error" "Lookup failed! Reason: Repository does not exist!"
         exit 1
     fi
 
-    createRepository "${device_repository}"
+    showSnapshots "${device_repository}"
     if [[ $? -ne 0 ]]; then
-        printLog "error" "Init failed! Reason: Unable to create repository!"
+        printLog "error" "Lookup failed! Reason: Unable to create backup!"
         exit 1
     fi
 
     local job_duration=$(/usr/local/sbin/getJobDuration.sh $script_start $SECONDS)
-    printLog "okay" "Repository successfully created. Runtime: ${job_duration}."
+    printLog "okay" "Repository successfully checked. Runtime: ${job_duration}."
     exit 0
 }
 

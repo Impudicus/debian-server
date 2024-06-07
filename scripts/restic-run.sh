@@ -39,7 +39,7 @@ checkRepository() {
     return $?
 }
 
-createBackup() {
+addSnapshot() {
     local connection_string="${1}"
     restic backup \
         /docker \
@@ -113,25 +113,25 @@ main() {
     # run
     getTarget "${HOSTNAME}"
     if [[ $? -ne 0 ]]; then
-        printLog "error" "Job failed! Reason: Unable to identify target!"
+        printLog "error" "Backup failed! Reason: Unable to identify target!"
         exit 1
     fi
 
     checkTargetConnection "${target_hostname}"
     if [[ $? -ne 0 ]]; then
-        printLog "error" "Job failed! Reason: Unable to etablish connection!"
+        printLog "error" "Backup failed! Reason: Unable to etablish connection!"
         exit 1
     fi
 
     checkRepository "${device_repository}"
     if [[ $? -ne 0 ]]; then
-        printLog "error" "Job failed! Reason: Repository does not exist!"
+        printLog "error" "Backup failed! Reason: Repository does not exist!"
         exit 1
     fi
 
-    createBackup "${device_repository}"
+    addSnapshot "${device_repository}"
     if [[ $? -ne 0 ]]; then
-        printLog "error" "Job failed! Reason: Unable to create backup!"
+        printLog "error" "Backup failed! Reason: Unable to create backup!"
         exit 1
     fi
 
