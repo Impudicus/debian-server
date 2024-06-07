@@ -129,8 +129,6 @@ validateAssetMissing() {
         local asset_name='poster.jpg'
         if [[ ! -f "${subdir}/${asset_name}" ]]; then
             printf "${script_name}: » poster for '${dir_name}' missing\n"
-        else
-            continue
         fi
 
         # season
