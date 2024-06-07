@@ -143,7 +143,7 @@ validateAssetMissing() {
             local file_name=$(basename "${file}")
             local file_ext=${file##*.}
 
-            local episode_regex=".*S([0-9]{2})E([0-9]{2}).*"
+            local episode_regex=".*S([0-9]{2})E([0-9]{2})*.jpg"
             if [[ "${file_name%.*}" =~ ${episode_regex} ]]; then
                 local asset_name=$(printf "Season%02.f.jpg" "${BASH_REMATCH[1]}")
                 if [[ ! -f "${subdir}/${asset_name}" ]]; then
