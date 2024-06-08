@@ -98,6 +98,6 @@ main() {
     local job_duration=$(/usr/local/sbin/getJobDuration.sh $script_start $SECONDS)
     printLog "okay" "Sync successfully executed. Runtime: ${job_duration}."
     exit 0
-}s
+}
 
 main "$@"
