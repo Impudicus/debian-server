@@ -131,7 +131,7 @@ main() {
 
     addSnapshot "${device_repository}"
     if [[ $? -ne 0 ]]; then
-        printLog "error" "Backup failed! Reason: Unable to create backup!"
+        printLog "error" "Backup failed! Reason: Unable to add snapshot!"
         exit 1
     fi
 

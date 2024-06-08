@@ -25,9 +25,11 @@ printLog() {
             printf "${script_name}: \e[41m${log_text}\e[0m\n" >&2
             ;;
         okay)
+            /usr/local/sbin/pushNotification.sh "nextcloud" "${log_type}" "${log_text}"
             printf "${script_name}: \e[42m${log_text}\e[0m\n" >&1
             ;;
         info)
+            /usr/local/sbin/pushNotification.sh "nextcloud" "${log_type}" "${log_text}"
             printf "${script_name}: \e[44m${log_text}\e[0m\n" >&1
             ;;
         *)
@@ -69,19 +71,33 @@ main() {
     local container_name='nextcloud'
     getContainerRunstate "${container_name}"
     if [[ $? -ne 0 ]]; then
-        # printLog "error" "Cronjob failed! Reason: Container '${container_name}' not running!"
+        printLog "error" "Sync failed! Reason: Container '${container_name}' not running!"
         exit 1
     fi
-    
-    /usr/bin/docker exec -u www-data -t "${container_name}" php -f /var/www/html/cron.php &> /dev/null
+
+    # scan user-folders    
+    /usr/bin/docker exec -u www-data -t "${container_name}" php occ files:scan --all &> /dev/null
     if [[ $? -ne 0 ]]; then
-        printLog "error" "Cronjob failed! Reason: Unable to run cronjob!"
+        printLog "error" "Sync failed! Reason: Error while running occ files:scan!"
+        exit 1
+    fi
+
+    # scan group-folders
+    /usr/bin/docker exec -u www-data -t "${container_name}" php occ groupfolders:scan 1 &> /dev/null
+    if [[ $? -ne 0 ]]; then
+        printLog "error" "Sync failed! Reason: Error while running occ groupfolders 1:scan!"
+        exit 1
+    fi
+
+    /usr/bin/docker exec -u www-data -t "${container_name}" php occ groupfolders:scan 2 &> /dev/null
+    if [[ $? -ne 0 ]]; then
+        printLog "error" "Sync failed! Reason: Error while running occ groupfolders 2:scan!"
         exit 1
     fi
 
     local job_duration=$(/usr/local/sbin/getJobDuration.sh $script_start $SECONDS)
-    printLog "okay" "Cronjob successfully executed. Runtime: ${job_duration}."
+    printLog "okay" "Sync successfully executed. Runtime: ${job_duration}."
     exit 0
-}
+}s
 
 main "$@"
