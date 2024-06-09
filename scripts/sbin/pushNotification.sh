@@ -48,10 +48,13 @@ main() {
     # get message_body
     case ${message_type} in
         error)
-            message_body="<font color='#bf616a'><b>${message_body}</b></font>"
+            message_body="<font color='#BF616A'><b>${message_body}</b></font>"
+            ;;
+        warn)
+            message_body="<font color='#EBCB8B'><b>${message_body}</b></font>"
             ;;
         info)
-            message_body="<font color='#5e81ac'><b>${message_body}</b></font>"
+            message_body="<font color='#5E81AC'><b>${message_body}</b></font>"
             ;;
         okay)
             message_body="${message_body}"
