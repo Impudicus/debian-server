@@ -128,6 +128,8 @@ main() {
             printLog "warn" "Selftest failing. Reason: Container '${container}' not running."
             error_count=$((error_count + 1))
         fi
+
+        echo "${container} is fine"
     done
 
 
