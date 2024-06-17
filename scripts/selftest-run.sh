@@ -127,6 +127,7 @@ main() {
         fi
     done
 
+    echo "not fine"
     exit 0
 
     # check service runstates
