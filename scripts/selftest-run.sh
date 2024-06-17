@@ -12,11 +12,7 @@ checkServiceRunstate() {
 
         local service_name="docker"
         local result=$(systemctl is-active --quiet "${service_name}")
-        if [[ ${result} ]]; then
-            echo "true"
-        else
-            echo "false"
-        fi
+        echo "${result}"
 
         sleep ${max_waittime}
 
