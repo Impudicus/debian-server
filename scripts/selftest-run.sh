@@ -5,12 +5,25 @@ readonly script_name=${BASH_SOURCE[0]}
 readonly script_path=$(dirname $(realpath ${BASH_SOURCE[0]}))
 readonly script_start=${SECONDS}
 
+getContainerRunstate() {
+    local container_name="${1}"
+    local container_runstate=$(docker inspect --format "{{.State.Status}}" "${container_name}")
+    if [[ "${container_runstate}" == 'running' ]]; then
+        return 0
+    else
+        return 1
+    fi
+}
+
 checkContainerRunstate() {
     local attempt=1
     local max_attempts=${max_attemts}
     while [ ${attempt} -le ${max_attempts} ]; do
 
-
+        getContainerRunstate "${check_container}"
+        if [[ $? -eq 0 ]]; then
+            return 0
+        fi
 
         sleep ${max_waittime}
 
@@ -27,7 +40,7 @@ checkServiceRunstate() {
 
         local service_name="$1"
         local result=$(systemctl is-active ${service_name})
-        if [[ "${result}" ]]; then
+        if [[ ${result} ]]; then
             return 0
         fi
 
