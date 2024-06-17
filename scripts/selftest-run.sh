@@ -118,7 +118,7 @@ main() {
         exit 1
     fi
 
-    for mountpoint in "${mount_points[@]}"; do
+    for mountpoint in "${mountpoints[@]}"; do
         echo $mountpoint
         checkMountState "${mountpoint}"
         if [[ $? -ne 0 ]]; then
