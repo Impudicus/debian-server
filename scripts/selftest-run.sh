@@ -7,12 +7,27 @@ readonly script_start=${SECONDS}
 
 checkContainerRunstate() {
     local attempt=1
-    local max_attempts=${max_attemts}
     while [ ${attempt} -le ${max_attempts} ]; do
 
-        local container_name="${1}"
-        local result=$(docker inspect --format "{{.State.Status}}" "${container_name}")
+        local result=$(docker inspect --format "{{.State.Status}}" "${1}")
         if [[ "${result}" == 'running' ]]; then
+            return 0
+        fi
+
+        sleep ${max_waittime}
+
+        attempt=$((attempt + 1))
+    done
+
+    return 1
+}
+
+checkMountState() {
+    local attempt=1
+    while [ ${attempt} -le ${max_attempts} ]; do
+
+        local result=$(mountpoint -q "${1}")
+        if [[ "${result}" ]]; then
             return 0
         fi
 
@@ -26,11 +41,9 @@ checkContainerRunstate() {
 
 checkServiceRunstate() {
     local attempt=1
-    local max_attempts=${max_attemts}
     while [ ${attempt} -le ${max_attempts} ]; do
 
-        local service_name="$1"
-        local result=$(systemctl is-active ${service_name})
+        local result=$(systemctl is-active ${1})
         if [[ ${result} ]]; then
             return 0
         fi
@@ -80,7 +93,7 @@ main() {
     fi
 
     # variables
-    max_attemts=3
+    max_attempts=3
     max_waittime=30
     error_count=0
 
@@ -98,17 +111,32 @@ main() {
         esac
     done
 
+    # check mount states
+    local mountpoints=("/mnt/pool1")
+    if [[ ! "$mounts" ]]; then
+        printLog "error" "Selftest failed. Reason: No mountpoints defined."
+        exit 1
+    fi
+
+    for mountpoint in $mountpoints; do
+        checkMountState "${mountpoint}"
+        if [[ $? -ne 0 ]]; then
+            printLog "warn" "Selftest failing. Reason: '${mountpoint}' not mounted."
+            error_count=$((error_count + 1))
+        fi
+    done
+
     # check service runstates
     local services=("cron" "docker" "fancontrol" "nfs-server" "ntp" "ntpd" "mdadm" "smbd" "sshd")
     if [[ ! "$services" ]]; then
-        printLog "error" "Selftest failed. Reason: No services found."
+        printLog "error" "Selftest failed. Reason: No services defined."
         exit 1
     fi
 
     for service in $services; do
         checkServiceRunstate "${service}"
         if [[ $? -ne 0 ]]; then
-            printLog "warn" "Selftest failing. Reason: Service '${service}' is inactive."
+            printLog "warn" "Selftest failing. Reason: Service '${service}' not running."
             error_count=$((error_count + 1))
         fi
     done
