@@ -5,24 +5,14 @@ readonly script_name=${BASH_SOURCE[0]}
 readonly script_path=$(dirname $(realpath ${BASH_SOURCE[0]}))
 readonly script_start=${SECONDS}
 
-getContainerRunstate() {
-    local container_name="${1}"
-    local container_runstate=$(docker inspect --format "{{.State.Status}}" "${container_name}")
-    if [[ "${container_runstate}" == 'running' ]]; then
-        return 0
-    else
-        return 1
-    fi
-}
-
 checkContainerRunstate() {
     local attempt=1
     local max_attempts=${max_attemts}
     while [ ${attempt} -le ${max_attempts} ]; do
 
-        local check_container="${1}"
-        getContainerRunstate "${check_container}"
-        if [[ $? -eq 0 ]]; then
+        local container_name="${1}"
+        local result=$(docker inspect --format "{{.State.Status}}" "${container_name}")
+        if [[ "${result}" == 'running' ]]; then
             return 0
         fi
 
@@ -123,19 +113,14 @@ main() {
     fi
 
     for container in $containers; do
-        checkContainerRunstate "$container"
+        checkContainerRunstate "${container}"
         if [[ $? -ne 0 ]]; then
             printLog "warn" "Selftest failing. Reason: Container '${container}' not running."
             error_count=$((error_count + 1))
         fi
-
-        echo "${container} is fine"
     done
 
-
-    sleep 1
-
-
+    # end
     if [[ $error_count -eq 0 ]]; then
         local job_duration=$(/usr/local/sbin/getJobDuration.sh $script_start $SECONDS)
         printLog "okay" "Selftest successfull without errors. Runtime: ${job_duration}."
