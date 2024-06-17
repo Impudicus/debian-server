@@ -11,8 +11,12 @@ checkServiceRunstate() {
     while [ ${attempt} -le ${max_attempts} ]; do
 
         local service_name="docker"
-        local result=$(systemctl is-active --quiet "${service_name}")
-        echo "${result}"
+        local result=$(systemctl is-active ${service_name})
+        if [[ "${result}" ]]; then
+            echo "fine"
+        else
+            echo "not fine"
+        fi
 
         sleep ${max_waittime}
 
