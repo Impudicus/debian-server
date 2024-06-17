@@ -7,7 +7,7 @@ readonly script_start=${SECONDS}
 
 checkServiceRunstate() {
     local attempt=1
-    local max_attempts=$(max_attemts)
+    local max_attempts=${max_attemts}
     while [ ${attempt} -le ${max_attempts} ]; do
 
         local service_name="docker"
