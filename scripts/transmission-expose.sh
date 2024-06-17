@@ -96,12 +96,15 @@ main() {
         exit 1
     fi
 
+    echo "exposed_port is $exposed_port"
+    sleep 5
+
     if [[ ! -f "${setting_file}" ]]; then
         printLog "error" "Job failed! Reason: No such file 'settings.json'!"
         exit 1
     fi
 
-    sed -E "s/(\"peer-port\": )[0-9]+/\1${exposed_port}/" "${setting_file}"
+    sed -E "s/(\"peer-port\": )[0-9]+/\1${exposed_port}/" "$setting_file"
     if [[ $? -ne 0 ]]; then
         printLog "error" "Job failed! Reason: Unable to change config!"
         exit 1
