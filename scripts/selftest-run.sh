@@ -127,9 +127,6 @@ main() {
         fi
     done
 
-    echo "not fine"
-    exit 0
-
     # check service runstates
     local services=("cron" "docker" "fancontrol" "nfs-server" "ntp" "ntpd" "mdadm" "smbd" "sshd")
     if [[ ! "$services" ]]; then
@@ -137,7 +134,7 @@ main() {
         exit 1
     fi
 
-    for service in $services; do
+    for service in "${services[@]}"; do
         checkServiceRunstate "${service}"
         if [[ $? -ne 0 ]]; then
             printLog "warn" "Selftest failing. Reason: Service '${service}' not running."
