@@ -41,15 +41,19 @@ printLog() {
 
     case "${log_type}" in
         error)
-            /usr/local/sbin/pushNotification.sh "wakeonlan" "${log_type}" "${log_text}"
+            /usr/local/sbin/pushNotification.sh "debian" "${log_type}" "${log_text}"
             printf "${script_name}: \e[41m${log_text}\e[0m\n" >&2
             ;;
         okay)
-            /usr/local/sbin/pushNotification.sh "wakeonlan" "${log_type}" "${log_text}"
+            /usr/local/sbin/pushNotification.sh "debian" "${log_type}" "${log_text}"
             printf "${script_name}: \e[42m${log_text}\e[0m\n" >&1
             ;;
+        warn)
+            /usr/local/sbin/pushNotification.sh "debian" "${log_type}" "${log_text}"
+            printf "${script_name}: \e[38;5;214m${log_text}\e[0m\n" >&1
+            ;;
         info)
-            /usr/local/sbin/pushNotification.sh "wakeonlan" "${log_type}" "${log_text}"
+            /usr/local/sbin/pushNotification.sh "debian" "${log_type}" "${log_text}"
             printf "${script_name}: \e[44m${log_text}\e[0m\n" >&1
             ;;
         *)

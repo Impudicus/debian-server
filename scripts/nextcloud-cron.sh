@@ -21,11 +21,14 @@ printLog() {
 
     case "${log_type}" in
         error)
-            /usr/local/sbin/pushNotification.sh "nextcloud" "${log_type}" "${log_text}"
+            /usr/local/sbin/pushNotification.sh "debian" "${log_type}" "${log_text}"
             printf "${script_name}: \e[41m${log_text}\e[0m\n" >&2
             ;;
         okay)
             printf "${script_name}: \e[42m${log_text}\e[0m\n" >&1
+            ;;
+        warn)
+            printf "${script_name}: \e[38;5;214m${log_text}\e[0m\n" >&1
             ;;
         info)
             printf "${script_name}: \e[44m${log_text}\e[0m\n" >&1
@@ -69,7 +72,7 @@ main() {
     local container_name='nextcloud'
     getContainerRunstate "${container_name}"
     if [[ $? -ne 0 ]]; then
-        # printLog "error" "Cronjob failed! Reason: Container '${container_name}' not running!"
+        printLog "warn" "Cronjob failed! Reason: Container '${container_name}' not running!"
         exit 1
     fi
     

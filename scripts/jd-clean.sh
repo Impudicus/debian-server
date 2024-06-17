@@ -40,6 +40,9 @@ printLog() {
         okay)
             printf "${script_name}: \e[42m${log_text}\e[0m\n" >&1
             ;;
+        warn)
+            printf "${script_name}: \e[38;5;214m${log_text}\e[0m\n" >&1
+            ;;
         info)
             printf "${script_name}: \e[44m${log_text}\e[0m\n" >&1
             ;;
