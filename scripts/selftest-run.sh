@@ -5,6 +5,21 @@ readonly script_name=${BASH_SOURCE[0]}
 readonly script_path=$(dirname $(realpath ${BASH_SOURCE[0]}))
 readonly script_start=${SECONDS}
 
+checkContainerRunstate() {
+    local attempt=1
+    local max_attempts=${max_attemts}
+    while [ ${attempt} -le ${max_attempts} ]; do
+
+
+
+        sleep ${max_waittime}
+
+        attempt=$((attempt + 1))
+    done
+
+    return 1
+}
+
 checkServiceRunstate() {
     local attempt=1
     local max_attempts=${max_attemts}
@@ -63,6 +78,7 @@ main() {
     # variables
     max_attemts=3
     max_waittime=30
+    error_count=0
 
     # parameters
     while [[ $# -gt 0 ]]; do
@@ -78,18 +94,39 @@ main() {
         esac
     done
 
-    # run
-    checkServiceRunstate 'docker'
+    # check services
+    checkServiceRunstate "docker"
     if [[ $? -ne 0 ]]; then
         printLog "error" "Selftest failed. Reason: Service 'docker' is inactive."
         exit 1
     fi
 
+    # check docker containers
+    local containers=$(docker ps -a --format "{{.Names}}")
+    if [[ ! "$containers" ]]; then
+        printLog "error" "Selftest failed. Reason: No containers found."
+        exit 1
+    fi
+
+    for container in $containers; do
+        checkContainerRunstate "$container"
+        if [[ $? -ne 0 ]]; then
+            printLog "warn" "Selftest failing. Reason: Container '${container}' not running."
+            error_count=$((error_count + 1))
+        fi
+    fi
+
+
     sleep 1
 
 
-    local job_duration=$(/usr/local/sbin/getJobDuration.sh $script_start $SECONDS)
-    printLog "okay" "Selftest without errors. Runtime: ${job_duration}."
+    if [[ $error_count -eq 0 ]]; then
+        local job_duration=$(/usr/local/sbin/getJobDuration.sh $script_start $SECONDS)
+        printLog "okay" "Selftest successfull without errors. Runtime: ${job_duration}."
+    else
+        local job_duration=$(/usr/local/sbin/getJobDuration.sh $script_start $SECONDS)
+        printLog "warn" "Selftest successfull with errors. Runtime: ${job_duration}."
+    fi
     exit 0
 }
 
