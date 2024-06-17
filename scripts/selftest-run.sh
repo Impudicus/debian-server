@@ -119,6 +119,7 @@ main() {
     fi
 
     for mountpoint in $mountpoints; do
+        echo $mountpoint
         checkMountState "${mountpoint}"
         if [[ $? -ne 0 ]]; then
             printLog "warn" "Selftest failing. Reason: '${mountpoint}' not mounted."
