@@ -99,7 +99,7 @@ main() {
     done
 
     # check service runstates
-    local services=("docker" "mdadm")
+    local services=("cron" "docker" "fancontrol" "nfs-server" "ntp" "ntpd" "mdadm" "smbd" "sshd")
     if [[ ! "$services" ]]; then
         printLog "error" "Selftest failed. Reason: No services found."
         exit 1
