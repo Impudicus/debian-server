@@ -113,7 +113,7 @@ main() {
 
     # check mount states
     local mountpoints=("/mnt/pool1")
-    if [[ ! "$mounts" ]]; then
+    if [[ ! "$mountpoints" ]]; then
         printLog "error" "Selftest failed. Reason: No mountpoints defined."
         exit 1
     fi
