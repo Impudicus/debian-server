@@ -98,14 +98,22 @@ main() {
         esac
     done
 
-    # check services
-    checkServiceRunstate "docker"
-    if [[ $? -ne 0 ]]; then
-        printLog "error" "Selftest failed. Reason: Service 'docker' is inactive."
+    # check service runstates
+    local services=("docker" "mdadm")
+    if [[ ! "$services" ]]; then
+        printLog "error" "Selftest failed. Reason: No services found."
         exit 1
     fi
 
-    # check docker containers
+    for service in $services; do
+        checkServiceRunstate "${service}"
+        if [[ $? -ne 0 ]]; then
+            printLog "warn" "Selftest failing. Reason: Service '${service}' is inactive."
+            error_count=$((error_count + 1))
+        fi
+    done
+
+    # check container runstates
     local containers=$(docker ps -a --format "{{.Names}}")
     if [[ ! "$containers" ]]; then
         printLog "error" "Selftest failed. Reason: No containers found."
