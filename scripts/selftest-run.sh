@@ -165,17 +165,12 @@ main() {
     if [[ $error_count -eq 0 ]]; then
         local job_duration=$(/usr/local/sbin/getJobDuration.sh $script_start $SECONDS)
         printLog "okay" "Selftest successfull without errors. Runtime: ${job_duration}."
+        exit 0
     else
         local job_duration=$(/usr/local/sbin/getJobDuration.sh $script_start $SECONDS)
         printLog "warn" "Selftest successfull with errors. Runtime: ${job_duration}."
+        exit 1
     fi
-
-        printLog "okay" "Selftest successfull with errors. Runtime: ${job_duration}."
-        printLog "error" "Selftest successfull with errors. Runtime: ${job_duration}."
-        printLog "warn" "Selftest successfull with errors. Runtime: ${job_duration}."
-        printLog "info" "Selftest successfull with errors. Runtime: ${job_duration}."
-
-    exit 0
 }
 
 main "$@"
