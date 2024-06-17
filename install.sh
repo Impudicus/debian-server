@@ -157,8 +157,10 @@ runConfig() {
 
     # create systemd
     cat "${config_dir}/systemd/qnap-powerstate.service" > "/etc/systemd/system/qnap-powerstate.service"
+    cat "${config_dir}/systemd/qnap-selftest.service" > "/etc/systemd/system/qnap-selftest.service"
     systemctl daemon-reload
     systemctl enable qnap-powerstate.service
+    systemctl enable qnap-selftest.service
 
     # config user   
     cat "${config_dir}/.bash_aliases" > "/home/${default_user}/.bash_aliases"

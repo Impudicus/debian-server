@@ -37,6 +37,9 @@ main() {
         tautulli)
             app_token="axn99nwdcyft2zibfp7edkesz18zxw"
             ;;
+        transmission)
+            app_token="ajc6uzgry1kr1oj4q4oademairg6uk"
+            ;;
         uptime)
             app_token="ann3bjwzwxxk3js2nqb3itea9pobyc"
             ;;
