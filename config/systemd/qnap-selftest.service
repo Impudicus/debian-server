@@ -7,7 +7,7 @@ After=qnap-powerstate.service
 [Service]
 Type=oneshot
 RemainAfterExit=yes
-ExecStart=/usr/local/bin/transmission-expose.sh
+ExecStart=/usr/local/bin/selftest-run.sh
 
 [Install]
 WantedBy=default.target
