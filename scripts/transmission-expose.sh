@@ -87,19 +87,19 @@ main() {
     done
 
     # run
-    local check_container='gluetun'
-    getContainerRunstate "${check_container}"
+    local container_name='gluetun'
+    getContainerRunstate "${container_name}"
     if [[ $? -ne 0 ]]; then
-        printLog "error" "Job failed! Reason: Container '${check_container}' not running!"
+        printLog "error" "Job failed! Reason: Container '${container_name}' not running!"
         exit 1
     fi
 
-    # local check_container='transmission'
-    # getContainerRunstate "${check_container}"
-    # if [[ $? -ne 0 ]]; then
-    #     printLog "error" "Job failed! Reason: Container '${check_container}' not running!"
-    #     exit 1
-    # fi
+    local container_name='transmission'
+    setContainerRunstate "${container_name}" 'stop'
+    if [[ $? -ne 0 ]]; then
+        printLog "error" "Job failed! Reason: Unable to stop container '${container_name}'!"
+        exit 1
+    fi
 
     if [[ ! -f "${setting_file}" ]]; then
         printLog "error" "Job failed! Reason: No such file 'settings.json'!"
@@ -124,14 +124,15 @@ main() {
         exit 1
     fi
 
-    local start_container='transmission'
-    setContainerRunstate "${start_container}" 'start'
+    local container_name='transmission'
+    setContainerRunstate "${container_name}" 'start'
     if [[ $? -ne 0 ]]; then
-        printLog "error" "Job failed! Reason: Unable to start container '${start_container}'!"
+        printLog "error" "Job failed! Reason: Unable to start container '${container_name}'!"
         exit 1
     fi
 
-    printLog "okay" "Script executed successfully."
+    local job_duration=$(/usr/local/sbin/getJobDuration.sh $script_start $SECONDS)
+    printLog "okay" "Exposed port changed. Runtime: ${job_duration}."
     exit 0
 }
 
