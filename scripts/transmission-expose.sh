@@ -43,11 +43,11 @@ printLog() {
             printf "${script_name}: \e[38;5;82m${log_text}\e[0m\n" >&1
             ;;
         warn)
-            /usr/local/sbin/pushNotification.sh "debian" "${log_type}" "${log_text}"
+            # /usr/local/sbin/pushNotification.sh "debian" "${log_type}" "${log_text}"
             printf "${script_name}: \e[38;5;214m${log_text}\e[0m\n" >&1
             ;;
         info)
-            /usr/local/sbin/pushNotification.sh "debian" "${log_type}" "${log_text}"
+            # /usr/local/sbin/pushNotification.sh "debian" "${log_type}" "${log_text}"
             printf "${script_name}: \e[38;5;21m${log_text}\e[0m\n" >&1
             ;;
         *)
@@ -94,13 +94,6 @@ main() {
         exit 1
     fi
 
-    local container_name='transmission'
-    setContainerRunstate "${container_name}" 'stop'
-    if [[ $? -ne 0 ]]; then
-        printLog "error" "Job failed! Reason: Unable to stop container '${container_name}'!"
-        exit 1
-    fi
-
     if [[ ! -f "${setting_file}" ]]; then
         printLog "error" "Job failed! Reason: No such file 'settings.json'!"
         exit 1
@@ -115,6 +108,19 @@ main() {
     local old_port=$(grep -oP '"peer-port": \K[0-9]+' "${setting_file}")
     if [[ ! "${old_port}" =~ ^[0-9]{5}$ ]]; then
         printLog "error" "Job failed! Reason: Unable to grep current exposed port!"
+        exit 1
+    fi
+
+    if [[ ${old_port} == ${new_port} ]]; then
+        local job_duration=$(/usr/local/sbin/getJobDuration.sh $script_start $SECONDS)
+        printLog "info" "Transmission exposed port matching. Runtime: ${job_duration}."
+        exit 0
+    fi
+
+    local container_name='transmission'
+    setContainerRunstate "${container_name}" 'stop'
+    if [[ $? -ne 0 ]]; then
+        printLog "error" "Job failed! Reason: Unable to stop container '${container_name}'!"
         exit 1
     fi
 
