@@ -85,6 +85,8 @@ main() {
         exit 1
     fi
 
+    sleep 1
+
 
     local job_duration=$(/usr/local/sbin/getJobDuration.sh $script_start $SECONDS)
     printLog "okay" "Selftest without errors. Runtime: ${job_duration}."
