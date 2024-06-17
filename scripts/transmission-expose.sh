@@ -83,12 +83,12 @@ main() {
         exit 1
     fi
 
-    local check_container='transmission'
-    getContainerRunstate "${check_container}"
-    if [[ $? -ne 0 ]]; then
-        printLog "error" "Job failed! Reason: Container '${check_container}' not running!"
-        exit 1
-    fi
+    # local check_container='transmission'
+    # getContainerRunstate "${check_container}"
+    # if [[ $? -ne 0 ]]; then
+    #     printLog "error" "Job failed! Reason: Container '${check_container}' not running!"
+    #     exit 1
+    # fi
 
     local exposed_port=$(docker logs gluetun | grep 'port forwarded' | tail -n 1 | awk '{print $NF}')
     if [[ ! "${exposed_port}" =~ ^[0-9]{5}$ ]]; then
