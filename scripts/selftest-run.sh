@@ -94,7 +94,7 @@ main() {
 
     # variables
     max_attempts=3
-    max_waittime=30
+    max_waittime=10
     error_count=0
 
     # parameters
