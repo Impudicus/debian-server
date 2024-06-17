@@ -10,18 +10,18 @@ checkServiceRunstate() {
     local max_attempts=${max_attemts}
     while [ ${attempt} -le ${max_attempts} ]; do
 
-        local service_name="docker"
+        local service_name="$1"
         local result=$(systemctl is-active ${service_name})
         if [[ "${result}" ]]; then
-            echo "fine"
-        else
-            echo "not fine"
+            return 0
         fi
 
         sleep ${max_waittime}
 
         attempt=$((attempt + 1))
     done
+
+    return 1
 }
 
 printLog() {
@@ -79,9 +79,15 @@ main() {
     done
 
     # run
-    checkServiceRunstate
+    checkServiceRunstate 'docker'
+    if [[ $? -ne 0 ]]; then
+        printLog "error" "Selftest failed. Reason: Service 'docker' is inactive."
+        exit 1
+    fi
 
 
+    local job_duration=$(/usr/local/sbin/getJobDuration.sh $script_start $SECONDS)
+    printLog "okay" "Selftest without errors. Runtime: ${job_duration}."
     exit 0
 }
 
