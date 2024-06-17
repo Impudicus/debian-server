@@ -6,8 +6,8 @@ readonly script_path=$(dirname $(realpath ${BASH_SOURCE[0]}))
 readonly script_start=${SECONDS}
 
 # configurations
-set -o errexit  # exit on error
-set -o pipefail # return exit status on pipefail
+# set -o errexit  # exit on error
+# set -o pipefail # return exit status on pipefail
 
 getContainerRunstate() {
     local result=$(/usr/bin/docker inspect --format "{{.State.Status}}" "${1}")
