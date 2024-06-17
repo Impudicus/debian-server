@@ -17,6 +17,17 @@ getContainerRunstate() {
         return 1
     fi
 }
+setContainerRunstate() {
+    if [[ "${2}" == 'start'  ]]; then
+        docker start "${1}" &> /dev/null
+        return $?
+    elif [[ "${2}" == 'stop'  ]]; then
+        docker stop "${1}" &> /dev/null
+        return $?
+    else
+        return 1
+    fi
+}
 
 printLog() {
     local log_type="${1}"
@@ -110,6 +121,13 @@ main() {
     sed -i "s/\"peer-port\": ${old_port}/\"peer-port\": ${new_port}/" "${setting_file}"
     if [[ $? -ne 0 ]]; then
         printLog "error" "Job failed! Reason: Unable to change configuration!"
+        exit 1
+    fi
+
+    local start_container='transmission'
+    setContainerRunstate "${start_container}" 'start'
+    if [[ $? -ne 0 ]]; then
+        printLog "error" "Job failed! Reason: Unable to start container '${start_container}'!"
         exit 1
     fi
 
