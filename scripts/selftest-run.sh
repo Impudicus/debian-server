@@ -112,7 +112,7 @@ main() {
     done
 
     # check mount states
-    local mountpoints=("/docker" "/mnt/pool1")
+    local mountpoints=("/docker" "/mnt/pool1" "/mnt/pool2")
     if [[ ! "$mountpoints" ]]; then
         printLog "error" "Selftest failed. Reason: No mountpoints defined."
         exit 1
