@@ -90,26 +90,28 @@ main() {
     #     exit 1
     # fi
 
-    local exposed_port=$(docker logs gluetun | grep 'port forwarded' | tail -n 1 | awk '{print $NF}')
-    if [[ ! "${exposed_port}" =~ ^[0-9]{5}$ ]]; then
-        printLog "error" "Job failed! Reason: Unable to grep exposed port!"
-        exit 1
-    fi
-
     if [[ ! -f "${setting_file}" ]]; then
         printLog "error" "Job failed! Reason: No such file 'settings.json'!"
         exit 1
     fi
 
-    local old_port=$(grep -oP '"peer-port": \K[0-9]+' "$setting_file")
-    echo $old_port
-    exit 1
-
-    sed -i "s/\"peer-port\": 44946/\"peer-port\": ${exposed_port}/" "$setting_file"
-    if [[ $? -ne 0 ]]; then
-        printLog "error" "Job failed! Reason: Unable to change config!"
+    local new_port=$(docker logs gluetun | grep 'port forwarded' | tail -n 1 | awk '{print $NF}')
+    if [[ ! "${new_port}" =~ ^[0-9]{5}$ ]]; then
+        printLog "error" "Job failed! Reason: Unable to grep new exposed port!"
         exit 1
-    fi    
+    fi
+
+    local old_port=$(grep -oP '"peer-port": \K[0-9]+' "${setting_file}")
+    if [[ ! "${old_port}" =~ ^[0-9]{5}$ ]]; then
+        printLog "error" "Job failed! Reason: Unable to grep current exposed port!"
+        exit 1
+    fi
+
+    sed -i "s/\"peer-port\": ${old_port}/\"peer-port\": ${new_port}/" "${setting_file}"
+    if [[ $? -ne 0 ]]; then
+        printLog "error" "Job failed! Reason: Unable to change configuration!"
+        exit 1
+    fi
 
     printLog "okay" "Script executed successfully."
     exit 0
