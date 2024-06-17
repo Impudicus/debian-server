@@ -26,7 +26,7 @@ checkMountState() {
     local attempt=1
     while [ ${attempt} -le ${max_attempts} ]; do
 
-        local result=$(mount | grep "on $1")
+        local result=$(mount | grep "on ${1}")
         if [[ "${result}" ]]; then
             return 0
         fi
