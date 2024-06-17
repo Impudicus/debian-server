@@ -61,17 +61,9 @@ printLog() {
     local log_text="${2}"
 
     case "${log_type}" in
-        error)
+        error|okay|warn)
             /usr/local/sbin/pushNotification.sh "debian" "${log_type}" "${log_text}"
             printf "${script_name}: \e[41m${log_text}\e[0m\n" >&2
-            ;;
-        okay)
-            /usr/local/sbin/pushNotification.sh "debian" "${log_type}" "${log_text}"
-            printf "${script_name}: \e[42m${log_text}\e[0m\n" >&1
-            ;;
-        info)
-            /usr/local/sbin/pushNotification.sh "debian" "${log_type}" "${log_text}"
-            printf "${script_name}: \e[44m${log_text}\e[0m\n" >&1
             ;;
         *)
             printf "${script_name}: ${log_text}\n" >&1
@@ -119,7 +111,7 @@ main() {
     fi
 
     for mountpoint in "${mountpoints[@]}"; do
-        echo $mountpoint
+
         checkMountState "${mountpoint}"
         if [[ $? -ne 0 ]]; then
             printLog "warn" "Selftest failing. Reason: '${mountpoint}' not mounted."
