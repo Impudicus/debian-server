@@ -114,7 +114,7 @@ main() {
             printLog "warn" "Selftest failing. Reason: Container '${container}' not running."
             error_count=$((error_count + 1))
         fi
-    fi
+    done
 
 
     sleep 1
