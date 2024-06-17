@@ -27,7 +27,7 @@ checkMountState() {
     while [ ${attempt} -le ${max_attempts} ]; do
 
         local result=$(mountpoint -q "${1}")
-        if [[ "${result}" ]]; then
+        if [[ $? -eq 0 ]]; then
             return 0
         fi
 
