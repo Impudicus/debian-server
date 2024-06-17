@@ -1,0 +1,13 @@
+[Unit]
+Description=qnap selftest notification
+Requires=network-online.target
+Wants=qnap-powerstate.service
+After=qnap-powerstate.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/local/bin/transmission-expose.sh
+
+[Install]
+WantedBy=default.target

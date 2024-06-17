@@ -132,7 +132,7 @@ main() {
     fi
 
     local job_duration=$(/usr/local/sbin/getJobDuration.sh $script_start $SECONDS)
-    printLog "okay" "Exposed port changed. Runtime: ${job_duration}."
+    printLog "okay" "Transmission exposed port changed. Runtime: ${job_duration}."
     exit 0
 }
 
