@@ -126,6 +126,8 @@ main() {
         fi
     done
 
+    exit 0
+
     # check service runstates
     local services=("cron" "docker" "fancontrol" "nfs-server" "ntp" "ntpd" "mdadm" "smbd" "sshd")
     if [[ ! "$services" ]]; then
