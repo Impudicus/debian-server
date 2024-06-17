@@ -168,6 +168,9 @@ main() {
     else
         local job_duration=$(/usr/local/sbin/getJobDuration.sh $script_start $SECONDS)
         printLog "warn" "Selftest successfull with errors. Runtime: ${job_duration}."
+        printLog "error" "Selftest successfull with errors. Runtime: ${job_duration}."
+        printLog "warn" "Selftest successfull with errors. Runtime: ${job_duration}."
+        printLog "info" "Selftest successfull with errors. Runtime: ${job_duration}."
     fi
     exit 0
 }
