@@ -20,6 +20,7 @@ checkContainerRunstate() {
     local max_attempts=${max_attemts}
     while [ ${attempt} -le ${max_attempts} ]; do
 
+        local check_container="${1}"
         getContainerRunstate "${check_container}"
         if [[ $? -eq 0 ]]; then
             return 0
