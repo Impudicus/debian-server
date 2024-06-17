@@ -26,8 +26,8 @@ checkMountState() {
     local attempt=1
     while [ ${attempt} -le ${max_attempts} ]; do
 
-        local result=$(mountpoint -q "${1}")
-        if [[ $? -eq 0 ]]; then
+        local result=$(mount | grep "on $1")
+        if [[ "${result}" ]]; then
             return 0
         fi
 
@@ -112,7 +112,7 @@ main() {
     done
 
     # check mount states
-    local mountpoints=("/mnt/pool1" "/mnt/pool2")
+    local mountpoints=("/docker" "/mnt/pool1")
     if [[ ! "$mountpoints" ]]; then
         printLog "error" "Selftest failed. Reason: No mountpoints defined."
         exit 1
