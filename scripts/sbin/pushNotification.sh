@@ -67,6 +67,9 @@ main() {
             ;;
     esac
 
+    # add brace
+    message_body=$(echo "${message_body}" | sed -E 's/(Reason|Runtime)/<br>\1/')
+
     # wait if needed
     if [[ "${message_wait}" ]]; then
         sleep ${message_wait}
