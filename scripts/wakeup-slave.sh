@@ -103,7 +103,7 @@ main() {
     # run
     getTarget "${HOSTNAME}"
     if [[ $? -ne 0 ]]; then
-        printLog "error" "Job failed! Reason: Unable to identify target!"
+        printLog "error" "Job failed!<br>Reason: Unable to identify target!"
         exit 1
     fi
 
@@ -112,7 +112,7 @@ main() {
     while [ ${attempt} -le ${max_attempts} ]; do
         setTargetRunstate "${target_mac_address}"
         if [[ $? -ne 0 ]]; then
-            printLog "error" "Job failed! Reason: Unable to wakeup target!"
+            printLog "error" "Job failed!<br>Reason: Unable to wakeup target!"
             exit 1
         fi
 
@@ -121,7 +121,7 @@ main() {
         getTargetRunstate "${target_ip_address}"
         if [[ $? -eq 0 ]]; then
             local job_duration=$(/usr/local/sbin/getJobDuration.sh $script_start $SECONDS)
-            printLog "okay" "Target '${target_hostname}' woken up. Runtime: ${job_duration}."
+            printLog "okay" "Target '${target_hostname}' woken up.<br>Runtime: ${job_duration}."
             exit 0
         fi
 
@@ -129,7 +129,7 @@ main() {
     done
 
     local job_duration=$(/usr/local/sbin/getJobDuration.sh $script_start $SECONDS)
-    printLog "error" "Job failed! Reason: Timeout after ${job_duration}!"
+    printLog "error" "Job failed!<br>Reason: Timeout after ${job_duration}!"
     exit 1
 }
 
