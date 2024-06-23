@@ -154,6 +154,10 @@ main() {
     fi
 
     for container in $containers; do
+        if [[ "${container}" == 'kometa' || "${container}" == 'imagemaid' ]]; then
+            continue
+        fi
+
         checkContainerRunstate "${container}"
         if [[ $? -ne 0 ]]; then
             printLog "warn" "Selftest failing. Reason: Container '${container}' not running."
