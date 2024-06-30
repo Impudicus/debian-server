@@ -78,7 +78,7 @@ main() {
     fi
 
     # variables
-    work_dir='/mnt/pool1/downloads/complete'
+    work_dir=''
     action_removeemptyfolders=''
     action_removejunk=''
     action_removesamples=''
