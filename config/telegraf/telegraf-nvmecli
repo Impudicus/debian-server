@@ -1,0 +1,3 @@
+Cmnd_Alias NVME = /usr/sbin/nvme
+telegraf ALL=(ALL:ALL) NOPASSWD: NVME
+Defaults!NVME !logfile, !syslog, !pam_session

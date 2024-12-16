@@ -1,0 +1,13 @@
+##############################################################
+#                          WARNING                           #
+#                  Authorized Access Only                    #
+#                                                            #
+#     You are accessing a secure system. Your activity,      #
+#      including IP address, username, and login time,       #
+#      is monitored and logged. Unauthorized access is       #
+#       prohibited and will be reported to the proper        #
+#               authorities for investigation.               #
+#                                                            #
+#    Use of this system indicates consent to monitoring.     #
+#                                                            #
+##############################################################

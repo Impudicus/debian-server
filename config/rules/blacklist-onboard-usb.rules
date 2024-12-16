@@ -1,0 +1,6 @@
+# The on-board 5GB stick should be disabled
+# I currently have no use for it and leaving it untouched allows a reset to the shipped state
+# by choosing the USB stick as boot target during POST
+# c.f. https://projectgus.com/2014/09/blacklisting-a-single-usb-device-from-linux/
+
+SUBSYSTEM=="usb", ATTRS{idVendor}=="1005", ATTRS{idProduct}=="b155", ATTR{authorized}="0"

@@ -1,0 +1,10 @@
+[Unit]
+Description=Debian Selftest Timer
+
+[Timer]
+OnBootSec=5min
+OnUnitActiveSec=60min
+Unit=debian-selftest.service
+
+[Install]
+WantedBy=timers.target

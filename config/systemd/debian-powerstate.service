@@ -1,0 +1,13 @@
+[Unit]
+Description=Debian Powerstate Service
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/local/sbin/debian-powerstate.sh poweron
+ExecStop=/usr/local/sbin/debian-powerstate.sh poweroff
+
+[Install]
+WantedBy=multi-user.target
