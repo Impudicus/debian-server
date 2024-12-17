@@ -1,0 +1,11 @@
+[Unit]
+Description=Transmission Selftest Service
+Wants=debian-powerstate.service
+After=debian-powerstate.service
+
+[Service]
+Type=simple
+ExecStart=/usr/local/sbin/transmission-selftest.sh
+
+[Install]
+WantedBy=multi-user.target
