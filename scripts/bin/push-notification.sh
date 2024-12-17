@@ -17,6 +17,33 @@ getAppToken() {
         debian)
             echo "asdpr25tei6i5969mcodw1ynsu7jp3"
             ;;
+        grafana)
+            echo "ayd4ncfifo8fpe143a82z19p48x4pa"
+            ;;
+        imagemaid|kometa)
+            echo "a45ergc1dorqzwcwr2bphps5rqpha6"
+            ;;
+        jdownloader)
+            echo "asfaygindy7fabbe7913avb7je91c8"
+            ;;
+        nextcloud)
+            echo "acuz3nkj4wbbxtzjdqsfjge4wf1qw9"
+            ;;
+        overseerr)
+            echo "ajwkxmq1nta7evsy6p59j8atdzbrb6"
+            ;;
+        restic)
+            echo "a6iygdoubnpy2hq2ggwiou4pxrwbf2"
+            ;;
+        tautulli)
+            echo "axn99nwdcyft2zibfp7edkesz18zxw"
+            ;;
+        transmission)
+            echo "ajc6uzgry1kr1oj4q4oademairg6uk"
+            ;;
+        uptime)
+            echo "ann3bjwzwxxk3js2nqb3itea9pobyc"
+            ;;            
         *)
             return 1
             ;;
