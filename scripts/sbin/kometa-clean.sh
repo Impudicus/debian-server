@@ -38,9 +38,9 @@ printLog() {
         info)
             echo -e "\e[96m[INFO]\e[39m $log_message"
             ;;
-        success)
-            push-notification.sh 'imagemaid' "$error_type" "$log_message"
+        success)            
             echo -e "\e[92m[SUCCESS]\e[39m $log_message"
+            push-notification.sh 'imagemaid' "$error_type" "$log_message"
             ;;
         *)
             echo "$log_message"
