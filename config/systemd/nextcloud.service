@@ -1,0 +1,11 @@
+[Unit]
+Description=Nextcloud Service
+Wants=debian-powerstate.service
+After=debian-powerstate.service
+
+[Service]
+Type=simple
+ExecStart=/usr/local/sbin/nextcloud-run.sh
+
+[Install]
+WantedBy=multi-user.target

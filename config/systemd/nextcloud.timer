@@ -1,0 +1,10 @@
+[Unit]
+Description=Nextcloud Timer
+
+[Timer]
+OnBootSec=5min
+OnUnitActiveSec=5min
+Unit=nextcloud.service
+
+[Install]
+WantedBy=timers.target
