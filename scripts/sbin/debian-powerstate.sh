@@ -12,6 +12,7 @@ printLog() {
     case "$error_type" in
         error)
             echo -e "\e[91m[ERROR]\e[39m $log_message"
+            push-notification.sh 'debian' "$error_type" "$log_message"
             ;;
         warn)
             echo -e "\e[93m[WARN]\e[39m $log_message"
