@@ -216,6 +216,10 @@ main() {
             }
         done
     fi
+
+    # --------------------------------------------------
+    local run_time=$((SECONDS - SCRIPT_TIME))
+    printLog "success" "Selftest executed successfully. Run time: $run_time seconds."
     exit 0
 }
 
