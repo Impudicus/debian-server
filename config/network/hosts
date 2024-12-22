@@ -1,4 +1,4 @@
 127.0.0.1       localhost
 127.0.0.1       changeme
 
-192.168.0.1     unifi-dm-se
+192.168.0.1     unifi-dm unifi-dm.local
