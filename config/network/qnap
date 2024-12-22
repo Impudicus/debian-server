@@ -1,8 +1,8 @@
 allow-hotplug enp5s0
 iface enp5s0 inet static
-    address 192.168.0.2
+    address 192.168.1.50
     netmask 255.255.255.0
-    gateway 192.168.0.254
+    gateway 192.168.1.1
 
 allow-hotplug enp6s0
 iface enp6s0 inet manual
