@@ -1,7 +1,6 @@
 #!/bin/bash
 
 set -o pipefail # Exit when a command in a pipeline fails
-set -o nounset  # Exit when using undeclared variables
 
 readonly SCRIPT_NAME=$(basename "$0")
 readonly SCRIPT_TIME=$SECONDS
@@ -75,9 +74,13 @@ removeSampleFiles() {
 }
 
 printHelp() {
-    echo "Usage: $SCRIPT_NAME [options]"
+    echo "Usage: $SCRIPT_NAME [options] work_dir"
     echo "Options:"
     echo "  -h, --help                          Show this help message."
+    echo "Workdirs:"
+    echo "  all                                 Run tasks on both workdirs."
+    echo "  downloads                           Run tasks on downloads workdir."
+    echo "  transcode                           Run tasks on transcode workdir."
 }
 printLog() {
     local error_type="$1"
