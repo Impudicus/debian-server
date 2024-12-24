@@ -17,8 +17,8 @@ runInstall() {
 
     # --------------------------------------------------
     # Update package list
-    cat "$CONFIG_DIR/apt/sources.list" | tee /etc/apt/sources.list > /dev/null
-    # cat "$CONFIG_DIR/apt/testing.list" | tee /etc/apt/sources.list.d/testing.list > /dev/null
+    cat "$config_dir/apt/sources.list" | tee /etc/apt/sources.list > /dev/null
+    # cat "$config_dir/apt/testing.list" | tee /etc/apt/sources.list.d/testing.list > /dev/null
 
     apt update || exit 1
     apt upgrade --yes || exit 1
@@ -63,7 +63,7 @@ runInstall() {
         docker-compose-plugin \
         || exit 1
 
-    cat "$CONFIG_DIR/docker/daemon.json" | tee "/etc/docker/daemon.json" > /dev/null || exit 1
+    cat "$config_dir/docker/daemon.json" | tee "/etc/docker/daemon.json" > /dev/null || exit 1
     systemctl restart docker > /dev/null || exit 1
 
     # # --------------------------------------------------
@@ -82,10 +82,10 @@ runInstall() {
     # )
     # rm --recursive --force "/tmp/QNAP-EC" || exit 1
 
-    # cat "$CONFIG_DIR/fancontrol/fancontrol" | tee "/etc/fancontrol" > /dev/null || exit 1
+    # cat "$config_dir/fancontrol/fancontrol" | tee "/etc/fancontrol" > /dev/null || exit 1
     # systemctl restart fancontrol > /dev/null || exit 1
 
-    # cat "$CONFIG_DIR/fancontrol/modul.conf" | tee "/etc/modules-load.d/fancontrol.conf" > /dev/null || exit 1
+    # cat "$config_dir/fancontrol/modul.conf" | tee "/etc/modules-load.d/fancontrol.conf" > /dev/null || exit 1
     # systemctl restart systemd-modules-load > /dev/null || exit 1
 
     # --------------------------------------------------
@@ -106,7 +106,7 @@ runInstall() {
         ntp \
         || exit 1
     
-    cat "$CONFIG_DIR/ntp/ntp.conf" | tee "/etc/ntp.conf" > /dev/null || exit 1
+    cat "$config_dir/ntp/ntp.conf" | tee "/etc/ntp.conf" > /dev/null || exit 1
     systemctl restart ntp > /dev/null || exit 1
 
     # --------------------------------------------------
@@ -122,7 +122,7 @@ runInstall() {
         nvidia-container-toolkit \
         || exit 1
     
-    cat "$CONFIG_DIR/docker/daemon-nvidia.json" | tee "/etc/docker/daemon.json" > /dev/null || exit 1
+    cat "$config_dir/docker/daemon-nvidia.json" | tee "/etc/docker/daemon.json" > /dev/null || exit 1
     systemctl restart docker > /dev/null || exit 1
 
     # --------------------------------------------------
@@ -138,7 +138,7 @@ runInstall() {
         smbclient \
         || exit 1
 
-    cat "$CONFIG_DIR/samba/smb.conf" | tee "/etc/samba/smb.conf" > /dev/null || exit 1
+    cat "$config_dir/samba/smb.conf" | tee "/etc/samba/smb.conf" > /dev/null || exit 1
     systemctl restart smbd > /dev/null || exit 1
 
     # --------------------------------------------------
@@ -148,14 +148,14 @@ runInstall() {
         openssh-server \
         || exit 1
     
-    cat "$CONFIG_DIR/ssh/sshd_config" | tee "/etc/ssh/sshd_config"              > /dev/null || exit 1
-    cat "$CONFIG_DIR/ssh/banner.txt"  | tee "/etc/ssh/banner.txt"               > /dev/null || exit 1
-    cat "$CONFIG_DIR/ssh/qnap.conf"   | tee "/etc/ssh/sshd_config.d/qnap.conf"  > /dev/null || exit 1
+    cat "$config_dir/ssh/sshd_config" | tee "/etc/ssh/sshd_config"              > /dev/null || exit 1
+    cat "$config_dir/ssh/banner.txt"  | tee "/etc/ssh/banner.txt"               > /dev/null || exit 1
+    cat "$config_dir/ssh/qnap.conf"   | tee "/etc/ssh/sshd_config.d/qnap.conf"  > /dev/null || exit 1
     systemctl restart ssh > /dev/null || exit 1
 
     local ssh_dir="/home/$default_user/.ssh"
     mkdir --parents "$ssh_dir" || exit 1
-    cat "$CONFIG_DIR/ssh/authorized_keys" | tee "$ssh_dir/authorized_keys" > /dev/null || exit 1
+    cat "$config_dir/ssh/authorized_keys" | tee "$ssh_dir/authorized_keys" > /dev/null || exit 1
     chown --recursive "$default_user:$default_user" "$ssh_dir" || exit 1
     chmod 700 "$ssh_dir" || exit 1
     chmod 600 "$ssh_dir/authorized_keys" || exit 1
@@ -174,10 +174,10 @@ runInstall() {
     
     usermod --append --groups docker telegraf || exit 1
 
-    cat "$CONFIG_DIR/telegraf/telegraf-nvmecli"  | tee "/etc/sudoers.d/telegraf-nvmecli"  > /dev/null || exit 1
-    cat "$CONFIG_DIR/telegraf/telegraf-smartctl" | tee "/etc/sudoers.d/telegraf-smartctl" > /dev/null || exit 1
+    cat "$config_dir/telegraf/telegraf-nvmecli"  | tee "/etc/sudoers.d/telegraf-nvmecli"  > /dev/null || exit 1
+    cat "$config_dir/telegraf/telegraf-smartctl" | tee "/etc/sudoers.d/telegraf-smartctl" > /dev/null || exit 1
 
-    cat "$CONFIG_DIR/telegraf/telegraf.conf" | tee "/etc/telegraf/telegraf.conf" > /dev/null || exit 1
+    cat "$config_dir/telegraf/telegraf.conf" | tee "/etc/telegraf/telegraf.conf" > /dev/null || exit 1
     systemctl restart telegraf > /dev/null || exit 1
     return 0
 }
@@ -187,24 +187,24 @@ runConfig() {
 
     # --------------------------------------------------
     # Configure cron
-    cat "$CONFIG_DIR/cron/crontab" | tee "/etc/crontab" > /dev/null || exit 1
+    cat "$config_dir/cron/crontab" | tee "/etc/crontab" > /dev/null || exit 1
     systemctl restart cron > /dev/null || exit 1
 
     # --------------------------------------------------
     # Copy dotfiles
-    cat "$CONFIG_DIR/.bash_aliases" \
+    cat "$config_dir/.bash_aliases" \
         | tee "/home/$default_user/.bash_aliases" \
         | tee "/root/.bash_aliases" > /dev/null || exit 1
-    cat "$CONFIG_DIR/.bashrc" \
+    cat "$config_dir/.bashrc" \
         | tee "/home/$default_user/.bashrc" \
         | tee "/root/.bashrc" > /dev/null || exit 1
-    cat "$CONFIG_DIR/.profile" \
+    cat "$config_dir/.profile" \
         | tee "/home/$default_user/.profile" \
         | tee "/root/.profile" > /dev/null || exit 1
     
     # --------------------------------------------------
     # Configure environment
-    cat "$CONFIG_DIR/environment" | tee "/etc/environment" > /dev/null || exit 1
+    cat "$config_dir/environment" | tee "/etc/environment" > /dev/null || exit 1
 
     # --------------------------------------------------
     # Add grub theme
@@ -217,29 +217,29 @@ runConfig() {
         tar --extract --file "/tmp/$optional_grub_theme.tar" --directory "$grub_dir" || exit 1
         rm --force "/tmp/$optional_grub_theme.tar" || exit 1
 
-        cat "$CONFIG_DIR/grub" | tee "/etc/default/grub" > /dev/null || exit 1
+        cat "$config_dir/grub" | tee "/etc/default/grub" > /dev/null || exit 1
         echo "GRUB_THEME=\"$grub_dir/theme.txt\"" | tee --append "/etc/default/grub" > /dev/null || exit 1
         update-grub || exit 1
     fi
 
     # --------------------------------------------------
     # Configure network
-    cat "$CONFIG_DIR/network/hosts" | tee "/etc/hosts" > /dev/null || exit 1
+    cat "$config_dir/network/hosts" | tee "/etc/hosts" > /dev/null || exit 1
     sed --in-place "s/changeme/$HOSTNAME/g" "/etc/hosts" || exit 1
 
-    cat "$CONFIG_DIR/network/resolv.conf" | tee "/etc/resolv.conf" > /dev/null || exit 1
+    cat "$config_dir/network/resolv.conf" | tee "/etc/resolv.conf" > /dev/null || exit 1
     
-    cat "$CONFIG_DIR/network/interfaces" | tee "/etc/network/interfaces"        > /dev/null || exit 1
-    cat "$CONFIG_DIR/network/qnap"       | tee "/etc/network/interfaces.d/qnap" > /dev/null || exit 1
+    cat "$config_dir/network/interfaces" | tee "/etc/network/interfaces"        > /dev/null || exit 1
+    cat "$config_dir/network/qnap"       | tee "/etc/network/interfaces.d/qnap" > /dev/null || exit 1
     systemctl enable networking > /dev/null || exit 1
 
     # --------------------------------------------------
     # Add scripts
-    cp "$CONFIG_DIR/../scripts/bin/"*.sh "/usr/local/bin/" 
+    cp "$config_dir/../scripts/bin/"*.sh "/usr/local/bin/" 
     chown root:root "/usr/local/bin/"*.sh
     chmod 755 "/usr/local/bin/"*.sh
 
-    cp "$CONFIG_DIR/../scripts/sbin/"*.sh "/usr/local/sbin/"
+    cp "$config_dir/../scripts/sbin/"*.sh "/usr/local/sbin/"
     chown root:root "/usr/local/sbin/"*.sh
     chmod 755 "/usr/local/sbin/"*.sh
     
@@ -249,8 +249,8 @@ runConfig() {
 
     # --------------------------------------------------
     # Configure systemd
-    cp "$CONFIG_DIR/systemd/"*.service "/etc/systemd/system/"
-    cp "$CONFIG_DIR/systemd/"*.timer   "/etc/systemd/system/"
+    cp "$config_dir/systemd/"*.service "/etc/systemd/system/"
+    cp "$config_dir/systemd/"*.timer   "/etc/systemd/system/"
     systemctl daemon-reload > /dev/null || exit 1
 
     systemctl enable debian-powerstate.service > /dev/null || exit 1
@@ -276,7 +276,7 @@ runCleanup() {
 printHelp() {
     echo "Usage: $SCRIPT_NAME [options]"
     echo "Options:"
-    echo "  -h, --help                          Show this help message."
+    echo "  -h, --help          Show this help message."
 }
 printLog() {
     local error_type="$1"
@@ -311,7 +311,7 @@ main() {
 
     # --------------------------------------------------
     # Variables
-    readonly CONFIG_DIR="./config"
+    readonly config_dir="./config"
     readonly optional_grub_theme='debian'
 
     # --------------------------------------------------
@@ -331,8 +331,8 @@ main() {
         shift
     done
 
-    if ! [[ -d "$CONFIG_DIR" ]]; then
-        printLog "error" "Configuration directory '$CONFIG_DIR' not found!"
+    if ! [[ -d "$config_dir" ]]; then
+        printLog "error" "Configuration directory '$config_dir' not found!"
         exit 1
     fi
 
