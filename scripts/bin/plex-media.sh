@@ -252,8 +252,8 @@ main() {
 
     # --------------------------------------------------
     # Variables
-    plex_api_key='1dy7bpG2DzKzqCKcsU5c'
-    tmdb_api_key='43829e52e661510f2bf04bcc1b5bafe3'
+    readonly plex_api_key='1dy7bpG2DzKzqCKcsU5c'
+    readonly tmdb_api_key='43829e52e661510f2bf04bcc1b5bafe3'
 
     local has_option=''
     local validate_duplicates=''
