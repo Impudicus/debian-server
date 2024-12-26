@@ -1,5 +1,6 @@
 #!/bin/bash
 
+set -o errexit  # Exit when a command fails
 set -o pipefail # Exit when a command in a pipeline fails
 set -o nounset  # Exit when using undeclared variables
 
@@ -183,7 +184,7 @@ runInstall() {
 }
 
 runConfig() {
-    local default_user=$(getent passwd 1000 | cut --delimiter ":" --fields 1)
+    local default_user=$(getent passwd 1000 | cut --delimiter ":" --fields 1) || exit 1
 
     # --------------------------------------------------
     # Configure cron
@@ -235,13 +236,13 @@ runConfig() {
 
     # --------------------------------------------------
     # Add scripts
-    cp "$config_dir/../scripts/bin/"*.sh "/usr/local/bin/" 
-    chown root:root "/usr/local/bin/"*.sh
-    chmod 755 "/usr/local/bin/"*.sh
+    cp "$config_dir/../scripts/bin/"*.sh "/usr/local/bin/" || exit 1
+    chown root:root "/usr/local/bin/"*.sh || exit 1
+    chmod 755 "/usr/local/bin/"*.sh || exit 1
 
-    cp "$config_dir/../scripts/sbin/"*.sh "/usr/local/sbin/"
-    chown root:root "/usr/local/sbin/"*.sh
-    chmod 755 "/usr/local/sbin/"*.sh
+    cp "$config_dir/../scripts/sbin/"*.sh "/usr/local/sbin/" || exit 1
+    chown root:root "/usr/local/sbin/"*.sh || exit 1
+    chmod 755 "/usr/local/sbin/"*.sh || exit 1
     
     # --------------------------------------------------
     # Configure sudo
@@ -249,8 +250,8 @@ runConfig() {
 
     # --------------------------------------------------
     # Configure systemd
-    cp "$config_dir/systemd/"*.service "/etc/systemd/system/"
-    cp "$config_dir/systemd/"*.timer   "/etc/systemd/system/"
+    cp "$config_dir/systemd/"*.service "/etc/systemd/system/" || exit 1
+    cp "$config_dir/systemd/"*.timer   "/etc/systemd/system/" || exit 1
     systemctl daemon-reload > /dev/null || exit 1
 
     systemctl enable debian-powerstate.service > /dev/null || exit 1
