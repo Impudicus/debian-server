@@ -50,7 +50,7 @@ validateNames() {
 
     # --------------------------------------------------
     local work_dir="/mnt/pool2/$1"
-    find "$work_dir" -type f -name "*.jpg" -o -name "*.png" | while read -r file; do
+    find "$work_dir" -type f -name "*.jpg" -o -name "*.jpeg" -o -name "*.png" | while read -r file; do
         local file_name=$(basename "$file")
         local file_ext="${file_name##*.}"
 
@@ -114,7 +114,7 @@ validateSize() {
 
     # --------------------------------------------------
     local work_dir="/mnt/pool2/$1"
-    find "$work_dir" -type f -name "*.jpg" -o -name "*.png" | while read -r file; do
+    find "$work_dir" -type f -name "*.jpg" -o -name "*.jpeg" -o -name "*.png" | while read -r file; do
         local file_name=$(basename "$file")
         local file_ext="${file_name##*.}"
 
