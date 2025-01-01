@@ -18,6 +18,9 @@ getContainerRunstate() {
     while [[ $attempts -lt $max_attempts ]]; do
         if docker inspect --format "{{.State.Running}}" "$container_name" | grep --quiet "true"; then
             return 0
+        elif docker inspect --format "{{.State.Status}}" "$container_name" | grep --quiet "exited" && \
+             docker inspect --format "{{.State.ExitCode}}" "$container_name" | grep --quiet "0"; then
+            return 0
         fi
         attempts=$((attempts + 1))
         sleep $max_waittime
@@ -72,7 +75,7 @@ getServiceRunstate() {
     local attempts=0
 
     while [[ $attempts -lt $max_attempts ]]; do
-        if systemctl is-enabled "$service_name.service" 2> /dev/null | grep --quiet --word-regexp "disabled" ; then
+        if systemctl is-enabled "$service_name.service" 2> /dev/null | grep --quiet --word-regexp "disabled"; then
             return 0
         elif systemctl is-active "$service_name.service" 2> /dev/null | grep --quiet --word-regexp "active"; then
             return 0
@@ -88,7 +91,7 @@ getTimerRunstate() {
     local attempts=0
 
     while [[ $attempts -lt $max_attempts ]]; do
-        if systemctl is-enabled "$timer_name.timer" 2> /dev/null | grep --quiet --word-regexp "disabled" ; then
+        if systemctl is-enabled "$timer_name.timer" 2> /dev/null | grep --quiet --word-regexp "disabled"; then
             return 0
         elif systemctl is-active "$timer_name.timer" 2> /dev/null | grep --quiet --word-regexp "active"; then
             return 0
@@ -205,7 +208,7 @@ main() {
     fi
 
     printLog "info" "Current selftest: Checking timers..."
-    local system_timers=("debian-selftest" "restic-backup" "transmission-selftest")
+    local system_timers=("debian-selftest" "nextcloud" "restic" "transmission-selftest")
     if [[ -z "$system_timers" ]]; then
         printLog "warn" "Selftest failing! No timers found!"
         sleep 1
