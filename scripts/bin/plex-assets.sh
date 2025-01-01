@@ -125,18 +125,20 @@ validateSize() {
 
         # movie-/show-poster (ratio < 1)
         if [[ $(echo "$aspect_ratio < 1" | bc) -eq 1 ]]; then
-            if [[ $file_ext != "jpg" || $file_width -gt 1000 || $file_height -gt 1500 ]]; then
+            if [[ $file_ext != "jpg" || $file_width -gt 1000 || $file_height -gt 1500 || $(stat --format="%s" "$file") -gt 5000000 ]]; then
                 rescaleImage "$file" 1000 1500
                 printLog "text" "$file"
+                sleep 1
             fi
             continue
         fi
 
         # backgrounds (ratio > 1)
         if [[ $(echo "$aspect_ratio > 1" | bc) -eq 1 ]]; then
-            if [[ $file_ext != "jpg" || $file_width -gt 1280 || $file_height -gt 720 ]]; then
+            if [[ $file_ext != "jpg" || $file_width -gt 1280 || $file_height -gt 720 || $(stat --format="%s" "$file") -gt 5000000 ]]; then
                 rescaleImage "$file" 1280 720
                 printLog "text" "$file"
+                sleep 1
             fi
             continue
         fi
