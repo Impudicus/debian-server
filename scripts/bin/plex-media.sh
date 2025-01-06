@@ -19,7 +19,7 @@ plexGetRunstate() {
 
 validateCollections() {
     plexFetchLibrary() {
-        local plex_url="http://127.0.0.1:32400/library/sections/1/all?X-Plex-Token=$plex_api_key&includeGuids=1"
+        local plex_url="http://127.0.0.1:32400/library/sections/1/all?X-Plex-Token=$PLEX_API_KEY&includeGuids=1"
         curl --silent --header "Accept: application/json" "$plex_url"
         return $?
     }
@@ -35,13 +35,13 @@ validateCollections() {
 
     tmdbFetchCollection() {
         local collection_id="$1"
-        local tmdb_url="https://api.themoviedb.org/3/collection/$collection_id?api_key=$tmdb_api_key&language=de-DE"
+        local tmdb_url="https://api.themoviedb.org/3/collection/$collection_id?api_key=$TMDB_API_KEY&language=de-DE"
         curl --silent --header "Accept: application/json" "$tmdb_url"
         return $?
     }
     tmdbFetchMovie() {
         local tmdb_id="$1"
-        local tmdb_url="https://api.themoviedb.org/3/movie/$tmdb_id?api_key=$tmdb_api_key&language=de-DE"
+        local tmdb_url="https://api.themoviedb.org/3/movie/$tmdb_id?api_key=$TMDB_API_KEY&language=de-DE"
         curl --silent --header "Accept: application/json" "$tmdb_url"
         return $?
     }
@@ -98,13 +98,13 @@ validateCollections() {
 
 validateEpisodes() {
     plexFetchLibrary() {
-        local plex_url="http://127.0.0.1:32400/library/sections/2/all?X-Plex-Token=$plex_api_key&includeGuids=1"
+        local plex_url="http://127.0.0.1:32400/library/sections/2/all?X-Plex-Token=$PLEX_API_KEY&includeGuids=1"
         curl --silent --header "Accept: application/json" "$plex_url"
         return $?
     }
     plexFetchEpisodes() {
         local plex_key="$1"
-        local plex_url="http://127.0.0.1:32400/library/metadata/$plex_key/children?X-Plex-Token=$plex_api_key&includeGuids=1"
+        local plex_url="http://127.0.0.1:32400/library/metadata/$plex_key/children?X-Plex-Token=$PLEX_API_KEY&includeGuids=1"
         local tv_show=$(curl --silent --header "Accept: application/json" "$plex_url")
         local tv_episodes=$(echo "$tv_show" | jq --raw-output ".MediaContainer.Metadata[] | select(.index == $season) | .leafCount")
         if [[ -z "$tv_episodes" || "$tv_episodes" == "null" ]]; then
@@ -116,14 +116,14 @@ validateEpisodes() {
 
     tmdbFetchShow() {
         local tmdb_id="$1"
-        local tmdb_url="https://api.themoviedb.org/3/tv/$tmdb_id?api_key=$tmdb_api_key&language=de-DE"
+        local tmdb_url="https://api.themoviedb.org/3/tv/$tmdb_id?api_key=$TMDB_API_KEY&language=de-DE"
         curl --silent --header "Accept: application/json" "$tmdb_url"
         return $?
     }
     tmdbFetchSeason() {
         local tmdb_id="$1"
         local season_id="$2"
-        local tmdb_url="https://api.themoviedb.org/3/tv/$tmdb_id/season/$season_id?api_key=$tmdb_api_key&language=de-DE"
+        local tmdb_url="https://api.themoviedb.org/3/tv/$tmdb_id/season/$season_id?api_key=$TMDB_API_KEY&language=de-DE"
         curl --silent --header "Accept: application/json" "$tmdb_url"
         return $?
     }
@@ -199,8 +199,9 @@ validateDuplicates() {
 
             # UNKNOWN
             printLog "warn" "$file_name"
-        done
+        done &
     done
+    wait
     return 0
 }
 
@@ -252,9 +253,6 @@ main() {
 
     # --------------------------------------------------
     # Variables
-    readonly plex_api_key='1dy7bpG2DzKzqCKcsU5c'
-    readonly tmdb_api_key='43829e52e661510f2bf04bcc1b5bafe3'
-
     local has_option=''
     local validate_duplicates=''
     local validate_missing=''
@@ -302,6 +300,11 @@ main() {
     fi
 
     # --------------------------------------------------
+    source '/etc/environment' || {
+        printLog "error" "Unable to load configuration file!"
+        exit 1
+    }
+
     printLog "info" "Library set to '$library'."
     if [[ -n "$validate_duplicates" ]]; then
         printLog "info" "Current job: Validate duplicate media files ..."

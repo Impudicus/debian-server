@@ -250,6 +250,11 @@ main() {
     fi
 
     # --------------------------------------------------
+    source '/etc/environment' || {
+        printLog "error" "Unable to load configuration file!"
+        exit 1
+    }
+
     printLog "info" "Library set to '$library'."
     if [[ -n "$validate_size" ]]; then
         printLog "info" "Current job: Validate asset sizes ..."

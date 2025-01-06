@@ -18,7 +18,7 @@ plexGetRunstate() {
 }
 
 plexFetchSessions() {
-    local plex_url="http://127.0.0.1:32400/status/sessions?X-Plex-Token=$plex_api_key"
+    local plex_url="http://127.0.0.1:32400/status/sessions?X-Plex-Token=$PLEX_API_KEY"
     curl --silent --header "Accept: application/json" "$plex_url"
     return $?
 }
@@ -66,9 +66,6 @@ main() {
 
     # --------------------------------------------------
     # Variables
-    readonly plex_api_key='1dy7bpG2DzKzqCKcsU5c'
-    readonly tmdb_api_key='43829e52e661510f2bf04bcc1b5bafe3'
-    readonly config_file='/etc/environment'
 
     # --------------------------------------------------
     # Parse command line arguments
@@ -88,7 +85,7 @@ main() {
     done
 
     # --------------------------------------------------
-    source "$config_file" || {
+    source '/etc/environment' || {
         printLog "error" "Unable to load configuration file!"
         exit 1
     }
@@ -99,8 +96,10 @@ main() {
     }
     if [[ -z "$session_list" || "$session_list" == "null" ]]; then
         printLog "warn" "No active Plex sessions found."
+    elif [[ $(echo "$session_list" | jq --compact-output '.MediaContainer.size') == "0" ]]; then
+        printLog "info" "No active Plex sessions found."
     else
-        echo "$session_list" | jq --compact-output '.MediaContainer.Metadata[]' | while read -r session; do 
+            echo "$session_list" | jq --compact-output '.MediaContainer.Metadata[]' | while read -r session; do 
             local user_name=$(echo "$session" | jq --raw-output '.User.title')
             local element_type=$(echo "$session" | jq --raw-output '.type')
             if [[ "$element_type" == "episode" ]]; then
