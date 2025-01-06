@@ -3,4 +3,5 @@ export AWS_SECRET_ACCESS_KEY=c6d02376-e317-4ace-b493-472e4d2e2141
 # export RESTIC_REPOSITORY=s3:https://s3.nl-ams.scw.cloud/ccr0rzt2b4kyxz # 2024
 export RESTIC_REPOSITORY=s3:https://s3.nl-ams.scw.cloud/lcq3d43sxapf8k # 2025
 export RESTIC_PASSWORD=KJDPAmm3Xje6j2HRSNK4
-export PLEX_API_KEY=1dy7bpG2DzKzqCKcsU5c
+export PLEX_API_KEY=hmyCY2pJpuznSNJHDBaK
+export TMDB_API_KEY=43829e52e661510f2bf04bcc1b5bafe3
