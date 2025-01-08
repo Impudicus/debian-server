@@ -2,11 +2,11 @@
 Description=Kometa Service
 Wants=debian-powerstate.service
 After=debian-powerstate.service
+OnSuccess=imagemaid.service
 
 [Service]
 Type=simple
 ExecStart=/usr/local/sbin/kometa-run.sh
-ExecStartPost=/usr/local/sbin/kometa-clean.sh
 
 [Install]
 WantedBy=multi-user.target
