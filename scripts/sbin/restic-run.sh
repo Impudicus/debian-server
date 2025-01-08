@@ -56,15 +56,18 @@ printLog() {
     case "$error_type" in
         error)
             echo -e "\e[91m[ERROR]\e[39m $log_message"
+            push-notification.sh 'restic' "$error_type" "$log_message"
             ;;
         warn)
             echo -e "\e[93m[WARN]\e[39m $log_message"
+            push-notification.sh 'restic' "$error_type" "$log_message"
             ;;
         info)
             echo -e "\e[96m[INFO]\e[39m $log_message"
             ;;
         success)
             echo -e "\e[92m[SUCCESS]\e[39m $log_message"
+            push-notification.sh 'restic' "$error_type" "$log_message"
             ;;
         *)
             echo "$log_message"
