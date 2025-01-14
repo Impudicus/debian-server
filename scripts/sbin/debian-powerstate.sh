@@ -5,6 +5,12 @@ set -o pipefail # Exit when a command in a pipeline fails
 readonly SCRIPT_NAME=$(basename "$0")
 readonly SCRIPT_TIME=$SECONDS
 
+getPackageInstallState() {
+    local package_name="$1"
+    dpkg --list | awk '{print $2}' | grep --line-regexp "$package_name" > /dev/null
+    return $?
+}
+
 printLog() {
     local error_type="$1"
     local log_message="$2"

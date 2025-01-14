@@ -9,7 +9,7 @@ readonly SCRIPT_TIME=$SECONDS
 
 getPackageInstallState() {
     local package_name="$1"
-    dpkg --list | grep --word-regexp "$package_name" > /dev/null
+    dpkg --list | awk '{print $2}' | grep --line-regexp "$package_name" > /dev/null
     return $?
 }
 
